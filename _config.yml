@@ -1,0 +1,15 @@
+pygments: true
+auto: true
+url: http://blog.xmi.im
+lsi: false
+markdown: redcarpet
+
+colors:
+  highlight: '#f60'
+
+projects:
+  - year: 2013
+    projects:
+      - name: Stringer
+        url: https://github.com/gindis/stringer
+        blurb: A self-hosted, anti-social RSS reader

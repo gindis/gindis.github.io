@@ -1,0 +1,37 @@
+---
+layout: default
+---
+
+<p class="meta"> {{ page.date | date: "%B %d, %Y" }} 
+<a href="/"><i class="home icon-home"></i></a>
+</p>
+<h1 class="title">{{ page.title }}</h1>
+
+
+<div id="post">
+  {% if page.from_newsletter %}
+    <p class="recycled-content">
+      This post first appeared in my <a href="http://eepurl.com/HgsHr">weekly-ish newsletter</a> about <strong>building awesome software</strong>.
+    </p>
+  {% endif %}
+{{ content }}
+</div>
+
+<div class="newsletter">
+  {% include mailchimp.html %}
+</div>
+
+<div id="related">
+  <h3>Related Posts</h3>
+  <ul class="posts">
+    {% for post in site.categories.blog limit:3 offset:1 %}
+    <li><span>{{ post.date | date_to_string }} &raquo;</span> <a href="{{ post.url }}">{{ post.title }}</a></li>
+    {% endfor %}
+  </ul>
+</div>
+
+{% if page.disclaimer %}
+<div class="disclaimer">
+  <p style="text-align: left; color: #666;">Disclaimer: Matt Swanson is a participant in the Amazon Services LLC Associates Program, an affiliate advertising program designed to provide a means for sites to earn advertising fees by advertising and linking to amazon.com</p>
+</div>
+{% endif %}
