@@ -10,6 +10,10 @@ colors:
 projects:
   - year: 2013
     projects:
+      - name: URL Shortener
+        url: http://gid.im/
+        blurb: URL Shortener
+
       - name: Stringer
         url: https://github.com/gindis/stringer
         blurb: A self-hosted, anti-social RSS reader
