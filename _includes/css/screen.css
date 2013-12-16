@@ -156,7 +156,8 @@ nav hr {
   margin-bottom: 15px;
 }
 
-.project-date {
+.project-date,
+.tools-date {
   color: #aaa !important;
   font-family: Monaco, "Courier New", monospace;
   font-size: 80%;
