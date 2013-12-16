@@ -21,15 +21,15 @@ projects:
 tools:
   - category: FD
     tools:
-      - name: ANGULARJS
-        url: http://angularjs.org/
-        blurb: HTML enhanced for web apps!
-      - name: EXPRESSJS
-        url: http://expressjs.com/
-        blurb: web application framework for node
       - name: NODEJS
         url: http://nodejs.org/
         blurb: Node.js is a platform built on Chrome's JavaScript runtime for easily building fast, scalable network applications. Node.js uses an event-driven, non-blocking I/O model that makes it lightweight and efficient, perfect for data-intensive real-time applications that run across distributed devices.
+      - name: EXPRESSJS
+        url: http://expressjs.com/
+        blurb: web application framework for node
+      - name: ANGULARJS
+        url: http://angularjs.org/
+        blurb: HTML enhanced for web apps!
       - name: React
         url: http://facebook.github.io/react/
         blurb: A JAVASCRIPT LIBRARY FOR BUILDING USER INTERFACES
