@@ -11,7 +11,7 @@ projects:
   - year: 2013
     projects:
       - name: URL Shortener
-        url: http://gid.im/
+        url: http://gid.im
         blurb: URL Shortener
 
       - name: Stringer
@@ -22,32 +22,29 @@ tools:
   - category: FD
     tools:
       - name: NODEJS
-        url: http://nodejs.org/
-        blurb: Node.js is a platform built on Chrome's JavaScript runtime for easily building fast, scalable network applications. Node.js uses an event-driven, non-blocking I/O model that makes it lightweight and efficient, perfect for data-intensive real-time applications that run across distributed devices.
+        url: http://nodejs.org
+        blurb: Node.js is a platform built on Chrome's JavaScript runtime for easily building fast scalable network applications.
       - name: EXPRESSJS
-        url: http://expressjs.com/
+        url: http://expressjs.com
         blurb: web application framework for node
       - name: ANGULARJS
-        url: http://angularjs.org/
+        url: http://angularjs.org
         blurb: HTML enhanced for web apps!
       - name: React
-        url: http://facebook.github.io/react/
+        url: http://facebook.github.io/react
         blurb: A JAVASCRIPT LIBRARY FOR BUILDING USER INTERFACES
       - name: Hogan.js
-        url: http://twitter.github.io/hogan.js/
+        url: http://twitter.github.io/hogan.js
         blurb: JavaScript templating from Twitter.
       - name: SASS
-        url: http://sass-lang.com/
+        url: http://sass-lang.com
         blurb: CSS with superpowers.
       - name: Ionic
-        url: http://ionicframework.com/
+        url: http://ionicframework.com
         blurb: The bond between HTML5 and Native has arrived.
       - name: YEOMAN
-        url: http://yeoman.io/
+        url: http://yeoman.io
         blurb: MODERN WORKFLOWS FOR MODERN WEBAPPS
-      - name: weinre
-        url: http://people.apache.org/~pmuellr/weinre/docs/latest/Home.html
-        blurb: WEb INspector REmote.
       - name: Frontend Development
         url: https://github.com/dypsilon/frontend-dev-bookmarks
         blurb: frontend-dev-bookmarks
@@ -55,7 +52,7 @@ tools:
   - category: UI
     tools:
       - name: Font Awesome
-        url: http://fontawesome.io/
+        url: http://fontawesome.io
         blurb: The iconic font designed for Bootstrap
       - name: Responsive Resources
         url: http://bradfrost.github.io/this-is-responsive/resources.html
@@ -64,6 +61,6 @@ tools:
   - category: Mac
     tools:
       - name: Homebrew
-        url: http://brew.sh/
+        url: http://brew.sh
         blurb: The missing package manager for OS X
 

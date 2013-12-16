@@ -40,13 +40,13 @@ title: blog posts, talks, book writeups, projects
   {% endfor %}
   
   <h2><i class="fa fa-cogs"></i> Interest</h2>
-  
+
   {% for tool_group in site.tools %}
     <h2 class="tools-date">{{ tool_group.category }} &raquo;</h2>
     <ul class="posts">
       {% for tool in tool_group.tools %}
         <li>
-          <a href="{{ tools.url }}">{{ tool.name }}:</a> {{ tool.blurb }}
+          <a href="{{ tool.url }}">{{ tool.name }}:</a> {{ tool.blurb }}
         </li>
       {% endfor %}
     </ul>
