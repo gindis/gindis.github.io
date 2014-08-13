@@ -1,6 +1,6 @@
-### [My Blog](http://blog.xmi.im)
+### [My Blog](http://blog.gindis.me)
 
-The [Jekyll](http://jekyllrb.com/) source for [blog.xmi.im](http://blog.xmi.im), which contains my blog, talks, and book writeups.
+The [Jekyll](http://jekyllrb.com/) source for [blog.gindis.me](http://blog.gindis.me), which contains my blog, talks, and book writeups.
 
 
 
