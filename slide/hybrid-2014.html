@@ -137,6 +137,11 @@
           </script>
         </section>
 
+        <!-- <section>
+          <h3>Hybrid App的开发框架</h3>
+          <p>PhoneGap、AppCan、Titanium、Salama、appcan</p>
+        </section> -->
+
         <section>
           <section data-background="#f60">
             <img src="http://gtms02.alicdn.com/tps/i2/TB165t_GXXXXXXeXVXX8HLfVVXX-640-1136.jpg" alt="虾米音乐WebAPP">
@@ -217,7 +222,7 @@
      * evt.beta 在围绕 x 轴旋转时（即前后旋转时），z 轴的度数差，
      * 设备水平放置时，beta 角度是 0 度；向上翻逐步增加到 180 度；向下翻减少到 -180 度。
      * 
-     * evt.gama 在围绕 y 轴旋转时（即扭转设备时），z 轴的度数差，
+     * evt.gamma 在围绕 y 轴旋转时（即扭转设备时），z 轴的度数差，
      * 
      * 水平放置角度是 0，向右拧增加到 90 度；向左拧减少到 -90 度。
      */
@@ -255,6 +260,8 @@
 </code></pre>
         </section>
 
+        <section><img src="http://www.xiami.com/qrcode?u=http://blog.gindis.me/demo/directions.html&w=400" alt=""> </section>
+
         <section>
           <h4>重力感应</h4>
           <p>acceleration or accelerationIncludingGravity</p>
@@ -286,11 +293,13 @@ function deviceMotionHandler(evt) {
     }
     //acclGraEle.innerHTML = 'shake' + JSON.stringify(acclGra);
   }
-</code></pre>
-<img src="http://www.xiami.com/qrcode?u=http://blog.gindis.me/demo/shake.html&w=400" alt="">     
+</code></pre>    
         </section>
         <section>
-          <h4>栗子：神经狗火箭</h4>
+          <img src="http://www.xiami.com/qrcode?u=http://blog.gindis.me/demo/shake.html&w=400" alt=""> 
+        </section>
+        <section>
+<h4>栗子：神经狗火箭</h4>
 <pre><code data-trim>
 var acceleration = e.accelerationIncludingGravity;
   x[0] = acceleration.x;
@@ -298,8 +307,11 @@ var acceleration = e.accelerationIncludingGravity;
   z[0] = acceleration.z;
   curWidth = Math.max(diff(x), diff(y), diff(z));
 </code></pre>
-<img src="http://www.xiami.com/qrcode?u=http://m.xiami.com/market/music/act/battle.php&w=400" alt="">     
+     
         </section>
+        
+        <section><img src="http://www.xiami.com/qrcode?u=http://m.xiami.com/market/music/act/battle.php&w=400" alt=""></section>
+
         </section>
 
         <section>
