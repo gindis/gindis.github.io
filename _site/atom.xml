@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+ 
+ <title>Gindis Wang</title>
+ <link href="http://blog.xmi.im/atom.xml" rel="self"/>
+ <link href="http://blog.xmi.im/"/>
+ <updated>2014-09-01T13:30:03+08:00</updated>
+ <id>http://blog.xmi.im/</id>
+ <author>
+   <name>Gindis Wang</name>
+   <email>flyxiang228 at gmail.com</email>
+ </author>
+
+ 
+ <entry>
+   <title>URL Shortener Service</title>
+   <link href="http://blog.xmi.im/blog/2013/10/26/url-shortener.html"/>
+   <updated>2013-10-26T00:00:00+08:00</updated>
+   <id>http://gindis.github.com/blog/2013/10/26/url-shortener</id>
+   <content type="html">&lt;p&gt;URL Shortener Service, &lt;a href=&quot;http://gid.im/&quot;&gt;Enter&amp;raquo;&lt;/a&gt;&lt;/p&gt;
+
+&lt;hr&gt;
+</content>
+ </entry>
+ 
+ <entry>
+   <title>hello world</title>
+   <link href="http://blog.xmi.im/blog/2013/10/20/hello-world.html"/>
+   <updated>2013-10-20T00:00:00+08:00</updated>
+   <id>http://gindis.github.com/blog/2013/10/20/hello-world</id>
+   <content type="html">&lt;p&gt;I finally got around to setting up GitHub pages (and then the GitHub server promptly decided to start having issues...making me think that I was a complete failure).
+But, now everything seems to be working!&lt;/p&gt;
+</content>
+ </entry>
+ 
+ 
+</feed>
