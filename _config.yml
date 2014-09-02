@@ -62,5 +62,11 @@ tools:
     tools:
       - name: Homebrew
         url: http://brew.sh
-        blurb: The missing package manager for OS X
+        blurb: The missing package manager
+      - name: Alfred
+        url: http://www.alfredapp.com/
+        blurb: Alfred is an award-winning productivity application
+      - name: MacPorts
+        url: https://www.macports.org/
+        blurb: An open-source community initiative
 
