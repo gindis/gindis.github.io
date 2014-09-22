@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>CSS-Sprites</title>
+  <style>
+body {
+  background: url('images/grey.png') repeat 0 0;
+}
+
+.icons-wrapper {
+  width: 260px;
+  overflow: hidden;
+  display: block;
+  margin: 150px auto 0;
+  text-align: center;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
+  -webkit-box-shadow: 0px 0px 2px 0px rgba(0, 0, 0, .3);
+  box-shadow: 0px 0px 2px 0px rgba(0, 0, 0, .3);
+  background: #ffffff; /* Old browsers */
+}
+
+.icon {
+  background: url('images/icons.png') no-repeat 0 0;
+  width: 32px;
+  height: 32px;
+  float: left;
+  margin: 10px;
+  text-indent: -9999px;
+  /* CSS3 Transitions */
+  opacity: 1;
+    filter: alpha(opacity=100);
+    -webkit-transition: all 400ms ease;
+    -moz-transition: all 400ms ease;
+    -ms-transition: all 400ms ease;
+    -o-transition: all 400ms ease;
+    transition: all 400ms ease;
+}
+
+.icon:hover {
+  opacity: .4;
+    filter: alpha(opacity=40);
+}
+
+.document {
+  background-position: -32px 0 !important;
+}
+
+.group {
+  background-position: -64px 0 !important;
+}
+
+.location {
+  background-position: -96px 0 !important;
+}
+
+.microphone {
+  background-position: -128px 0 !important;
+}
+
+@media only screen and (-webkit-min-device-pixel-ratio: 1.5),
+    only screen and (-o-min-device-pixel-ratio: 3/2),
+    only screen and (min--moz-device-pixel-ratio: 1.5),
+    only screen and (min-device-pixel-ratio: 1.5) {
+        .icon {
+            background: url('images/icons@2x.png') no-repeat 0 0;
+            background-size: 160px 32px;
+        }
+        
+        body {
+          background: url('images/grey@2x.png') repeat 0 0;
+          background-size: 397px 322px;
+        }
+}
+  </style>
+</head>
+<body>
+  <div class="icons-wrapper">
+    <h4>These icons look sharp</h4>
+
+    <a href="#" class="icon bar-graph">pie-chart</a>
+    <a href="#" class="icon document">document</a>
+    <a href="#" class="icon group">group</a>
+    <a href="#" class="icon location">location</a>
+    <a href="#" class="icon microphone">microphone</a>
+  </div><!--/.icons-wrapper-->
+</body>
+</html>
