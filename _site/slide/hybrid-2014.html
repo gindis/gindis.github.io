@@ -1,0 +1,369 @@
+<!doctype html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+
+    <title>Hybrid APP AND Mobile Web</title>
+
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <link rel="stylesheet" href="css/reveal.min.css">
+    <link rel="stylesheet" href="css/theme/default.css" id="theme">
+
+    <!-- For syntax highlighting -->
+    <link rel="stylesheet" href="lib/css/zenburn.css">
+
+    <!-- If the query includes 'print-pdf', include the PDF print sheet -->
+    <script>
+      if( window.location.search.match( /print-pdf/gi ) ) {
+        var link = document.createElement( 'link' );
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = 'css/print/pdf.css';
+        document.getElementsByTagName( 'head' )[0].appendChild( link );
+      }
+    </script>
+    <style>
+    .reveal .reveal-table {
+      width: 100%;
+      font-size: 16px;
+      border: 1px solid #ddd;
+      border-collapse: collapse;
+    }
+    .reveal th,
+    .reveal td{
+      border: 1px solid #ddd;
+      border-width: 1px 0 0 1px;
+      padding-left: .5rem;
+    }
+    .reveal th,
+    .reveal td:first-child {
+      font-size: 700;
+    }
+    </style>
+
+    <!--[if lt IE 9]>
+    <script src="lib/js/html5shiv.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+
+    <div class="reveal">
+
+      <!-- Any section element inside of this container is displayed as a slide -->
+      <div class="slides">
+
+        <section>
+          <img id="slide" width="320" src="http://www.xiami.com/qrcode?u=http://m.xiami.com&w=600" alt="slide qrcode">
+          <script>
+          var qrcodeUrl = 'http://www.xiami.com/qrcode?u='+location.href+'&w=600';
+          var localHash = location.hash;
+          qrcodeUrl = qrcodeUrl.replace(location.hash, '')
+          document.querySelector('#slide').src = qrcodeUrl;
+          </script>
+        </section>
+
+        <section data-background="#1e75bb">
+          <h2>Hybrid APP AND Mobile Web</h2>
+          <h3></h3>
+          <p>
+            <small><a href="http://www.gindis.me/about">笑翟</a> / <a href="http://weibo.com/gindis">@gindis</a></small>
+          </p>
+        </section>
+
+        <section>
+          <h3>Hybird(混合模式移动开发)</h3>
+          <p>
+            介于web-app、native-app两者的app兼具“Native App良好用户交互体验的优势”和“Web App跨平台开发的优势”
+          </p>
+        </section>
+
+        <section data-markdown>
+          <script type="text/template">
+          ### Web App、Hybrid App、Native APP对比
+
+          <table class="reveal-table">
+            <tr>
+              <th></th>
+              <th>Web App（网页应用）</th>
+              <th>Hybrid App（混合应用）</th>
+              <th>Native App（原生应用）</th>
+            </tr>
+            <tr>
+              <td>开发成本</td>
+              <td>低</td>
+              <td>中</td>
+              <td>高</td>
+            </tr>
+            <tr>
+              <td>维护更新</td>
+              <td>简单</td>
+              <td>简单</td>
+              <td>简单</td>
+            </tr>
+            <tr>
+              <td>体验</td>
+              <td>差</td>
+              <td>优</td>
+              <td>优</td>
+            </tr>
+            <tr>
+              <td>Store或market认可</td>
+              <td>不认可</td>
+              <td>认可</td>
+              <td>认可</td>
+            </tr>
+            <tr>
+              <td>安装</td>
+              <td>不需要</td>
+              <td>需要</td>
+              <td>需要</td>
+            </tr>
+            <tr>
+              <td>跨平台</td>
+              <td>优</td>
+              <td>优</td>
+              <td>差</td>
+            </tr>
+          </table>
+          </script>
+        </section>
+
+        <!-- <section>
+          <h3>Hybrid App的开发框架</h3>
+          <p>PhoneGap、AppCan、Titanium、Salama、appcan</p>
+        </section> -->
+
+        <section>
+          <section data-background="#f60">
+            <img src="http://gtms02.alicdn.com/tps/i2/TB165t_GXXXXXXeXVXX8HLfVVXX-640-1136.jpg" alt="虾米音乐WebAPP">
+            <img src="http://gtms04.alicdn.com/tps/i4/TB1eDmcGXXXXXXvXFXX8HLfVVXX-640-1136.jpg" alt="虾米音乐WebAPP">
+          </section>
+          <section data-background="#555354">
+            <img width="320" src="http://gtms03.alicdn.com/tps/i3/TB1yBV5GXXXXXb0XVXX8HLfVVXX-640-1136.jpg" alt="虾米音乐好声音游戏">
+            <img width="320" src="http://gtms01.alicdn.com/tps/i1/TB1ZdCbGXXXXXXGXFXX8HLfVVXX-640-1136.jpg" alt="虾米音乐好声音游戏">
+          </section>
+          <section data-background="#555354">
+            <img width="320" src="http://gtms04.alicdn.com/tps/i4/TB12rubGXXXXXXAXFXX8HLfVVXX-640-1136.jpg" alt="虾米音乐好声音游戏">
+            <img width="320" src="http://gtms03.alicdn.com/tps/i3/TB1JqGfGXXXXXXgXpXX8HLfVVXX-640-1136.jpg" alt="虾米音乐好声音游戏">
+          </section>
+          <section data-background="#555354">
+            <img width="320" src="http://gtms01.alicdn.com/tps/i1/TB18IegGXXXXXaVXpXX8HLfVVXX-640-1136.jpg" alt="虾米音乐好声音游戏">
+            <img width="320" src="http://gtms03.alicdn.com/tps/i3/TB12kqgGXXXXXalXXXX8HLfVVXX-640-1136.jpg" alt="虾米音乐好声音游戏">
+          </section>
+          <section data-background="#555354">
+            <img width="320" src="http://gtms02.alicdn.com/tps/i2/TB1hRGjGXXXXXXKXXXX8HLfVVXX-640-1136.jpg" alt="虾米音乐会员中心">
+            <img width="320" src="http://gtms01.alicdn.com/tps/i1/TB1tkGkGXXXXXXPXXXX8HLfVVXX-640-1136.jpg" alt="虾米音乐签到">
+          </section>
+          <section data-background="#555354">
+            <img width="320" src="http://gtms04.alicdn.com/tps/i4/TB1.PWjGXXXXXX_XXXX8HLfVVXX-640-1136.jpg" alt="虾米音乐专辑介绍">
+            <img width="320" src="http://gtms01.alicdn.com/tps/i1/TB1N3CjGXXXXXX_XXXX8HLfVVXX-640-1136.jpg" alt="虾米音乐艺人介绍">
+          </section>
+
+        </section>
+
+        <section>
+        <section id="transitions">
+          <h2>DeviceOrientationEvent</h2>
+          <h3>传感器，动作 － 设备方向事件</h3>
+        </section>
+    
+        <section>
+          <h3>陀螺仪</h3>
+          <p>X、Y 和 Z轴分别对应于 DeviceOrientationEvent 的 beta、gamma 和 alpha 属性</p>
+          <img src="http://gtms02.alicdn.com/tps/i2/TB1J3h8GXXXXXbaXVXX7QDA2pXX-747-348.png" alt="">
+        </section>
+
+        <section>
+<h4>代码</h4>
+<pre><code data-trim>
+!function () {
+  'user strict';
+
+  var win = window;
+  var doc = document;
+  var head = null;
+
+  if (win.DeviceOrientationEvent) {
+    console.log("DeviceOrientation is supported");
+
+    //监听设备方向
+    win.addEventListener('deviceorientation', findNorth);
+
+    //监听设备运动状态
+    win.addEventListener('devicemotion', detectShake);
+
+  } else {
+    console.log("DeviceOrientation is not supported");
+  }
+
+  //获取元素
+  function getEle(eleId) {
+    return document.getElementById(eleId);
+  }
+
+  //设备方向
+  function findNorth(evt) {
+    var directions = getEle('directions');
+    head = 'directions:';
+
+    /**
+     * evt.alpha 在围绕 z 轴旋转时（即左右旋转时），y 轴的度数差，
+     * 当设备顶部指向地球正北方向时，alpha 角是 0 度，设备向左边旋转时增大，介于 0 - 360 度之间。 
+     * 
+     * evt.beta 在围绕 x 轴旋转时（即前后旋转时），z 轴的度数差，
+     * 设备水平放置时，beta 角度是 0 度；向上翻逐步增加到 180 度；向下翻减少到 -180 度。
+     * 
+     * evt.gamma 在围绕 y 轴旋转时（即扭转设备时），z 轴的度数差，
+     * 
+     * 水平放置角度是 0，向右拧增加到 90 度；向左拧减少到 -90 度。
+     */
+    
+    /**
+     * winOri == -90 横屏
+     * winOri == 0 竖屏 
+     */
+    var winOri = win.orientation; 
+
+
+    if (evt.alpha < 5 || evt.alpha > 355) {
+      directions.innerHTML = head + 'North!';
+    } else if (evt.alpha < 180) {
+      directions.innerHTML = head + 'Turn Left';
+    } else {
+      directions.innerHTML = head + 'Turn Right';
+    }
+  }
+
+  //设备运动
+  function detectShake(evt) {
+    var acclEle = getEle('accl');
+    var accl = evt.acceleration;
+    head = 'status:';
+
+    if (accl.x > 1.5 || accl.y > 1.5 || accl.z > 1.5) {
+      acclEle.innerHTML = head + 'EARTHQUAKE!!!' + JSON.stringify(accl);
+    } else {
+      acclEle.innerHTML = head + 'All systems go!' + JSON.stringify(accl);
+    }
+  }
+
+}();
+</code></pre>
+        </section>
+
+        <section><img src="http://www.xiami.com/qrcode?u=http://blog.gindis.me/demo/directions.html&w=400" alt=""> </section>
+
+        <section>
+          <h4>重力感应</h4>
+          <p>acceleration or accelerationIncludingGravity</p>
+        </section>
+
+        <section>
+          <h4>栗子：摇一摇</h4>
+<pre><code data-trim>
+var last_update = new Date().getTime();
+var THRESHOLD = 2000;
+var x = y = z = last_x = last_y = last_z = 0;
+function deviceMotionHandler(evt) {    
+    var acclGra =evt.accelerationIncludingGravity; // 捕捉重力加速度
+    var curTime = new Date().getTime();
+    var acclGraEle = getEle('acclGra');
+    if ((curTime - last_update)> 100) {
+      var diffTime = curTime -last_update;
+      last_update = curTime;
+      x = acclGra.x;
+      y = acclGra.y;
+      z = acclGra.z;
+      var speed = Math.abs(x + y + z - last_x - last_y - last_z) / diffTime * 10000;
+      if (speed > THRESHOLD) {
+        acclGraEle.innerHTML = 'shake' + JSON.stringify(acclGra);
+      }    
+      last_x = x;    
+      last_y = y;    
+      last_z = z;    
+    }
+    //acclGraEle.innerHTML = 'shake' + JSON.stringify(acclGra);
+  }
+</code></pre>    
+        </section>
+        <section>
+          <img src="http://www.xiami.com/qrcode?u=http://blog.gindis.me/demo/shake.html&w=400" alt=""> 
+        </section>
+        <section>
+<h4>栗子：神经狗火箭</h4>
+<pre><code data-trim>
+var acceleration = e.accelerationIncludingGravity;
+  x[0] = acceleration.x;
+  y[0] = acceleration.y;
+  z[0] = acceleration.z;
+  curWidth = Math.max(diff(x), diff(y), diff(z));
+</code></pre>
+     
+        </section>
+        
+        <section><img src="http://www.xiami.com/qrcode?u=http://m.xiami.com/market/music/act/battle.php&w=400" alt=""></section>
+
+        </section>
+
+        <section>
+          <h4>其他传感器</h4>
+          <ul>
+            <li>环境</li>
+            <li>音频</li>
+            <li>视频</li>
+          </ul>
+        </section>
+
+        <section>
+          <h1>THANKS</h1>
+          <h5>笑翟,  gindis.me/about</h5>
+        </section>
+
+      </div>
+
+    </div>
+
+    <script src="lib/js/head.min.js"></script>
+    <script src="js/reveal.min.js"></script>
+
+    <script>
+
+      // Full list of configuration options available here:
+      // https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+        controls: true,
+        progress: true,
+        history: true,
+        center: true,
+
+        theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+        transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
+
+        // Parallax scrolling
+        // parallaxBackgroundImage: 'https://s3.amazonaws.com/hakim-static/reveal-js/reveal-parallax-1.jpg',
+        // parallaxBackgroundSize: '2100px 900px',
+
+        // Optional libraries used to extend on reveal.js
+        dependencies: [
+          { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+          { src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+          { src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+          { src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+          { src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+          { src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+        ]
+      });
+
+    </script>
+
+  </body>
+</html>
