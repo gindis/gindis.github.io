@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>loading for page</title>
+  <style>
+html {
+  font-size: 62.5%;
+}
+.checktips {
+  padding: 1.5rem 1rem;
+  text-align: center;
+  position: fixed;
+  width: 4rem;
+  /*left: 50%;
+  bottom: 4%;
+  margin: 0 0 0 -2rem;*/
+  background: #333;
+  background: rgba(47,47,47,0.98);
+  border-radius: .5rem;
+  z-index: 999;
+}
+.circle_wrap {
+  width: 3rem;
+  margin: 0 auto;
+  height: .6rem;
+}
+.circle_g {
+  background-color: #ffffde;
+  float: left;
+  height: .6rem;
+  margin-left: .3rem;
+  width: .6rem;
+  -webkit-animation-name: bounce_circleG;
+  -webkit-animation-duration: 0.6s;
+  -webkit-animation-iteration-count: infinite;
+  -webkit-animation-direction: linear;
+  -webkit-border-radius: .4rem;
+}
+
+.circle_1 {
+  -webkit-animation-delay: 0.12s;
+}
+
+.circle_2 {
+  -webkit-animation-delay: 0.24s;
+}
+
+.circle_3 {
+  -webkit-animation-delay: 0.36s;
+}
+
+@-webkit-keyframes bounce_circleG {
+  50% {
+    background-color: #f70
+  }
+}
+
+.core_loading {
+  width: 90px;
+  height: 90px !important;
+  min-height: 0 !important;
+  margin: 0 auto;
+  padding-top: 20%;
+  z-index: 99;
+  color: #999999;
+  text-align: center;
+  overflow: hidden;
+  background: url(http://g.dd.alicdn.com/tps/i3/T1rS9vFsNhXXauUnsh-180-180.png) no-repeat center bottom;
+  background-size: 90px 90px;
+}
+.core_loading  i {
+    display: block;
+    width: 43px;
+    height: 43px;
+    margin: 14px auto 0;
+    background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFYAAABWCAYAAABVVmH3AAACuUlEQVR42u2aPWsUQRiAY7IXUfHEb9OkSbF3u8dZ5OJ9/AIFKwVBC41BLBSstLUwtYUgCoImWojcH1DQwoiVVqJ3GhAkas4YPyJoogZ1feeYYl1ibiY75fPAy/LuvtXD7Oy7M9PVBQAAAAAAzvlSKxyTaEr81tfjWEkv9YJEtERcxM4K+VQtHP6P1HbI8xEsWdIs5dbM1QrTy4mVaE0O5dZiy4LZanigg9R2SN1BbBnied4qec1vmIj9UA1vqnqsmYnt/lwrNEzESt0LVY81M7GezK9zJmKl7quqx5qZ2IzuWSOTUPVYMxPbazlie7FmKPZjNWyaiJW6ScRaiG1VglsmYt9VgjpiLebYZyX/iInYRskfYY616AoO7di8TVqpVodWa+Zo35btdAUWfazEuqeD/onlxMqoPqXq6GMt/rzUvCmx8dWu/NWlpE6V8+PyfJPEav687OT26NG49Xkpdy4uVfJRdV8/78GW/ajNSKy/WxzYHRd7rziwR93XzxmtK5X7ZNDfGxercqQ6+JC9HMrvi4uVfD8fLAdi5UM1nPhwDSPWgdg35eCftkvyk4h1IPZtOTgdFyv5GcQ6aLumy8HZuFiV02Y5ECsLMufjYlWOWAdiZQXrUmJF6zJiHYh9XwnH4mIlH0dserGebHHXE1vedVa03Ii9nRB7B7EOxMrZgYnEWYIJxKYXmxGRjxJiH7Nr4ECsbBg2EhuIDcQ6ECtbMFOJLZnXiHUgVs4OzP64fiX6szAfqavKEZterDq88S1aXIwUSq7K2fJ2IFZe/5/tEft9oT1iJf+FWAdipW+9n+hjHyLWgdhrfn9xphI+kClgXl3Hcv07EevgB0HISqiDGX36uoEfhPRiu/XZgaw+R5DVOQvdjuR6+hCHh1QAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADoyF+TwFz/o0LQCwAAAABJRU5ErkJggg==) no-repeat;
+    background-size: 43px 43px;
+    -webkit-transform-style: preserve-3d;
+    -webkit-animation: loading 1s infinite linear;
+  }
+.core_loading  span {
+    display: block;
+    padding-top: 10px;
+    font-size: 14px;
+    color: #fff;
+  }
+
+@-webkit-keyframes loading {
+  0 {
+    -webkit-transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+  }
+}
+
+  </style>
+</head>
+<body>
+<div class="checktips">
+  <div id="X_toast_loading" class="circle_wrap">
+    <div class="circle_g circle_1"></div>
+    <div class="circle_g circle_2"></div>
+    <div class="circle_g circle_3"></div>
+  </div>
+</div>
+<div class="home_activity" id="X_home_activity_wrap">
+  <div class="core_loading">
+    <i></i><span>努力加载中...</span>
+  </div>
+</div>
+</body>
+</html>

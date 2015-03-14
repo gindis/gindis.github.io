@@ -1,0 +1,131 @@
+
+.ds-box {
+  position: fixed;
+  background: rgba(42,45,50,0.85);
+  padding: 16px;
+  box-sizing: border-box;
+  line-height: 1.4;
+  pointer-events: none;
+  color: rgba(250,251,255,0.95);
+  font-family: 'Helvetica Neue', 'Segoe UI', Helvetica, Arial, sads-serif;
+}
+
+.ds-box.ds-show {
+  pointer-events: auto;
+}
+
+.ds-box a {
+  color: inherit;
+  opacity: 0.7;
+  font-weight: 700;
+}
+
+.ds-box a:hover,
+.ds-box a:focus {
+  opacity: 1;
+}
+
+.ds-box p {
+  margin: 0;
+}
+
+.ds-box.ds-show,
+.ds-box.ds-visible {
+  pointer-events: auto;
+}
+
+.ds-close {
+  width: 20px;
+  height: 20px;
+  position: absolute;
+  right: 4px;
+  top: 4px;
+  overflow: hidden;
+  text-indent: 100%;
+  cursor: pointer;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+
+.ds-close:hover, 
+.ds-close:focus {
+  outline: none;
+}
+
+.ds-close::before,
+.ds-close::after {
+  content: '';
+  position: absolute;
+  width: 3px;
+  height: 60%;
+  top: 50%;
+  left: 50%;
+  background: #6e6e6e;
+}
+
+.ds-close:hover::before,
+.ds-close:hover::after {
+  background: #fff;
+}
+
+.ds-close::before {
+  -webkit-transform: translate(-50%,-50%) rotate(45deg);
+  transform: translate(-50%,-50%) rotate(45deg);
+}
+
+.ds-close::after {
+  -webkit-transform: translate(-50%,-50%) rotate(-45deg);
+  transform: translate(-50%,-50%) rotate(-45deg);
+}
+
+.ds-box.ds-bar {
+  top: 0;
+  left: 0;
+  width: 100%;
+}
+
+.ds-effect-slidetop {
+  box-shadow: inset 4.5rem 0 rgba(0,0,0,0.6);
+}
+.ds-effect-slidetop p {
+  padding: 0 3.2em;
+  font-size: 1.2em;
+  display: inline-block;
+}
+
+.ds-effect-slidetop.ds-show,
+.ds-effect-slidetop.ds-hide {
+  -webkit-animation-name: animSlideTop;
+  animation-name: animSlideTop;
+  -webkit-animation-duration: 0.3s;
+  animation-duration: 0.3s;
+  -webkit-animation-timing-function: cubic-bezier(0.7,0,0.3,1);
+  animation-timing-function: cubic-bezier(0.7,0,0.3,1);
+}
+
+@-webkit-keyframes animSlideTop {
+  0% { -webkit-transform: translate3d(0,-100%,0); }
+  100% { -webkit-transform: translate3d(0,0,0); }
+}
+
+@keyframes animSlideTop {
+  0% { -webkit-transform: translate3d(0,-100%,0); transform: translate3d(0,-100%,0); }
+  100% { -webkit-transform: translate3d(0,0,0); transform: translate3d(0,0,0); }
+}
+
+.ds-effect-loadingcircle.ds-show + svg path {
+  -webkit-animation: animDash 3s;
+  animation: animDash 3s;
+}
+
+.ds-arrow {
+  width: 60%;
+  height: 1rem;
+  background-color: #61e69d;
+  position: absolute;
+  top: 7rem;
+  visibility: hidden;
+}
+.ds-wrap .stretchRight {
+  visibility: visible;
+}

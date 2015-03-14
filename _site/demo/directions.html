@@ -13,9 +13,14 @@
 
 </head>
 <body>
-  <div id="directions"></div>
-  <div id="accl"></div>
-  <div id="acclGra"></div>
+  <div id="log">
+    <p id="directions"></p>
+    <p id="accl"></p>
+    <p id="acclGra"></p>
+    <p id="alpha"></p>
+    <p id="beta"></p>
+    <p id="gamma"></p>
+  </div>
 
   <script>
 
@@ -29,13 +34,15 @@
     var SHAKE_THRESHOLD = 2000;
     var x = y = z = last_x = last_y = last_z = 0;
 
-    if (window.DeviceOrientationEvent) {
+    if (win.DeviceOrientationEvent) {
       console.log("DeviceOrientation is supported");
-      
+
       //监听设备方向
       win.addEventListener('deviceorientation', findNorth);
+
       //监听设备运动状态
       win.addEventListener('devicemotion', deviceMotionHandler);
+
     } else {
       console.log("DeviceOrientation is not supported");
     }
@@ -50,6 +57,24 @@
       var directions = getEle('directions');
       head = 'directions:';
 
+      /**
+       * evt.alpha 在围绕 z 轴旋转时（即左右旋转时），y 轴的度数差，
+       * 当设备顶部指向地球正北方向时，alpha 角是 0 度，设备向左边旋转时增大，介于 0 - 360 度之间。 
+       * 
+       * evt.beta 在围绕 x 轴旋转时（即前后旋转时），z 轴的度数差，
+       * 设备水平放置时，beta 角度是 0 度；向上翻逐步增加到 180 度；向下翻减少到 -180 度。
+       * 
+       * evt.gamma 在围绕 y 轴旋转时（即扭转设备时），z 轴的度数差，
+       * 
+       * 水平放置角度是 0，向右拧增加到 90 度；向左拧减少到 -90 度。
+       */
+      
+      /**
+       * winOri == -90 横屏
+       * winOri == 0 竖屏 
+       */
+      var winOri = win.orientation;
+
       if (evt.alpha < 5 || evt.alpha > 355) {
         directions.innerHTML = head + 'North!';
       } else if (evt.alpha < 180) {
@@ -57,6 +82,9 @@
       } else {
         directions.innerHTML = head + 'Turn Right';
       }
+      getEle('alpha').innerHTML = 'alpha:' + evt.alpha;
+      getEle('beta').innerHTML = 'beta:' + evt.beta;
+      getEle('gamma').innerHTML = 'gamma:' + evt.gamma;
     }
 
     //设备运动
@@ -77,18 +105,18 @@
       var curTime = new Date().getTime();
       var acclGraEle = getEle('acclGra');
       if ((curTime - last_update)> 100) {
-          var diffTime = curTime -last_update;
-          last_update = curTime;
-          x = acclGra.x;
-          y = acclGra.y;
-          z = acclGra.z;
-          var speed = Math.abs(x + y + z - last_x - last_y - last_z) / diffTime * 10000;
-          if (speed > SHAKE_THRESHOLD) {
-            acclGraEle.innerHTML = 'shake' + JSON.stringify(acclGra);
-          }    
-          last_x = x;    
-          last_y = y;    
-          last_z = z;    
+        var diffTime = curTime -last_update;
+        last_update = curTime;
+        x = acclGra.x;
+        y = acclGra.y;
+        z = acclGra.z;
+        var speed = Math.abs(x + y + z - last_x - last_y - last_z) / diffTime * 10000;
+        if (speed > SHAKE_THRESHOLD) {
+          acclGraEle.innerHTML = 'shake' + JSON.stringify(acclGra);
+        }    
+        last_x = x;    
+        last_y = y;    
+        last_z = z;    
       }
       //acclGraEle.innerHTML = 'shake' + JSON.stringify(acclGra);
     }
