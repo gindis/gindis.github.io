@@ -1,0 +1,280 @@
+<DOCTYPE html>
+<html>
+<head>
+    <title>
+        share Demo
+    </title>
+    <meta charset='utf-8'>
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1.0, maximum-scale=1.0,user-scalable=0" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="msapplication-tap-highlight" content="no" />
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" href="//cdnst.immomo.com/momofes/css/mobile/common.dev.css"/>
+    <script src="//cdnst.immomo.com/momofes/js/mobile/zepto.min.js"></script>
+    <script src="//cdnst.immomo.com/momofes/js/mobile/momo.mobile.2.0.min.js"></script>
+    
+    
+    <script src="//cdnst.immomo.com/momofes/js/mobile/momo_bridge.2.0.3.min.js"></script>
+    
+
+    
+    <style>
+        .common-sec {
+            color: #999999;
+            padding:10px;
+        }
+        .common-sec-title {
+            font-size:16px;
+            line-height:20px;
+            font-weight: 400;
+        }
+
+    </style>
+</head>
+<body>
+    
+
+<div class="common-sec-title">Share Demo 分享示例:</div>
+
+<section class="common-sec" >
+    <p> 分享6.1  </p>
+    <p> 分享到留言板添加消息尾巴 </p>
+
+    <p>
+        右上角分享和页面的分享面板按钮分享内容一致。
+        为全部可用渠道
+    </p>
+    <p> 直接分享, 渠道为分享到留言板 </p>
+    <p> 注意： 所有分享渠道文字内容应有不同 </p>
+
+    <p> 新增功能的js，见注释中包含“尾巴”区块</p>
+
+</section>
+
+<div class="btn-wrapper" style="margin-top:50px;">
+    <a class="btn common-blue-btn" href="javascript:;" id='ui-btn'>
+        初始化分享按钮 (留言板带小尾巴链接)
+    </a>
+    <a class="btn common-blue-btn" href="javascript:;" id='share-btn'>
+        分享面板 callShare
+    </a>
+    <a class="btn common-blue-btn" href="javascript:;" id='share-one'>
+        直接分享 (留言板小尾巴)
+    </a>
+    <a class="btn common-blue-btn" href="javascript:;" id='btn3'>
+        进入URL参数页面 
+    </a>
+</div>
+<script>
+
+    var doc_url =  '/doc/bridge/share.html'
+    mm.invoke('init', { enable: { share:0, ui_btn:1},    ui_btn: {                      
+        title: '', dropdown: 0,
+        buttons: [{
+            'text': '文档',
+                'action': 0,
+                'param': {callback:'callback.doc'}
+        }]
+        }
+    })
+    
+
+    // NOTE: USE YOUR own SIGN HERE!!!!!!
+    $.get('/sdk/sign', {url:location.href}, function(resp){
+        config = resp
+        config["error"] = 'mm.configError';
+        console.log(resp)
+
+        /*config = {
+        randomstr: "keigaojkl3j48afefl32",  //随机串
+        timestamp: 1433391148446,           //第三方应用服务器时间
+        sign: "40B4A72E7ACB468AAF1B65C47CE9875AEB8B7D74",
+                                        //第三方应用通过ticket,timestamp,randomstr,url等参数，按照签名规则之后的sha1值
+        client_id: "925ef991ec30ccc0"   //第三方应用ID
+        }*/  
+
+        mm.invoke('initConfig', config, function(resq){
+            /*resq={
+                status: 0, // 0 成功 1 失败
+                message: 'init auth 成功'
+            }*/
+            $.showTip(resq.message)
+        });
+    })
+    // 分享全局配置
+    var shareConfig = {
+        title: '陌陌',                 // 默认的标题: QQ空间需要
+        text: '总有新奇在身边',        // 默认的内容详情
+        url: 'http://www.immomo.com',  // 默认链接: 需要带上完整的protocal
+        pic: 'http://chatst.immomo.com/webim/09/01/09016D25-8F82-434D-97C3-BD774F6E1C6A_L.jpg',
+                                             // 默认分享图片: 需要是外网可用的图片链接
+        callback: 'callback.share',          // 分享完成后的回调函数: 需要是页面上可访问的对象名
+                                             // NOTE: iOS 的callback handler为此处的 callback 名称，'.' 替换为 '_'
+        apps: ['qzone', 'sina', 'momo_feed', 'momo_contacts', 'browser',
+               'qq', 'qqwb', 'weixin', 'weixin_friend'],   // 页面分享时所需要显示的Apps,
+        configs: {                           // 对单独的渠道进行配置
+                  'qq': {                   // QQ
+                         title:'qq',
+                         text:'qq',
+                         url:'http://www.qq.com',
+                         pic:'http://www.immomo.com/static/w5/img/website/header-bg2.jpg'
+                         },
+                  'qzone': {                 // QQ空间
+                         title:'qzone',
+                         text:'qzone',
+                         url:'http://www.qq.com',
+                         pic:'http://www.immomo.com/static/w5/img/website/header-bg2.jpg'
+                         },
+                  'sina': {                      // 新浪
+                         title:'sina',
+                         text:'sina',
+                         url:'http://www.sina.com',
+                         pic:'http://www.immomo.com/static/w5/img/website/header-bg2.jpg'
+                         },
+                  'momo_friend': {               // 好友
+                         title:'friend',
+                         text:'friend',
+                         
+                         url: 'http://www.immomo.com',
+                         pic:'http://chatst.immomo.com/webim/55/49/554904AF-82C0-4FF0-9968-B6F074D6BC0A_L.jpg'
+                         },
+                  'momo_discuss': {              // 讨论组
+                         title:'discuss',
+                         text:'discuss',
+                         
+                         url: 'http://www.immomo.com',
+                         pic:'http://chatst.immomo.com/webim/49/49/494955DA-DA93-4B64-BEAC-69FCA2830D2F_L.jpg'
+                         },
+                  'momo_group': {                // 群组
+                         title:'group',
+                         text:'group',
+                         
+                         url: 'http://www.immomo.com',
+                         pic:'http://chatst.immomo.com/webim/F1/50/F150C89F-61E3-4618-B529-3866EDCA71AB_L.jpg'
+                         },
+                  'momo_contacts': {             // 好友/群组/讨论组， 
+                                                 // iOS 无效，应该单独配置(friend/discuss/group)
+                                                 // Android 上只有 momo_contacts 有效
+                         title:'contacts',
+                         text:'contacts',
+                         
+                         url: 'http://www.immomo.com',
+                         pic:'http://www.immomo.com/static/w5/img/website/header-bg2.jpg'
+                         },
+                  'momo_feed': {                 // 留言板 小尾巴
+                         title:'feed',
+                         text:'留言板',
+                         url:'http://www.immomo.com',
+                         pic:'http://www.immomo.com/static/w5/img/website/header-bg2.jpg',
+                         /* 消息尾巴新增配置 - begin */
+                         resource:{
+                            icon: 'http://cdnst.momocdn.com/static/m4/img/citycard/share-icon.png', // 留言板分享图标
+                            link: 'http://www.immomo.com',
+                            title:"陌陌明信片",
+                            desc:"来自陌陌用户的祝福"
+                         },
+                         /* 消息尾巴新增配置 －end */
+                         },
+                  'weixin': {                       // 微信朋友圈
+                         title:'wx',
+                         text:'weixin',
+                         url:'http://www.immomo.com',
+                         pic:'http://www.immomo.com/static/w5/img/website/header-bg2.jpg'
+                         },
+                  'weixin_friend': {                 // 微信聊天
+                         title:'wx_chat',
+                         text:'weixin_chat',
+                         url:'http://www.immomo.com',
+                         pic:'http://www.immomo.com/static/w5/img/website/header-bg2.jpg'
+                         }
+                 }
+    }
+
+    var callback  = {
+        share: function(resp){
+            $.showTip('Share Callback' + resp)
+            console.log(1)
+            console.log(resp)
+        },
+        doc: function(){
+            $.showTip('location')
+            location.href = doc_url;
+        }
+    }
+
+    // 右上角分享按钮
+    var $ui_btn= $('#ui-btn')
+    $ui_btn.on('click', function(e){
+        $.showTip('初始化右上角分享')
+        mm.invoke('init', { 
+                enable : {
+                    back : 0,         // 后退按钮
+                    forward :0,       // 前进
+                    refresh : 0,      // 刷新
+                    share : 0,        // 分享按钮
+                    scrollbar: 1,     // 原生滚动条显隐 (注：这里对垂直和水平滚动条都不显示)
+                    ui_btn: 1         // 右上角复合按钮显隐。(最高优先级，和share互斥)
+                },
+                share:  shareConfig,             // 兼容5.7及以下版本分享
+                ui_btn: {                        // 5.7+ 的 ui_btn
+                    title: '',
+                    dropdown: 0,
+                    buttons: [{
+                            'text': '分享',
+                            'action': 1,
+                            'param': shareConfig,
+                    }]
+              }
+                }
+        )
+    })
+
+    // 页面分享按钮
+    var $share = $('#share-btn')
+    $share.on('click', function(e){
+        $.showTip('sharePanel')
+        mm.invoke('callShare',shareConfig, function(resp){
+            console.log(resp)
+        })
+    })
+
+    // 直接分享到留言板的配置
+    var shareOneConfig = {
+        app: 'momo_feed',
+        title: '陌陌明信片',                   // 默认标题: 5.8新增字段，部分渠道需要
+        text: '来自陌陌用户的祝福',              // 默认内容详情
+        url: 'http://m.immomo.com/inc/citycard/welcome/entry',        // 默认链接: 注意需要带上完整的protocal
+        pic: 'http://chatst.immomo.com/webim/09/01/09016D25-8F82-434D-97C3-BD774F6E1C6A_L.jpg',
+                                             // 默认分享图片,注意需要是外网可用的图片链接
+        confirm_tail:'1',        //是否弹出确认对话框，1弹出，2不弹出，直接分享
+        resource: {
+            icon: 'http://cdnst.momocdn.com/static/m4/img/citycard/share-icon.png',// 留言板分享图标
+            link: 'http://m.immomo.com/inc/citycard/welcome/entry',
+            title:"陌陌明信片",
+            desc:"来自陌陌用户的祝福",
+            ignore_pic:1
+        },
+        callback: 'callback.share'      // 分享完成后的回调函数，一个页面上的对象。
+    }
+
+    // 单独分享按钮
+    var $one= $('#share-one')
+    $one.on('click', function(e){
+        $.showTip('shareOne')
+        mm.invoke('shareOne',shareOneConfig, function(resp){
+            console.log(resp)
+        })
+    })
+
+    $('#btn3').on('click', function(e){
+        location.href = '/demo/bridge/url'
+    })
+
+</script>
+
+
+
+</body>
+</html>
+
