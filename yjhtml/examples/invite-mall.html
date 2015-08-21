@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>基分商城</title>
+  <meta content="yes" name="apple-mobile-web-app-capable">
+  <meta content="yes" name="apple-touch-fullscreen">
+  <meta content="telephone=no,email=no" name="format-detection">
+  <link href="../build/img/app_icon.png" rel="Shortcut Icon" type="image/x-icon">
+  <link href="../build/img/app_icon.png" rel="apple-touch-icon-precomposed">
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+  <link rel="stylesheet" href="../build/invite/invite.css">
+  <!--[if lt IE 9]>
+  <script src="../build/vendor/js/html5shiv.js"></script>
+  <![endif]-->
+</head>
+<body>
+  <div class="container" id="J_container">
+    <!-- 用户信息 -->
+    <!-- 兑换动态 -->
+    <!-- 积分商城 -->
+  </div>
+  <script src="../build/vendor/js/sea.js"></script>
+  <script>
+
+    // Environment, Default production
+    var ASSET = "../build/";
+
+    // For development
+    if (location.href.indexOf("?dev") > 0) {
+      ASSET = "../client/";
+    }
+
+    // Set configuration
+    seajs.config({
+      base: ASSET,
+      alias: {
+        "zepto": "vendor/js/zepto.js"
+      }
+    });
+
+    // Init
+    seajs.use(['invite/mall']);
+
+  </script>
+</body>
+</html>

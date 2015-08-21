@@ -1,0 +1,709 @@
+@charset "UTF-8";
+@import '../vendor/scss/reset';
+@import '../module/common';
+@import './loading';
+$color-green: #64C758;
+$color-yellow: #FFFF4C;
+$color-pink: #FF6D68;
+$bg-pink: #FF6158;
+$color-title: #7F4141;
+$color-tip: #A5B2C5;
+$color-gray: #A7B3CA;
+body {
+  background-color: #FF6D68;
+}
+p {
+  margin: 0;
+}
+.icons-me {
+  background-image: url('../img/invite/from-me.png');
+  background-repeat: no-repeat;
+  background-position: 50% 50%;
+  background-size: 25px 38px;
+}
+h2 {
+  font-weight: 400;
+}
+@mixin mod {
+  background-color: #fff;
+  border-radius: 15px;
+  margin: 10px;
+}
+@mixin button {
+  background-color: $bg-pink;
+  padding: 12px 15px;
+  color: $color-yellow;
+  font-size: 1.8rem;
+  border-radius: 1000px;
+  display: inline-block;
+  margin: 0 auto;
+  cursor: pointer;
+}
+.invite-banner {
+  width: 100%;
+  margin-bottom: 20px;
+  img {
+    max-width: 100%;
+    display: block;
+  }
+}
+// 用户信息 
+.my-invite {
+  @include mod;
+  padding: 1.2rem;
+  overflow: hidden;
+  margin-top: 10px;
+  .user-cover {
+    float: left;
+    padding-right: 10px;
+  }
+  img {
+    width: 4rem;
+    height: 4rem;
+    border-radius: 100px;
+  }
+  .user-info {
+    float: left;
+    line-height: 2em;
+    span {
+      color: $color-green;
+    }
+  }
+  .user-name {
+    font-size: 1.4rem;
+    color: $color-title;
+  }
+  .user-count {
+    float: right;
+    text-align: right;
+    color: $color-green;
+    line-height: 2em;
+    em {
+      display: block;
+      font-style: normal;
+    }
+  }
+}
+// 我的番号
+.invite-number {
+  @include mod;
+  padding: 15px;
+  text-align: center;
+  p {
+    margin: 0;
+    line-height: 30px;
+    color: $color-tip;
+  }
+  .friend-dynamic {
+    color: $color-green;
+    font-size: 1.3rem;
+    line-height: 2.6rem;
+    height: 2.6rem;
+    overflow: hidden;
+  }
+  .copy-number-wrap {
+    margin: 0 10px 10px;
+  }
+  .copy-number {
+    @include button;
+    background-color: #ECECFB;
+    color: #FF6058;
+    font-size: 1rem;
+    border: 1px solid #DBDBEA;
+    display: block;
+    user-select: text;
+    -webkit-touch-callout: default;
+    touch-callout: default;
+    word-break: break-all;
+  }
+  .relate {
+    position: relative;
+    height: 6rem;
+    width: 100%;
+    padding-bottom: 20px;
+    .from-me, .from-friend {
+      background-color: $bg-pink;
+      width: 6rem;
+      height: 6rem;
+      border-radius: 1000px;
+      line-height: 6rem;
+    }
+    .from-me {
+      position: absolute;
+      left: 1rem;
+      background: $bg-pink url('../img/invite/from-me.png') no-repeat 50% 50%;
+      background-size: 25px 38px;
+    }
+    .from-friend {
+      position: absolute;
+      right: 1rem;
+      font-size: 1.6rem;
+      color: white;
+    }
+    .number-detail {
+      color: $color-green;
+      position: absolute;
+      height: 6rem;
+      left: 8rem;
+      right: 8rem;
+      em {
+        font-size: 1.6rem;
+        font-style: normal;
+        display: block;
+        line-height: 3.6rem;
+      }
+      span {
+        line-height: 2rem;
+      }
+      .line {
+        font-size: 0px;
+        height: 1px;
+        background-color: $color-green;
+        display: block;
+        position: absolute;
+        top: 50%;
+        width: 100%;
+        z-index: 2;
+      }
+      .arrow {
+        display: block;
+        width: 15px;
+        height: 15px;
+        margin-top: -8px;
+        border-top: 1px solid $color-green;
+        border-right: 1px solid $color-green;
+        border-left: 1px solid white;
+        border-bottom: 1px solid white;
+        z-index: 1;
+        background-color: white;
+        position: absolute;
+        right: 3px;
+        top: 50%;
+        transform: rotate(45deg)
+      }
+    }
+  }
+}
+// 我的积分
+.integral {
+  @include mod;
+  padding: 10px;
+  h2 {
+    text-align: center;
+    font-size: 1.6rem;
+    color: $color-title;
+    line-height: 4rem;
+  }
+  .step {
+    column-count: 3;
+    overflow: hidden;
+  }
+  .col {
+    text-align: center;
+    .circle {
+      background-color: $color-green;
+      width: 6.5rem;
+      height: 6.5rem;
+      border-radius: 1000px;
+      margin: 0 auto;
+      font-size: 1.9rem;
+      color: white;
+    }
+    p {
+      min-height: 2em;
+      color: #A5B2C5;
+      line-height: 1.2rem;
+      padding: 10px 0;
+    }
+    b {
+      color: $color-pink;
+    }
+    em {
+      background-color: $color-green;
+      border-radius: 1000px;
+      color: white;
+      display: block;
+      height: 2rem;
+      width: 2rem;
+      line-height: 2rem;
+      margin: 0 auto;
+      font-size: 1.3rem;
+      font-style: normal;
+    }
+  }
+  .col-two .circle, .col-three .circle {
+    span {
+      display: block;
+      transform: translate(0, 15px)
+    }
+    i {
+      font-style: normal;
+      display: block;
+      opacity: 0.5;
+      font-size: 1.4rem;
+    }
+  }
+  .col-three .circle span {
+    font-size: 2.1rem;
+  }
+  .expla {
+    text-align: center;
+    line-height: 2em;
+    // padding-top: 10px;
+    a {
+      display: inline-block;
+      color: $color-pink;
+      font-size: 1.6rem;
+      padding: 1.5rem 1rem 1rem;
+    }
+  }
+}
+// 积分商城
+.mall {
+  @include mod;
+  padding: 10px;
+  .load-error-tip{
+    text-align: center;
+    color: #A7B3CA;
+    padding: 10px 0 25px;
+    line-height: 2rem;
+    font-size: 1.4rem;
+  }
+  .tip {
+    color: #A7B3CA;
+    text-align: center;
+    font-size: 1.4rem;
+    padding-bottom: 10px;
+    margin-top: -5px;
+  }
+  h2 {
+    font-weight: 400;
+    text-align: center;
+    font-size: 1.6rem;
+    color: $color-title;
+    line-height: 4rem;
+  }
+  .items {
+    // column-count: 3;
+    overflow: hidden;
+    // padding: 0 8px;
+  }
+  .item {
+    text-align: center;
+    padding-bottom: 12px;
+    overflow: hidden;
+    float: left;
+    width: 33.3%;
+    img {
+      width: 7.5rem;
+      height: 7.5rem;
+      display: block;
+      margin: 0 auto;
+    }
+    h3 {
+      color: $color-green;
+      margin: 5px 0 3px;
+      font-weight: 400;
+    }
+    .name {
+      /* autoprefixer: off */
+      
+      height: 2.8rem;
+      line-height: 1.4rem;
+      color: #7F4141;
+      margin: 3px 0 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+    }
+    .store {
+      display: block;
+      color: #A7B3CA;
+      font-style: normal;
+      padding: 3px 0 10px;
+    }
+    .store-disable {
+      display: inline-block;
+      color: white;
+      background-color: #A7B3CA;
+      padding: 4px 10px;
+      border-radius: 100px;
+      min-width: 22px;
+    }
+    .buy {
+      display: inline-block;
+      color: white;
+      background-color: $color-green;
+      padding: 4px 10px;
+      border-radius: 100px;
+      min-width: 24px;
+    }
+    .disable {
+      background-color: #A7B3CA;
+    }
+  }
+  .disable-item{
+    img{
+      opacity: 0.4;
+    }
+    h3{
+      color: $color-gray !important;
+    }
+    .name{
+      color: $color-gray !important;
+    }
+    .buy{
+      background-color: #A7B3CA !important;
+    }
+  }
+  .more {
+    text-align: center;
+    padding: 0px 0 10px;
+    a {
+      @include button;
+    }
+  }
+  .last-exchange {
+    text-align: center;
+    border-top: 1px solid #EAEDF1;
+    padding: 10px 0 0px;
+    font-size: 1.3rem;
+    color: $color-gray;
+    ul {
+      height: 2.6rem;
+      overflow: hidden
+    }
+    li {
+      line-height: 2.6rem;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+      span {
+        color: $color-title;
+      }
+      b {
+        font-weight: 400;
+        color: $color-title;
+      }
+    }
+  }
+}
+// 排行
+.rank {
+  @include mod;
+  h2 {
+    text-align: center;
+    font-size: 1.6rem;
+    color: $color-title;
+    line-height: 3rem;
+    padding: 10px 0 0;
+  }
+  p {
+    text-align: center;
+    color: $color-pink;
+  }
+  .load-error-tr{
+    background-color: white !important;
+  }
+  .load-error-tip{
+    color: $color-gray;
+    font-size: 1.4rem;
+    padding:20px 0;
+    background-color: white
+  }
+  table {
+    width: 100%;
+    color: $color-title;
+    img {
+      white: 3rem;
+      height: 3rem;
+      border-radius: 1000px;
+      vertical-align: middle;
+    }
+    th {
+      color: #A6B2CA;
+      padding: 10px;
+      background-color: white
+    }
+    tr {
+      background-color: #EAEDF1;
+    }
+    tr:nth-child(1) {
+      background-color: #ffc600;
+    }
+    tr:nth-child(2) {
+      background-color: #DBDBED;
+    }
+    tr:nth-child(3) {
+      background-color: #FBBE9B;
+    }
+    td {
+      border-bottom: 5px solid white;
+      padding: 0.5rem 1rem;
+    }
+    em {
+      // font-style: normal;
+      background-color: white;
+      width: 2rem;
+      height: 2rem;
+      line-height: 2rem;
+      display: inline-block;
+      border-radius: 100px;
+    }
+    td.none {
+      background-color: white;
+      text-align: center;
+      color: #A7B3CA !important;
+    }
+  }
+}
+.loading-more {
+  text-align: center;
+  padding: 0 0 5px;
+  a, p {
+    color: #A7B3CA;
+    padding: 10px;
+    display: inline-block;
+  }
+}
+// 番号信息
+.number-info {
+  @include mod;
+  padding: 10px;
+  .user-info {
+    text-align: center;
+    img {
+      width: 6rem;
+      height: 6rem;
+      border-radius: 100px;
+      display: block;
+      margin: 0 auto;
+    }
+  }
+  .user-name {
+    color: $color-title;
+    line-height: 2rem;
+  }
+  .number-id {
+    text-align: center;
+    padding-bottom: 30px;
+    .bg {
+      display: inline-block;
+      position: relative;
+      z-index: 2;
+      &:after {
+        content: ' ';
+        display: block;
+        width: 80%;
+        height: 100%;
+        background-color: #F8D5D4;
+        position: absolute;
+        z-index: -1;
+        left: 10px;
+        top: 5px;
+        // transform: rotate(357deg)
+        transform: matrix(1.088, -0.06, -0.015, 0.910, 0, 0)
+      }
+      &:before {
+        content: ' ';
+        display: block;
+        width: 80%;
+        height: 100%;
+        background-color: #F8D5D4;
+        position: absolute;
+        z-index: -1;
+        right: 10px;
+        top: 5px;
+        // transform: rotate(3deg)
+        transform: matrix(1.088, 0.06, -0.015, 0.910, 0, 0)
+      }
+    }
+    span {
+      background-color: $bg-pink;
+      display: inline-block;
+      padding: 10px;
+      color: white;
+      border-radius: 2px;
+      font-size: 1.4rem;
+    }
+    em {
+      background-color: white;
+      color: $color-green;
+      font-style: normal;
+      padding: 5px 10px;
+      font-size: 2.5rem;
+      margin-left: 10px;
+      vertical-align: middle;
+    }
+    a{
+      color: $color-green;
+      text-decoration: none;
+    }
+  }
+  .download-app {
+    padding-top: 104px;
+    background: url(../img/invite/number-info-bg.png) no-repeat 50% 0;
+    background-size: 225px 108px;
+    text-align: center;
+    p {
+      color: #1eaffc;
+      font-size: 1.3rem;
+      line-height: 1.6rem;
+      margin-bottom: 20px;
+    }
+    a {
+      @include button;
+    }
+  }
+  .tip {
+    text-align: center;
+    color: $color-pink;
+    padding: 10px;
+  }
+}
+// 兑换动态
+.exchange-dynamic {
+  @include mod;
+  padding: 5px;
+  text-align: center;
+  color: $color-gray;
+  font-size: 1.3rem;
+  ul {
+    height: 2.6rem;
+    overflow: hidden
+  }
+  li {
+    line-height: 2.6rem;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    span {
+      color: $color-title;
+    }
+    b {
+      font-weight: 400;
+      color: $color-title;
+    }
+  }
+}
+/////////////////////
+.J_numberTip {
+  text-align: center;
+  padding: 15px;
+  input, textarea {
+    font-size: 1.4rem;
+    text-align: center;
+    padding: 5px;
+    width: 90%;
+    border: 1px solid #eee;
+  }
+  span {
+    padding: 10px;
+    color: $color-green;
+    display: block;
+    font-size: 1.4rem;
+  }
+}
+.J_explaTip {
+  padding: 10px;
+  ol {
+    padding: 0;
+  }
+  li {
+    line-height: 2rem;
+    list-style: none;
+    font-size: 1.4rem;
+    color: $color-title;
+    padding: 3px 0;
+  }
+  p {
+    padding: 10px 0;
+    color: #A7B3CA;
+    text-align: center;
+  }
+}
+.promotion-bar {
+  background-color: rgba(0, 0, 0, 0.3);
+  color: white;
+}
+// 表单
+.J_goodForm {
+  padding: 12px;
+  overflow: hidden;
+  input[type=text], input[type=number] {
+    float: left;
+    background-color: #EAEDF1;
+    border: 1px solid #EAEDF1;
+    border: none;
+    box-sizing: border-box;
+    border-radius: 8px;
+  }
+  .col2 {
+    padding: 6px;
+    margin-bottom: 10px;
+    font-size: 1.4rem;
+    width: 100%;
+  }
+  .col1 {
+    padding: 6px;
+    margin-bottom: 10px;
+    font-size: 1.4rem;
+    width: calc(50% - 5px);
+  }
+  .col-extar {
+    margin-right: 10px;
+  }
+  textarea {
+    border: 1px solid #EAEDF1;
+    box-sizing: border-box;
+    border-radius: 8px;
+    background-color: #EAEDF1;
+    border: none;
+    width: 100%;
+  }
+  .btns {
+    text-align: center;
+    overflow: hidden;
+    input {
+      background-color: $color-green;
+      color: white;
+      padding: 5px 10px;
+      border: none;
+      border-radius: 100px;
+      font-size: 1.4rem;
+      min-width: 8rem;
+      margin: 0 5px;
+    }
+    .dialog-close {
+      background-color: #999;
+    }
+  }
+  p {
+    padding: 10px 0;
+    color: #A7B3CA;
+    text-align: center;
+  }
+}
+.disable-buy-tip {
+  padding: 10px;
+  text-align: center;
+  font-size: 1.4rem;
+  p {
+    color: $color-green;
+    line-height: 2rem;
+  }
+  a {
+    margin-top: 1.2rem;
+    display: inline-block;
+    background-color: $color-green;
+    color: white;
+    padding: 8px 10px;
+    border-radius: 100px;
+  }
+}
+.error-tip {
+  // box-shadow: 0px 0px 2px red inset;
+  border: 1px solid red;
+}

@@ -7,3 +7,4 @@ app/components
 *.iml
 test*.js
 .Ds_Store
+.git

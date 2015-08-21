@@ -1,0 +1,44 @@
+.game {
+  text-align: center;
+  .inner {
+    width: 2.88rem;
+    height: 100%;
+    margin: 0 auto;
+    padding-top: .2rem;
+    position: relative;
+    box-sizing: border-box;
+    .machine{
+      width: 2.88rem;
+      height: 4.6rem;
+      background-repeat: no-repeat;
+      background-image: url(../img/poto/gamestart.png);
+      background-size: contain;
+      background-position: center top;
+
+    }
+    .chance {
+      box-sizing: border-box;
+      width: 3rem;
+      padding: .1rem .4rem;
+      font-size: .14rem;
+      color: #00ADFF;
+      position: absolute; 
+      left: 50%;
+      margin-left: -1.5rem;
+      top: 4rem;
+    }
+    .egg {
+      position: absolute;
+      left: 30%;
+      top: 2.8rem;
+      width: .4rem;
+      height: .5rem;
+      opacity: 0;
+    }
+    .egg-default {
+      background-repeat: no-repeat;
+      background-image: url(../img/poto/egg.png);
+      background-size: contain;
+    }
+  }
+}

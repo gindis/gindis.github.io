@@ -1,0 +1,1 @@
+define("page/loading",["zepto","module/preloader"],function(e,o,r){var a=(e("zepto"),e("module/preloader")),l=a.create(function(e,o){switch(e){case"error":break;case"complete":seajs.use("page/exp"),console.log("complete");break;case"progress":var r=Math.round(100*o)+"%";document.querySelector("#J_proCur").style.width=r}});l.addRange([ASSET+"/img/logo.png"]),l.load()});

@@ -1,0 +1,436 @@
+.post {
+  .post-meta .avatar, .post-list .post-item .avatar {
+    width: 48px;
+    height: 48px;
+    float: left;
+    overflow: hidden;
+    border-radius: 48px;
+    -webkit-border-radius: 48px;
+    margin-right: 10px;
+
+    img {
+      width: 48px;
+      height: 48px;
+      border-radius: 48px;
+      -webkit-border-radius: 48px;
+    }
+  }
+  .post-meta {
+    padding: 15px;
+    overflow: hidden;
+    .name {
+      line-height: 48px;
+      overflow: hidden;
+      font-size: 20px;
+      color: #18242f;
+    }
+    .time {
+      float: right;
+      color: #a7b4c6;
+    }
+    .info {
+      overflow: hidden;
+        line-height: 1.4;
+        padding-top: 2px;
+      .sname {
+        font-size: 22px;
+        color: #333;
+      }
+      .sponsor {
+        font-size: 18px;
+        color: #999;
+      }
+    }
+  }
+  .post-content {
+    img {
+      display: block;
+    }
+  }
+  .post-trends {
+    padding: 15px;
+
+    .pag {
+      .tag {
+        display: inline-block;
+        line-height: 34px;
+        color: #000;
+        margin-right: 10px;
+        margin-bottom: 10px;
+        position: relative;
+        padding-left: 44px;
+
+        b {
+          width: 34px;
+          height: 34px;
+          margin-right: 4px;
+          position: absolute;
+          left: 0;
+          background: url(../img/attr_icon.png) no-repeat;
+        }
+      }
+      .a1 {
+        color: #229aef;
+      }
+      .a2 {
+        color: #adb941;
+
+        b {
+          background-position: 0 -34px;
+        }
+      }
+      .a3 {
+        color: #cf424d;
+
+        b {
+          background-position: 0 -68px;
+        }
+      }
+      .a4 {
+        color: #6bc562;
+
+        b {
+          background-position: 0 -102px;
+        }
+      }
+      .a5 {
+        color: #9541b7;
+
+        b {
+          background-position: 0 -136px;
+        }
+      }
+      .a6 {
+        color: #00bdb4;
+
+        b {
+          background-position: 0 -170px;
+        }
+      }
+      .a7 {
+        color: #d56b48;
+
+        b {
+          background-position: 0 -204px;
+        }
+      }
+      .m1 {
+        color: #229aef;
+
+        b {
+          background: url(../img/jicon.png) no-repeat;
+          background-position: 0 -60px;
+          color: #00b3ff;
+        }
+      }
+    }
+    .like, .say {
+      .i {
+        width: 34px;
+        height: 34px;
+        float: left;
+        background: url(../img/jicon.png) no-repeat;
+        margin-right: 10px;
+        margin-top: -1px;
+      }
+    }
+    .like {
+      line-height: 28px;
+      color: #a6b3c5;
+
+      .i {
+        background-position: -54px 0;
+      }
+    }
+    .say {
+      line-height: 28px;
+      padding-left: 34px;
+
+      .i {
+        background-position: -40px -60px;
+        margin-left: -34px;
+      }
+    }
+  }
+  .post-share {
+    padding: 40px 0 30px;
+  }
+  .post-count {
+    font-size: 20px;
+    height: 20px;
+    padding: 20px 0;
+    text-align: center;
+    position: relative;
+
+    span {
+      background-color: #fff;
+      padding: 0 10px;
+      position: relative;
+      z-index: 10;
+      color: #a7b4c7;
+    }
+    &:after {
+      content: '';
+      width: 100%;
+      height: 1px;
+      background-color: #e7eff8;
+      position: absolute;
+      left: 0;
+      top: 50%;
+    }
+  }
+  .post-list {
+    .post-item {
+      border-bottom: #e7eff8 1px solid;
+      padding: 30px 15px;
+      overflow: hidden;
+      font-size: 20px;
+
+      .post-body {
+        overflow: hidden;
+      }
+      .post-head {
+        padding-top: 6px;
+        padding-bottom: 10px;
+        position: relative;
+
+        .author {
+          color: #2aadff;
+        }
+        .meta {
+          color: #a7b4c6;
+          font-size: 14px;
+          margin-top: 3px;
+        }
+        .like {
+          position: absolute;
+          top: 0;
+          right: 0;
+          line-height: 30px;
+          color: #0ab0f5;
+          border: #0ab0f5 1px solid;
+            border-radius: 30px;
+            padding: 4px 10px 3px;
+
+          b {
+            width: 30px;
+            height: 30px;
+            float: left;
+            background-image: url(../img/jicon.png);
+            background-position: -25px -25px;
+            margin-right: 6px;
+            background-repeat: no-repeat;
+          }
+        }
+      }
+      .post-body-inner {
+        line-height: 24px;
+        .reply {
+          color: #b2b2b2;
+          display: block;
+        }
+        img {
+          display: block;
+          width: 90px;
+          margin-top: 10px;
+        }
+      }
+    }
+  }
+}
+@media only screen and (max-width:767px) {
+  .post {
+    .post-meta .avatar, .post-list .post-item .avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 32px;
+      -webkit-border-radius: 32px;
+      margin-right: 5px;
+
+      img {
+        width: 32px;
+        height: 32px;
+        border-radius: 32px;
+        -webkit-border-radius: 32px;
+      }
+    }
+    .post-meta {
+      padding: 5px 11px;
+
+      .name {
+        line-height: 32px;
+        font-size: 16px;
+      }
+      .info {
+        line-height: 1.4;
+        padding-top: 2px;
+        .sname {
+          font-size: 13px;
+        }
+        .sponsor {
+          font-size: 11px;
+        }
+      }
+    }
+    .post-content {
+      .post-img {
+        padding: 0 11px;
+      }
+    }
+    .post-trends {
+      padding: 5px 11px;
+      font-size: 14px;
+
+      .pag {
+        .tag {
+          line-height: 20px;
+          margin-right: 5px;
+          margin-bottom: 5px;
+          padding-left: 25px;
+
+          b {
+            width: 20px;
+            height: 20px;
+            margin-right: 5px;
+            background-size: 20px 180px;
+          }
+        }
+        .a2 {
+          b {
+            background-position: 0 -20px;
+          }
+        }
+        .a3 {
+          b {
+            background-position: 0 -40px;
+          }
+        }
+        .a4 {
+          b {
+            background-position: 0 -60px;
+          }
+        }
+        .a5 {
+          b {
+            background-position: 0 -80px;
+          }
+        }
+        .a6 {
+          b {
+            background-position: 0 -100px;
+          }
+        }
+        .a7 {
+          b {
+            background-position: 0 -120px;
+          }
+        }
+        .m1 {
+          b {
+            background-size: 57px 57px;
+            background-position: 0 -34px
+          }
+        }
+      }
+      .like .i, .say .i {
+        width: 20px;
+        height: 20px;
+        background-size: 50px 50px;
+        margin-top: 3px;
+      }
+      .like {
+        line-height: 20px;
+        padding-top: 10px;
+        padding-bottom: 5px;
+
+        .i {
+          background-position: -27px 0;
+        }
+      }
+      .say {
+        line-height: 20px;
+        padding-left: 22px;
+
+        .i {
+          margin-right: 0;
+          background-position: -20px -30px;
+          margin-left: -22px;
+        }
+      }
+    }
+    .post-share {
+      padding: 30px 0;
+    }
+    .post-count {
+      padding: 0;
+      height: 0;
+      font-size: 11px;
+      color: #b2b2b2;
+      
+      span {
+        height: 20px;
+        border: 1px solid #c9cacb;
+        line-height: 22px;
+        position: relative;
+        top: -10px;
+        border-radius: 20px;
+        color: #b2b2b2;
+        font-style: italic;
+        padding: 5px 10px 4px;
+
+        i {
+          padding: 0 7px;
+          font-style: normal;
+        }
+      }
+      &:after {
+        background-color: #c9cacb;
+      }
+    }
+    .post-list {
+      .post-item {
+        padding: 20px 11px;
+        font-size: 14px;
+        background-color: #fafafa;
+        border-color: #c9cacb;
+
+        .post-head {
+          padding-bottom: 5px;
+          padding-top: 2px;
+          .author {
+            color: #333;
+          }
+
+          .byline {
+            padding-bottom: 2px;
+          }
+          .meta {
+            font-size: 10px;
+            padding-bottom: 10px;
+            margin-top: -1px;
+            color: #b2b2b2;
+          }
+          .like {
+            line-height: 15px;
+            font-size: 10px;
+            padding: 3px 8px;
+            border-radius: 25px;
+
+            b {
+              width: 15px;
+              height: 15px;
+              background-size: 50px 50px;
+              background-position: -13px -13px;
+              margin-right: 3px;
+              top: 2px;
+              position: relative;
+            }
+          }
+        }
+        .post-body-inner {
+          line-height: 20px;
+        }
+      }
+    }
+  }
+}

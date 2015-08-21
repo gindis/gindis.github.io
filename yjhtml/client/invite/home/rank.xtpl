@@ -1,0 +1,31 @@
+<div class="rank">
+  <h2>肥皂排名</h2>
+    <p>每期排名前十的用户会获得惊喜大奖(●'◡'●)ﾉ♥</p>
+  <div class="rank-content">
+      <table>
+        <thead>
+          <tr>
+            <th width="20">排名</th>
+            <th align="left">昵称</th>
+            <th align="right">丢出肥皂数</th>
+          </tr>
+        </thead>
+        <tbody id="J_rankBody">
+        {{#if(errorTip)}}
+          {{{errorTip}}}
+        {{else}}
+          {{include ('./rankitem')}}
+        {{/if}}
+        </tbody>
+      </table>
+  </div>
+  {{#if(ranklist && ranklist.length > 0)}}
+    <div class="loading-more">
+    <a href="javascript:;" id="J_rankLoad">点击查看更多(๑╹ڡ╹)╭</a>
+  </div>
+  {{else}}
+  <div class="loading-more">
+    <p>暂无排名</p>
+  </div>
+  {{/if}}
+</div>

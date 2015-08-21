@@ -1,0 +1,1 @@
+define("module/feed",[],function(e,d,f){});

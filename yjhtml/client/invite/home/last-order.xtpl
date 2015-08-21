@@ -1,0 +1,7 @@
+<div class="exchange-dynamic">
+  <ul id="J_lastOrder">
+    {{#each(root)}}
+      <li><b>{{username}}</b>刚刚兑换了<span>{{productname}}</span></li>
+    {{/each}}
+  </ul>
+</div>

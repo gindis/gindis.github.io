@@ -1,0 +1,48 @@
+html,
+body {
+  width: 100%;
+  height: 100%; }
+
+.loading {
+  position: absolute;
+  top: 0;
+  left: 0; }
+  .loading .loading-body {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    background-color: #050b3a; }
+  .loading .loading-main {
+    position: absolute;
+    width: 260px;
+    left: 50%;
+    top: 50%;
+    margin-left: -130px;
+    margin-top: -59px; }
+    .loading .loading-main .logo {
+      width: 114px;
+      height: 42px;
+      margin: 0 auto;
+      background-image: url(logo2.png);
+      background-size: contain;
+      background-repeat: no-repeat;
+      position: relative;
+      z-index: 2; }
+    .loading .loading-main .progress,
+    .loading .loading-main .current {
+      border-radius: 20px;
+      height: 20px; }
+    .loading .loading-main .progress {
+      background-color: #fff;
+      margin-top: -7px; }
+    .loading .loading-main .current {
+      background-color: #FDC700;
+      -webkit-transition: all 600ms ease-out;
+              transition: all 600ms ease-out;
+      width: 8%; }
+    .loading .loading-main .hint {
+      padding-top: 23px;
+      color: #FDC700;
+      font-size: 14px;
+      line-height: 20px;
+      text-align: center; }

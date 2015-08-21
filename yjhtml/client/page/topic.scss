@@ -1,0 +1,325 @@
+@import '../vendor/scss/reset';
+@import '../module/common';
+@import '../module/share';
+
+html {
+  font-size: 62.5%;
+}
+body {
+  background-color: #eaedf1;
+}
+video {
+  width: 100%;
+  background-color: #1cabff;
+}
+.container {
+  .content {
+    font-size: 20px;
+
+    .main {
+
+      /*background-color: #fff;*/
+      border-top-left-radius: 10px;
+      border-top-right-radius: 10px;
+
+      .share {
+        .i {
+          background-position: 0 0;
+        }
+      }
+      .post {
+        background-color: #fff;
+      }
+      .logo-wrap {
+        background-color: #fff;
+        padding-top: 70px;
+        padding-bottom: 60px;
+      }
+      .logo {
+        width: 240px;
+        margin: 0 auto;
+
+        .icon {
+          height: 120px;
+          background-size: 240px 120px;
+        }
+      }
+      .post-content {
+        .post-img {
+          margin-bottom: 10px;
+
+          &:last-child {
+            margin-bottom: 0;
+          }
+        }
+      }
+    }
+    .post-live {
+      border-top: 1px solid #c9cacb;
+    }
+  }
+  .sidebar {
+    border-radius: 20px;
+    -webkit-border-radius: 20px;
+    box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    margin-top: 130px;
+    border: #a6b3c5 1px solid;
+
+    .icon {
+      background-image: url(../img/juju_white.gif);
+      background-repeat: no-repeat;
+    }
+  }
+}
+
+.post-live {
+  padding: 22px;
+  font-size: 18px;
+  line-height: 1.2;
+
+  .cover {
+    width: 216px;
+    float: left;
+    margin: 0 22px 22px 0;
+
+    img {
+      width: 216px;
+    }
+  }
+  .info {
+    overflow: hidden;
+    min-height: 302px;
+    color: #333;
+
+    .tit {
+      font-size: 20px;
+    }
+    .time {
+      padding: 16px 0;
+    }
+    .adr {
+      padding-bottom: 16px;
+    }
+  }
+  .body {
+    color: #999;
+  }
+  .more {
+    padding: 22px 0;
+    color: #0ab0f5;
+    border-bottom: #c9cacb 1px solid;
+    text-align: center;
+  }
+  .tags {
+    padding: 22px 0;
+
+    .tag {
+      height: 36px;
+      line-height: 36px;
+      color: #999;
+      border: #c9cacb 1px solid;
+      margin: 0 10px;
+      padding: 4px 20px;
+      border-radius: 40px;
+    }
+  }
+  .btn-state {
+    border-radius: 2px;
+    border: #999 1px solid;
+    padding: 4px 10px 4px 0;
+    i {
+      background-color: #999;
+      color: #fff;
+      font-style: normal;
+      padding: 4px 10px;
+      margin-right: 10px;
+    }
+  }
+}
+.actor {
+  background-color: #fff;
+  padding: 0 22px;
+
+  .total {
+    height: 88px;
+    line-height: 88px;
+    font-size: 26px;
+    color: #999;
+    text-align: center;
+    border-bottom: #c9cacb 1px solid;
+
+    .num {
+      color: #0ab0f5;
+    }
+  }
+  .list {
+    .item {
+      .avatar {
+        float: left;
+        margin-right: 22px;
+        img {
+          width: 30px;
+          border-radius: 100%;
+        }
+      }
+      box-sizing: border-box;
+      border-bottom: #c9cacb 1px solid;
+      height: 50px;
+      line-height: 30px;
+      padding: 10px 0;
+      font-size: 24px;
+    }
+  }
+}
+.promotion-bar {
+  background-color: rgba(255, 255, 255, .9);
+  border-top: 1px solid #e7eff8;
+  color: #00afff;
+
+  .slogan {
+  }
+}
+@media only screen and (max-width:767px) {
+  video {
+    height: calc(100vw*9/16);
+    min-height: 1.68rem;
+  }
+  .container {
+    width: 100%;
+
+    .content {
+      .head {
+        height: 20px;
+
+        .logo {
+          display: none;
+        }
+      }
+      .main {
+        padding-bottom: 48px;
+        border-top-left-radius: 0;
+        border-top-right-radius: 0;
+
+        .logo-wrap {
+          padding-top: 35px;
+          padding-bottom: 30px;
+        }
+        .logo {
+          width: 120px;
+          margin: 0 auto;
+
+          .icon {
+            height: 60px;
+            background-size: 120px 60px;
+          }
+        }
+        .post {
+          padding-bottom: 5px;
+        }
+      }
+      .post-live {
+        padding: 11px;
+        font-size: 12px;
+        line-height: 1.2;
+
+        .cover {
+          width: 108px;
+          margin: 0 11px 11px 0;
+
+          img {
+            width: 108px;
+          }
+        }
+        .info {
+          min-height: 151px;
+
+          .tit {
+            font-size: 13px;
+          }
+          .time {
+            padding: 8px 0;
+          }
+          .adr {
+            padding-bottom: 8px;
+          }
+        }
+        .btn-state {
+          height: 18px;
+          border-radius: 2px;
+          border: #999 1px solid;
+          padding: 2px 10px 2px 0;
+          i {
+            background-color: #999;
+            color: #fff;
+            font-style: normal;
+            padding: 2px 5px;
+            margin-right: 5px;
+          }
+        }
+        .more {
+          padding: 11px 0;
+        }
+        .tags {
+          padding: 11px 0;
+
+          .tag {
+            height: 18px;
+            line-height: 18px;
+            margin: 0 5px;
+            padding: 2px 10px;
+            border-radius: 20px;
+          }
+        }
+      }
+      .actor {
+        margin-top: 19px;
+        padding: 0 11px;
+
+        .total {
+          height: 44px;
+          line-height: 44px;
+          font-size: 13px;
+          color: #999;
+
+          .num {
+            color: #0ab0f5;
+          }
+        }
+        .list {
+          .item {
+            .avatar {
+              margin-right: 11px;
+
+              img {
+                width: 15px;
+                border-radius: 100%;
+              }
+            }
+            height: 25px;
+            line-height: 15px;
+            padding: 5px 0;
+            font-size: 12px;
+          }
+        }
+      }
+      .foot {
+        display: none;
+
+        .go {
+          height: 39px;
+          line-height: 39px;
+          font-size: 14px;
+        }
+        .copyright {
+          padding-top: 20px;
+          font-size: 10px;
+        }
+      }
+    }
+  }
+  .promotion-bar {
+    border-color: #c9cacb;
+  }
+}
+@import '../module/feed';

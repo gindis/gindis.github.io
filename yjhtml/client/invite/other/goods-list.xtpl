@@ -1,0 +1,6 @@
+{{#each(productlist)}}
+<div class="item">
+  <img src="{{productimg}}">
+  <span class="name">{{{productname}}}</span>
+</div>
+{{/each}}

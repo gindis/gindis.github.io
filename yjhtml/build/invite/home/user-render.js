@@ -1,0 +1,1 @@
+define("invite/home/user-render",["./user","xtemplate/runtime"],function(e,r,n){var t=e("./user"),u=e("xtemplate/runtime"),i=new u(t);n.exports=function(){return i.render.apply(i,arguments)}});

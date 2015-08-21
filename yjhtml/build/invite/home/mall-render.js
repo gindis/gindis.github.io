@@ -1,0 +1,1 @@
+define("invite/home/mall-render",["./mall","xtemplate/runtime"],function(e,n,t){var r=e("./mall"),l=e("xtemplate/runtime"),m=new l(r);t.exports=function(){return m.render.apply(m,arguments)}});

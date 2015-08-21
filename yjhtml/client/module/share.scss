@@ -1,0 +1,110 @@
+@import './ani';
+.mod-share {
+  width: 100%;
+  height: 180px;
+  background-color: rgba(255, 255, 255, .98);
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  z-index: 10001;
+  color: #000;
+  border-top: #e7eff8 1px solid;
+  .tit {
+    text-align: center;
+    padding: 20px 0;
+    margin: 0;
+    font-size: 18px;
+    font-weight: 200;
+    position: relative;
+  }
+  .share-way {
+    overflow: hidden;
+    .item {
+      display: block;
+      float: left;
+      font-size: 16px;
+      width: 33.3333333%;
+      margin-bottom: 30px;
+      color: #000;
+      text-align: center;
+      b {
+        width: 57px;
+        height: 57px;
+        background-image: url(../img/share_btn.png);
+        background-repeat: no-repeat;
+        background-size: 57px 228px;
+        display: block;
+        margin: 0 auto 10px;
+      }
+    }
+    .sina {
+      b {
+
+      }
+    }
+    .fri {
+      b {
+        background-position: 0 -57px;
+      }
+    }
+    .timeline {
+      b {
+        width: 63px;
+        height: 62px;
+        background-image: url(../img/timeline.png);
+        background-repeat: no-repeat;
+        background-size: 63px 62px;
+        margin-top: -2px;
+        position: relative;
+        z-index: 2;
+      }
+    }
+    .renren {
+      b {
+        background-position: 0 -114px;
+      }
+    }
+    .qzone {
+      b {
+        background-position: 0 -171px;
+      }
+    }
+  }
+  .close {
+    width: 40px;
+    height: 40px;
+    position: absolute;
+    right: 5px;
+    top: 5px;
+    overflow: hidden;
+    text-indent: 100%;
+    cursor: pointer;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+/*    &:hover,
+    &:focus {
+      outline: none;
+    }*/
+    &::before,
+    &::after {
+      content: '';
+      position: absolute;
+      width: 1px;
+      height: 60%;
+      top: 50%;
+      left: 50%;
+      background: #6e6e6e;
+    }
+
+    &::before {
+      -webkit-transform: translate(-50%,-50%) rotate(45deg);
+      transform: translate(-50%,-50%) rotate(45deg);
+    }
+
+    &::after {
+      -webkit-transform: translate(-50%,-50%) rotate(-45deg);
+      transform: translate(-50%,-50%) rotate(-45deg);
+    }
+  }
+
+}

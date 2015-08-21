@@ -1,0 +1,146 @@
+#J_wishHead {
+  .inner {
+    margin-left: 0;
+    margin-right: 0;
+    padding-left: .1rem;
+    padding-right: .1rem;
+  }
+  .wish-btn {
+    right: 0;
+  }
+}
+#J_wishList {
+  padding-top: .2rem;
+}
+.scroll {
+  height: 3.6rem;
+  height: calc(100% - 1.2rem);
+  overflow: hidden;
+}
+.wish-list {
+  .item {
+    position: relative;
+    .hcur{
+      background-color: rgba(255,255,255,.05);
+    }
+  }
+  .load {
+    text-align:center;
+    padding-top: .15rem;
+  }
+  .inner {
+    border-bottom: 1px solid rgba(255,255,255,0.2);
+    min-height: .6rem;
+    /*margin: 0 .1rem;*/
+    margin-left: .1rem;
+    margin-right:.1rem;
+    overflow: hidden;
+    .avatar {
+      width: .4rem;
+      height: .4rem;
+      border-radius: 50%;
+      overflow: hidden;
+      float: left;
+      margin-top: .1rem;
+      .circle {
+        width: .4rem;
+        height: .4rem;
+        border-radius: 50%;
+        display: block;
+      }
+    }
+    .body {
+      overflow: hidden;
+      box-sizing: border-box;
+      padding-left: .1rem;
+      margin-right: .7rem;
+      padding-bottom: .1rem;
+      line-height: 1.4;
+      .name {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+      }
+      .name {
+        color: #339CF4;
+        padding: .14rem 0 .06rem;
+      }
+      .signature {
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+    }
+    .wish-btn {
+      position: absolute;
+      top: 0;
+      right: -.1rem;
+      width: .8rem;
+      text-align: center;
+      color: #FDC700;
+      .tit {
+        padding: .14rem 0 .06rem;
+      }
+      .btn-inverse {
+        margin-top: .15rem;
+      }
+      .btn-default {
+        color: #FF4544;
+        i {
+          &:before {
+            content: "\f08a"
+          }
+        }
+        /*&:hover {
+          color: #333;
+        }*/
+      }
+      .btn-fav {
+        background-color:#FF4544;
+        color:white;
+        i {
+          &:before{
+            content: "\f004"
+          }
+        }
+        /*&:hover {
+          color: #171F46;
+        }*/
+      }
+    }
+  } 
+}
+
+.myfri {
+  position: absolute;
+  width: 2.17rem;
+  background-color: rgba(0,148,248,.8);
+  color: #fff;
+  border-radius: .05rem;
+  text-align: center;
+  left: .52rem;
+  top: 2.58rem;
+  max-height: 2.5rem;
+  z-index: 9997;
+  display: none;
+  .myfriscroll {
+    overflow: hidden;
+    height: 1.92rem;
+  }
+  .item {
+    border-bottom:solid 1px rgba(255, 255, 255, .2);
+    height: .38rem;
+    line-height: .38rem;
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+  .null {
+    .con {
+      height: 1.92rem;
+      line-height: 1.92rem;
+    }
+  }
+}

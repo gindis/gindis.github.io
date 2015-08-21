@@ -1,0 +1,25 @@
+<div class="integral">
+  <h2>基分获取</h2>
+  <div class="step">
+    <div class="col col-one">
+      <div class="circle icons-me"></div>
+      <p>扔出肥皂</p>
+      <em>1</em>
+    </div>
+    <div class="col col-two">
+      <div class="circle">
+        <span>888<br/>888</span>
+      </div>
+      <p>好友注册<br/>并填写<b>肥皂番号</b></p>
+      <em>2</em>
+    </div>
+    <div class="col col-three">
+      <div class="circle">
+        <span>+1<i>+1</i></span>
+      </div>
+      <p>邀请成功<br/>获取基分</p>
+      <em>3</em>
+    </div>
+  </div>
+  <div class="expla"><a href="javascript:;" id="J_inviteExpla">活动说明 &raquo;</a></div>
+</div>

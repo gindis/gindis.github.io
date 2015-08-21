@@ -1,0 +1,118 @@
+.panel {
+  width: 2.72rem;
+  margin: auto;
+  box-sizing: border-box;
+  /*padding-top: 3.7rem;*/
+  /*margin-top: .4rem;*/
+  position: relative;
+  .body {
+    width: 100%;
+    background-image: url(../img/poto/invite-box.png);
+    box-sizing: border-box;
+    background-repeat: no-repeat;
+    background-position: center top;
+    padding-top: .2rem;
+    padding-bottom: 1rem;
+    background-color: transparent;
+    background-size: 100%;
+    position: absolute;
+    top: 1.2rem;
+    z-index: 3;
+    .tit {
+      width: 70%;
+      font-size: .15rem;
+      color: #7B6327;
+      text-shadow: none;
+      margin: auto;
+      margin-bottom: .15rem;
+      text-align: center;
+      line-height: .18rem;
+      font-weight: 700;
+    }
+    input {
+      background-color: #FCE1BB;
+      border-radius: 0;
+      border: none;
+      width: 80%;
+      margin: auto;
+      margin-bottom: .1rem;
+      &:focus {
+        border-color: #66afe9;
+        outline: none;
+      }
+    }
+    .hint {
+      margin-right: .3rem;
+      text-shadow: none;
+      color: #7B6327;
+      float: right;
+    }
+    .graph-active{
+      width: 100%;
+      height: 1rem;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+    }
+  }
+  .graph {
+    position: absolute;
+    z-index: 1;
+    top: 2.5rem;
+    width: 1.92rem;
+    left: 50%;
+    margin-left: -.96rem;
+
+    &:hover,
+    &.hover{
+      top: 2.65rem;
+    }
+  }
+  .graph-btn {
+    background-position: center 40%;
+    background-repeat: no-repeat;
+    width: .5rem;
+    height: 1rem;
+    background-image: url(../img/poto/leg.png);
+    background-size: contain;
+  }
+  .pull {
+    float: left;
+  }
+  .push {
+    float: right;
+  }
+  .act {
+    z-index: 4;
+  }
+  .sjj {
+    background-position: center top;
+    background-repeat:no-repeat;
+    width: 100%;
+    background-image: url(../img/poto/prize.png);
+    height: 3rem;
+    background-size: contain;
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 2;
+  }
+}
+.invite {
+  padding-top: .3rem;
+  .chance {
+    box-sizing: border-box;
+    width: 2rem;
+    padding: .1rem .4rem;
+    font-size: .14rem;
+    color: #00ADFF;
+    position: absolute; 
+    left: 50%;
+    margin-left: -1rem;
+    top: 4rem;
+    text-align: center;
+  }
+  .act {
+    display:none;
+  }
+}

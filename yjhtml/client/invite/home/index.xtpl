@@ -1,0 +1,4 @@
+{{include ('./banner')}}
+{{include ('./user')}}
+{{include ('./number')}}
+{{include ('./step')}}
