@@ -1,0 +1,1 @@
+define("invite/other/goods-list-render",["./goods-list","xtemplate/runtime"],function(e,t,n){var r=e("./goods-list"),i=e("xtemplate/runtime"),o=new i(r);n.exports=function(){return o.render.apply(o,arguments)}});

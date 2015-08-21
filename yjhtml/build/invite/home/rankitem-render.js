@@ -1,0 +1,1 @@
+define("invite/home/rankitem-render",["./rankitem","xtemplate/runtime"],function(e,n,t){var r=e("./rankitem"),i=e("xtemplate/runtime"),m=new i(r);t.exports=function(){return m.render.apply(m,arguments)}});

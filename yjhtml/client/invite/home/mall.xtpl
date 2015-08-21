@@ -1,0 +1,28 @@
+<div class="mall">
+  <h2>奖品展示</h2>
+  <div class="items">
+    {{#if(errorTip)}}
+      {{{errorTip}}}
+    {{else}}
+      {{#each(productlist)}}
+      <div class="item">
+        <img src="{{productimg}}">
+        <h3>{{productprice}}基分</h3>
+        <span class="name">{{{productname}}}</span>
+      </div>
+    {{/each}}
+    {{/if}}
+  </div>
+  <div class="more">
+    <a href="{{moreUrl}}">更多奖品</a>
+  </div>
+  {{#if(lastorder.length > 0)}}
+  <div class="last-exchange">
+    <ul id="J_lastOrder">
+    {{#each(lastorder)}}
+      <li><b>{{username}}</b>刚刚兑换了<span>{{productname}}</span></li>
+    {{/each}}
+    </ul>
+  </div>
+  {{/if}}
+</div>

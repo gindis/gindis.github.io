@@ -1,0 +1,1 @@
+define("invite/home/step-render",["./step","xtemplate/runtime"],function(e,t,n){var r=e("./step"),p=e("xtemplate/runtime"),i=new p(r);n.exports=function(){return i.render.apply(i,arguments)}});

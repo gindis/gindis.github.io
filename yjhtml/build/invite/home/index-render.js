@@ -1,0 +1,1 @@
+define("invite/home/index-render",["./index","xtemplate/runtime"],function(e,n,t){var r=e("./index"),i=e("xtemplate/runtime"),d=new i(r);t.exports=function(){return d.render.apply(d,arguments)}});

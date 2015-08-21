@@ -1,0 +1,23 @@
+{{#with(userdata)}}
+<div class="invite-number">
+  <div class="relate">
+    <div class="from-me"></div>
+    <div class="from-friend">基友</div>
+    <div class="number-detail">
+      <em>{{invitecode}}</em>
+      <span>肥皂番号</span>
+      <i class="line"></i>
+      <i class="arrow"></i>
+    </div>
+  </div>
+  <p>长按复制链接，把肥皂番号告诉好基友</p>
+  <div class="copy-number-wrap"><a class="copy-number" href="http://appwap.juju.la/invite/share?uid={{invitecode}}" id="J_copyNumber" class="disable-link">appwap.juju.la/invite/share?uid={{invitecode}}</a></div>
+  {{#if(myinvitedlist.length > 0)}}
+    <ul class="friend-dynamic" id="J_friendDynamic">
+      {{#each(myinvitedlist)}}
+        <li>{{this}}捡起了你的肥皂，快去JUJU找他</li>
+      {{/each}}
+    </ul>
+  {{/if}}
+</div>
+{{/with}}

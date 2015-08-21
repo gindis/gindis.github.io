@@ -1,0 +1,126 @@
+@import '../vendor/scss/reset';
+@import '../module/common';
+@import '../module/share';
+html {
+  font-size: 62.5%;
+}
+body {
+  background-color: #eaedf1;
+}
+video {
+  width: 100%;
+  background-color: #1cabff;
+}
+.container {
+  .content {
+    font-size: 20px;
+
+    .main {
+      background-color: #fff;
+      border-top-left-radius: 10px;
+      border-top-right-radius: 10px;
+
+      .share {
+        .i {
+          background-position: 0 0;
+        }
+      }
+      .logo {
+        width: 240px;
+        margin: 70px auto 60px;
+
+        .icon {
+          height: 120px;
+          background-size: 240px 120px;
+        }
+      }
+      .post-content {
+        .post-img {
+          margin-bottom: 10px;
+
+          &:last-child {
+            margin-bottom: 0;
+          }
+        }
+      }
+    }
+    .post-live {
+      border-top: 1px solid #e7eff8;
+    }
+  }
+  .sidebar {
+    border-radius: 20px;
+    -webkit-border-radius: 20px;
+    box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    margin-top: 130px;
+    border: #a6b3c5 1px solid;
+
+    .icon {
+      background-image: url(../img/juju_white.gif);
+      background-repeat: no-repeat;
+    }
+  }
+}
+.promotion-bar {
+  background-color: rgba(255, 255, 255, .9);
+  border-top: 1px solid #e7eff8;
+  color: #00afff;
+
+  .slogan {
+  }
+}
+@media only screen and (max-width:767px) {
+  video {
+    height: calc(100vw*9/16);
+    min-height: 1.68rem;
+  }
+  .container {
+    width: 100%;
+
+    .content {
+      .head {
+        height: 20px;
+
+        .logo {
+          display: none;
+        }
+      }
+      .main {
+        padding-bottom: 50px;
+        border-top-left-radius: 0;
+        border-top-right-radius: 0;
+
+        .logo {
+          width: 120px;
+          margin: 35px auto 30px;
+
+          .icon {
+            height: 60px;
+            background-size: 120px 60px;
+          }
+        }
+        .post-content {
+          margin-bottom: 5px;
+        }
+      }
+      .foot {
+        display: none;
+
+        .go {
+          height: 39px;
+          line-height: 39px;
+          font-size: 14px;
+        }
+        .copyright {
+          padding-top: 20px;
+          font-size: 10px;
+        }
+      }
+    }
+  }
+  .promotion-bar {
+    border-color: #c9cacb;
+  }
+}
+@import '../module/feed';

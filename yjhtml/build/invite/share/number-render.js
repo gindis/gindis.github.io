@@ -1,0 +1,1 @@
+define("invite/share/number-render",["./number","xtemplate/runtime"],function(e,n,r){var t=e("./number"),u=e("xtemplate/runtime"),m=new u(t);r.exports=function(){return m.render.apply(m,arguments)}});

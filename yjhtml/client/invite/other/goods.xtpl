@@ -1,0 +1,10 @@
+<div class="mall">
+  <h2>奖品展示</h2>
+  <p class="tip">奖品菌会在每周四发货哟</p>
+  <div class="items" id="J_goodsContainer">
+  {{include ('./goods-list')}}
+  </div>
+  <div class="loading-more">
+    <a href="javascript:;" id="J_goodsLoad">点击查看更多(๑╹ڡ╹)╭</a>
+  </div>
+</div>

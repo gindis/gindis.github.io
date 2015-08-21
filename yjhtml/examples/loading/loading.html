@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>Loading</title>
+  <meta content="yes" name="apple-mobile-web-app-capable">
+  <meta content="yes" name="apple-touch-fullscreen">
+  <meta content="telephone=no,email=no" name="format-detection">
+  <link href="../build/img/app_icon.png" rel="Shortcut Icon" type="image/x-icon">
+  <link href="../build/img/app_icon.png" rel="apple-touch-icon-precomposed">
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+  <link rel="stylesheet" href="loading.css">
+</head>
+<body>
+<div id="J_loading" class="loading" style="display:none;">
+  <div class="loading-body">
+    <div class="loading-main">
+      <div class="logo"></div>
+      <div class="progress">
+        <div id="J_proCur" class="current"></div>
+      </div>
+      <div class="hint">
+        好像有什么奇怪的东西<br/>要出来...
+      </div>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+~function(){
+  function getEle (select) {
+    return document.querySelector(select);
+  }
+  var loading = getEle('#J_loading');
+  loading.style.display = 'block';
+  setTimeout(function(){
+    var proCur = getEle('#J_proCur');
+    proCur.style.width = '100%';
+  }, 200);
+}();
+</script>
+</body>
+</html>

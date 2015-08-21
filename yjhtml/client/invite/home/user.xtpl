@@ -1,0 +1,14 @@
+{{#with(userdata)}}
+<div class="my-invite">
+  <div class="user-cover">
+    <img src="{{avatar}}">
+  </div>
+  <div class="user-info">
+    <div class="user-name">{{{nickname}}}</div>
+    <span>我的基分：{{score}}</span>
+  </div>
+  <div class="user-count">
+    <span>丢出肥皂数<em>{{invitecounter}}</em></span>
+  </div>
+</div>
+{{/with}}

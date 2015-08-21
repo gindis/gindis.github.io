@@ -1,0 +1,12 @@
+node_modules
+sea-modules
+dist
+.tmp
+.sass-cache
+app/components
+.idea
+*.iml
+test*.js
+.Ds_Store
+*.map
+.swp

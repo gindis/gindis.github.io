@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>JUJU组织</title>
+  <meta content="yes" name="apple-mobile-web-app-capable">
+  <meta content="yes" name="apple-touch-fullscreen">
+  <meta content="telephone=no,email=no" name="format-detection">
+  <link href="../build/img/app_icon.png" rel="Shortcut Icon" type="image/x-icon">
+  <link href="../build/img/app_icon.png" rel="apple-touch-icon-precomposed">
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+  <link rel="stylesheet" href="../build/page/tissue.css">
+  <!--[if lt IE 9]>
+  <script src="../build/vendor/js/html5shiv.js"></script>
+  <![endif]-->
+</head>
+<body>
+<div class="promotion-bar">
+  <div class="ico"></div>
+  <div class="detail">
+    <div class="name">JUJU</div>
+    <div class="slogan">更懂二次元</div>
+    <a href="http://a.app.qq.com/o/simple.jsp?pkgname=la.juju.android" class="btn"><b></b>免费下载</a>
+  </div>
+</div><!--/.promotion-bar-->
+<script src="../build/vendor/js/sea.js"></script>
+  <script>
+
+    var jujuClient = ""; // juju
+
+    // Environment, Default production
+    var ASSET = "build";
+
+    // For development
+    if (location.href.indexOf("?dev") > 0) {
+      ASSET = "client";
+    }
+
+    // Set configuration
+    seajs.config({
+      base: "../" + ASSET + "/",
+      alias: {
+        "zepto": "vendor/js/zepto.js"
+      }
+    });
+
+    // Init
+    seajs.use("page/tissue");
+  </script>
+</body>
+</html>

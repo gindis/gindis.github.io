@@ -1,0 +1,9 @@
+{{#if(ranklist && ranklist.length > 0)}}
+{{#each(ranklist)}}
+<tr>
+  <td align="center"><em>{{ranknum}}</em></td>
+  <td> <img src="{{headpic}}"> {{{username}}}</td>
+  <td align="right"><span>{{invitecounter}}</span></td>
+</tr>
+{{/each}}
+{{/if}}

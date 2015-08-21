@@ -1,0 +1,1 @@
+define("invite/home/last-order-render",["./last-order","xtemplate/runtime"],function(e,r,t){var n=e("./last-order"),a=e("xtemplate/runtime"),i=new a(n);t.exports=function(){return i.render.apply(i,arguments)}});

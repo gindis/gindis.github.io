@@ -1,0 +1,1 @@
+define("invite/home/number-render",["./number","xtemplate/runtime"],function(e,n,r){var t=e("./number"),m=e("xtemplate/runtime"),u=new m(t);r.exports=function(){return u.render.apply(u,arguments)}});

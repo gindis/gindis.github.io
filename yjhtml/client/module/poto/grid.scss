@@ -1,0 +1,29 @@
+.container {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+  margin: 0 auto;
+  background-image: url(../img/poto/bg.png);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: 0 0;
+  overflow: hidden;
+  .viewport {
+    height: 100%;
+  }
+  .scene {
+    height: 100%;
+    float: left;
+    position: relative;
+    .act {
+      text-align: center;
+      width: 100%;
+      position: absolute;
+      left: 0;
+      bottom: .6rem;
+    }
+  }
+}
+

@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>JUJU异界</title>
+  <meta content="yes" name="apple-mobile-web-app-capable">
+  <meta content="yes" name="apple-touch-fullscreen">
+  <meta content="telephone=no,email=no" name="format-detection">
+  <link href="http://appwap.juju.la/statics/build/img/app_icon.png" rel="Shortcut Icon" type="image/x-icon">
+  <link href="http://appwap.juju.la/statics/build/img/app_icon.png" rel="apple-touch-icon-precomposed">
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+  <link rel="stylesheet" href="../build/game/poto.css">
+  <script>
+    var loadingLogo = new Image; 
+    loadingLogo.src = "../client/img/logo_m.png";
+    function handlerOrientationChange() {
+      var win = window;
+      var width = (win.innerWidth <= 320) ? 320 : ((win.innerWidth >= 736) ? 736 : win.innerWidth);
+      var fontSize = 100 * (width / 320);
+      document.documentElement.style.fontSize = fontSize + "px";
+    }
+    /**
+     * resize font size
+     */
+    function resizeFont() {
+      window.onresize = handlerOrientationChange;
+      setTimeout(function() {
+        handlerOrientationChange();
+        document.querySelector('#J_loading').style.display='block';
+        document.querySelector('.container').style.display='block';
+      }, 0);
+    }
+    resizeFont();
+  </script>
+</head>
+<body>
+<div id="J_loading" class="loading" style="display:none;">
+  <div class="body">
+    <div class="main">
+      <div class="logo"></div>
+      <div class="progress">
+        <div id="J_proCur" class="current"></div>
+      </div>
+      <div id="J_pronum" class="num"></div>
+      <div class="hint">
+        好像有什么奇怪的东西<br/>要出来...
+      </div>
+    </div>
+  </div>
+</div><!--/.loading-->
+
+<div class="container" style="display:none;">
+  <div class="viewport">
+    <div class="scene wish">
+      <ul id="J_wishHead" class="wish-list">
+<!--         <li class="load"><img src="../client/svg/oval.svg" width="30" alt=""></li>
+ -->  </ul>
+      <div class="scroll" id="J_wishScroll">
+      <ul id="J_wishList" class="wish-list">
+        <li class="load"><img src="../client/svg/oval.svg" width="30" alt=""></li>
+      </ul>
+      </div>
+      <div class="act">
+        <button id="J_btnPop" class="btn btn-pop">大声说出你的二次元愿望！</button>
+      </div>
+    </div><!--/.wish-->
+    <div class="scene game">
+      <div class="inner">
+        <!--/ swing animated  bounceInDown animated -->
+        <div id="J_img" class="machine"></div>
+        <div id="J_egg" class="egg egg-default"></div>
+        <button id="J_btnStart" class="btn-start btn">抽我</button>
+        <div class="chance">还有<span id="J_lotterNum" class="num">0</span>次机会yo~</div>
+      </div>
+    </div><!--/.game-->
+    <div class="scene invite">
+      <div class="panel">
+        <div class="head"></div>
+        <div class="body">
+          <h3 class="tit">阿勒。。。给你个邀请基友来异界的机会吧</h3>
+          <input class="form-control" id="J_inviteuser" data-uid="10000157" placeholder="邀请人昵称">
+          <span class="hint">ps. 点我的腿毛发送邀请</span>
+          <div class="graph-active" id="J_graph"></div>
+        </div>
+        <div class="graph">
+          <div class="graph-btn pull"></div>
+          <div class="graph-btn push"></div>
+        </div>
+        <div class="act">
+          <button class="in" class="btn btn-invite">发送邀请</button>
+        </div>
+        <div class="sjj"></div>
+      </div>
+      <div class="chance">还剩<span id="J_inviteNum" class="num">0</span>次邀请</div>
+    </div><!--/.invite-->
+  </div><!--/.viewport-->
+  <div class="pointer">
+    <span class="current"></span><span></span><span></span>
+  </div><!--/.pointer-->
+  <div id="J_myfri" class="myfri">
+    <div class="myfriscroll" id="J_myfriScroll">
+    <ul id="J_users"></ul>
+    </div>
+  </div>
+</div><!--/.container-->
+
+<!--/modal dialog contianer-->
+<div id="J_dialog" class="modal fade"><div class="modal-backdrop"></div><div class="modal-main"></div></div><!--/.modal-->
+<script type="text/template" id="tmpl-dialog-user">
+  {% for (var i=0; i<o.length; i++) { %}
+  <li data-uid="{%=o[i].uid%}" class="item">{%=o[i].nickname%}</li>
+  {% } %}
+</script>
+<script type="text/template" id="tmpl-dialog-mywish">
+{% for (var i=0; i<o.length; i++) { %}
+<li class="item">
+  <div class="inner" data-id="{%=o[i].dreamid%}" data-uid="{%=o[i].uid%}">
+    <div class="avatar">
+      <img class="circle" src="{%=o[i].avatar%}">
+    </div>
+    <div class="body">
+      <div class="name">{%=o[i].nickname%}</div>
+      <div class="signature">{%=o[i].content%}</div>
+    </div>
+    <div class="wish-btn">
+      {% if(o[i].isfav == 1 || o[i].isfav ==0){ %}
+      <button class="btn-inverse {% if(o[i].isfav){ %} btn-default {% } else { %} btn-fav {% } %}">
+        <i class="fa fa-heart"></i>
+      </button>
+      {% } else { %} 
+      <p class="tit">追梦者</p><p class="num">{%=o[i].counter%}</p>
+      {% } %}
+    </div>
+  </div>
+</li>
+{% } %}
+</script>
+
+<script type="text/template" id="tmpl-dialog-wish">
+<div class="modal-dialog mywish">
+  <div class="modal-content">
+    <div class="modal-header envelope-header">
+      <h4 class="modal-title">我的愿望</h4>
+    </div>
+    <div class="modal-body">
+     <form role="form">
+      <div class="form-group">
+        <textarea class="form-control ipt" id="mywish" placeholder="我的愿望"></textarea>
+        <span id="J_fnum" class="fnum">30</span>
+        <p class="tips">重新许愿会清空之前的愿望哟<br/>٩(๑ᵒ̴̶̷͈᷄ᗨᵒ̴̶̷͈᷅)و </p>
+      </div>
+      <button id="sendwish" class="btn btn-yellow rounded20">许愿</button>
+    </form>
+    </div>
+    <div class="modal-footer">
+      <div class="btn-blue-container">
+       <button type="button" id="J_sbt" class="btn btn-blue rounded20">等下再许</button>
+       <span class="btn-star"></span>
+      </div>
+    </div>
+  </div>
+</div>
+</script><!--我的愿望-->
+
+<script type="text/template" id="tmpl-dialog-shits">
+<div class="modal-dialog shits">
+  <div class="modal-content">
+    <div class="modal-header">
+    </div>
+    <div class="modal-body">
+      <form role="form" class="centered">
+        <div class="form-group">
+          <textarea class="form-control" id="J_sayWorks" placeholder="说你所想，写你所爱，大声告诉全世界，有机会出现在JUJU FRIEND中"></textarea>
+        </div>
+        <button id="J_say" class="btn btn-say">Biu 出去</button>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <div class="btn-blue-container">
+         <button type="button" id="J_sbt" class="btn btn-blue rounded20">继续抽奖</button>
+         <span class="btn-star"></span>
+      </div>
+    </div>
+  </div>
+</div>
+</script><!--话题-->
+
+<script type="text/template" id="tmpl-dialog-log">
+<div class="modal-dialog log">
+  <div class="modal-content">
+    <div class="modal-header"></div>
+    <div class="modal-body">
+      <div class="txtalign">{%=o.msg%}</div>
+    </div>
+  </div>
+</div>
+</script><!--吐槽-->
+
+<script type="text/template" id="tmpl-dialog-invite">
+<div class="modal-dialog invite">
+  <div class="panel">
+    <div class="head"></div>
+    <div class="body">
+      <h3 class="tit">阿勒。。。给你个邀请基友来异界的机会吧</h3>
+      <input class="form-control" id="J_inviteuser2" placeholder="邀请人昵称">
+      <span class="hint">ps. 点我的腿毛发送邀请</span>
+      <div class="graph-active" id="J_graph2"></div>
+    </div>
+    <div class="graph">
+      <div class="graph-btn pull"></div>
+      <div class="graph-btn push"></div>
+    </div>
+    <div class="act">
+      <button class="btn btn-invite">发送邀请</button>
+    </div>
+    <div class="sjj"></div>
+  </div>
+  <div class="chance">还剩<span id="J_inviteNum" class="num">{%=o.invitecounter%}</span>次邀请</div>
+</div>
+</script><!--抽中邀请-->
+
+<script type="text/template" id="tmpl-dialog-recommend">
+<div class="modal-dialog recommend">
+  <div class="modal-header"></div>
+  <div class="modal-body">
+    <div class="img">
+      <img src="{%=o[i].image%}" alt="">
+    </div>
+    <h3 class="username">{%=o[i].nickname%}</h3>
+    <span class="attr">二次元属性: </span>
+    <span class="price">$</span>
+    <button type="button" class="btn btn-fo"><span>关注TA</span></button>
+  </div>
+  <div class="modal-footer">
+    <div class="btn-blue-container">
+     <button type="button" id="J_sbt" class="btn btn-blue rounded20">继续抽奖</button>
+     <span class="btn-star"></span>
+    </div>
+  </div>
+</div> 
+</script><!--用户推荐-->
+
+<script type="text/template" id="tmpl-dialog-gift">
+<div class="modal-dialog gift">
+  <div class="modal-content">
+    <div class="modal-header"></div>
+    <div class="modal-body">
+      <h3 class="tit">{%=o.title%}</h3>
+      <div class="gif">
+      <img src="{%=o.image%}">
+      </div>
+      <div class="des">{%=o.description%}</div>
+    </div>
+    <div class="modal-footer">
+      <div class="btn-blue-container">
+       <button type="button" id="J_sbt" class="btn btn-blue rounded20">继续抽奖</button>
+       <span class="btn-star"></span>
+      </div>
+    </div>
+  </div>
+</div> 
+</script><!--用户推荐-->
+
+<script type="text/template" id="tmpl-dialog-refuel">
+<div class="modal-dialog refuel">
+  <div class="modal-header"></div>
+  <div class="modal-body"></div>
+  <div class="modal-footer">
+    <div class="btn-blue-container">
+     <button type="button" id="J_sbt" class="btn btn-blue rounded20">继续抽奖</button>
+     <span class="btn-star"></span>
+    </div>
+  </div>
+</div>
+</script><!--未中奖界面-->
+
+<script src="../build/vendor/js/sea.js"></script>
+<script>
+
+  // Default Config
+  var config = {
+    "gameName": "poto",
+    "uid": "10272492",
+    "sid": ""
+  };
+
+  // Environment, Default production
+  // 静态资源目录路径
+  var ASSET = "../build/";
+
+  // For development
+  if (location.href.indexOf("?dev") > 0) {
+    ASSET = "../client/";
+  }
+
+  // Set configuration
+  seajs.config({
+    base: ASSET,
+    alias: {
+      "zepto": "vendor/js/zepto",
+      "flipsnap": "vendor/js/flipsnap",
+      "tmpl": "vendor/js/tmpl",
+      "iscroll": "vendor/js/iscroll"
+    }
+  });
+
+  // Init
+  seajs.use("game/start");
+
+</script>
+</body>
+</html>

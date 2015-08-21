@@ -1,0 +1,1 @@
+define("invite/scroll",[],function(n,e,i){function o(n){this.ul=$("#"+n),this.scrollFn()}o.prototype.scrollFn=function(){var n=this,e=n.ul;setTimeout(function(){var i=e.find("li");if(!(i.length<2)){{var o=i.eq(0),t=o.clone();o.height()}o.animate({marginTop:"-26px"},500,"ease-out",function(){t.appendTo(n.ul),o.remove(),n.scrollFn()})}},3e3)},i.exports=o});

@@ -1,0 +1,17 @@
+{{#each(productlist)}}
+{{set(title="兑换")}}
+{{#if(productstock===0)}}
+  {{set(title="已兑完", className="disable-item")}}
+{{/if}}
+<div class="item {{className}}">
+  <img src="{{productimg}}">
+  <h3>{{productprice}}基分</h3>
+  <span class="name">{{{productname}}}</span>
+  <em class="store">剩余:{{productstock}}</em>
+  {{#if(productprice < ../userScore)}}
+    <a href="javascript:;" data-stock="{{productstock}}" data-id="{{productid}}" class="buy">{{title}}</a>
+  {{else}}
+    <a href="javascript:;" data-stock="{{productstock}}" data-id="{{productid}}" class="buy disable">{{title}}</a>
+  {{/if}}
+</div>
+{{/each}}
