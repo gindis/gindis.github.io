@@ -4,9 +4,11 @@ define(function(require,exports,module){
 
   var $ = require('zepto');
   var base = require('module/base');
+  var evtClick = 'click';
 
   if ($.os.phone || $.os.tablet) {
     var share = require('module/share');
+    evtClick = 'tap';
   } else {
     var ELE = {
       'shareBtn': $('#J_shareBtn'),
@@ -31,5 +33,11 @@ define(function(require,exports,module){
   var dbtn2 = $('.channel .btn').eq(1);
   dbtn1.attr('href', base.market.ios);
   dbtn2.attr('href', base.market.andorid);
-  
+
+  if ($('#J_more')) {
+    $('#J_more').on(evtClick, function(){
+      $('#J_body').removeClass('open');
+      $(this).remove();
+    });
+  }
 })

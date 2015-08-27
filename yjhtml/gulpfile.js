@@ -2,7 +2,7 @@
 
 var gulp = require('gulp');
 var del = require('del');
-var sass = require('gulp-sass');
+var compass = require('gulp-compass');
 var prefix = require('gulp-autoprefixer');
 var minify = require('gulp-minify-css');
 var coffee = require('gulp-coffee');
@@ -43,13 +43,17 @@ gulp.task('connect', function() {
 gulp.task('sass-to-css', function() {
   return gulp.src(paths.sassRoot)
   //return gulp.src('client/**/i*.scss')
-    .pipe(sass())
+    .pipe(compass({
+      css: 'client',
+      sass: 'client',
+      image: 'client'
+    }))
     .pipe(gulp.dest(paths.produce));
 });
 
 gulp.task('prefix', ['sass-to-css'], function() {
   return gulp.src(paths.cssRoot)
-    .pipe(prefix("last 3 versions"))
+    .pipe(prefix("last 2 versions"))
     .pipe(gulp.dest(paths.produce))
 });
 
