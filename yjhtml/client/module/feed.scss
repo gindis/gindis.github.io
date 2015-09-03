@@ -19,10 +19,14 @@
     padding: 15px;
     overflow: hidden;
     .name {
-      line-height: 48px;
+      line-height: 1.5;
       overflow: hidden;
       font-size: 20px;
       color: #18242f;
+    }
+    .origin {
+      color: #999;
+      font-size: 14px;
     }
     .time {
       float: right;
@@ -48,12 +52,12 @@
     }
   }
   .post-trends {
-    padding: 15px;
+   /* padding: 15px;*/
 
     .pag {
       .tag {
         display: inline-block;
-        line-height: 34px;
+        line-height: 1.2;
         color: #000;
         margin-right: 10px;
         margin-bottom: 10px;
@@ -124,6 +128,17 @@
         }
       }
     }
+    .ssay-wrap {
+      background-color: #efefef;
+      color: #999;
+      padding: 10px 11px;
+      .ssay {
+        line-height: 1.5;
+        .i {
+          color: #333; 
+        }
+      }
+    }
     .like, .say {
       .i {
         width: 34px;
@@ -144,7 +159,8 @@
     }
     .say {
       line-height: 28px;
-      padding-left: 34px;
+      padding: 15px 0 0 34px;
+      margin: 0 15px;
 
       .i {
         background-position: -40px -60px;
@@ -239,6 +255,16 @@
   }
 }
 @media only screen and (max-width:767px) {
+  .forword {
+    .content .head {
+      height: 0;
+    }
+    .post-content {
+      background-color: #efefef;
+      padding-top: 11px;
+    }
+
+  }
   .post {
     .post-meta .avatar, .post-list .post-item .avatar {
       width: 32px;
@@ -256,9 +282,12 @@
     }
     .post-meta {
       padding: 5px 11px;
-
+      .origin {
+        color: #999;
+        font-size: 10px;
+      }
       .name {
-        line-height: 32px;
+        line-height: 1.5;
         font-size: 16px;
       }
       .info {
@@ -278,7 +307,7 @@
       }
     }
     .post-trends {
-      padding: 5px 11px;
+      /*padding: 5px 11px;*/
       font-size: 14px;
 
       .pag {
@@ -349,7 +378,8 @@
       }
       .say {
         line-height: 20px;
-        padding-left: 22px;
+        padding: 5px 0 5px 22px;
+        margin: 0 11px;
 
         .i {
           margin-right: 0;

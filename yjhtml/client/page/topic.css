@@ -836,6 +836,7 @@ video {
   float: left;
   margin: 0 22px 22px 0;
   position: relative;
+  overflow: hidden;
 }
 .post-live .cover img {
   width: 216px;
@@ -1104,10 +1105,14 @@ video {
   overflow: hidden;
 }
 .post .post-meta .name {
-  line-height: 48px;
+  line-height: 1.5;
   overflow: hidden;
   font-size: 20px;
   color: #18242f;
+}
+.post .post-meta .origin {
+  color: #999;
+  font-size: 14px;
 }
 .post .post-meta .time {
   float: right;
@@ -1130,11 +1135,11 @@ video {
   display: block;
 }
 .post .post-trends {
-  padding: 15px;
+  /* padding: 15px;*/
 }
 .post .post-trends .pag .tag {
   display: inline-block;
-  line-height: 34px;
+  line-height: 1.2;
   color: #000;
   margin-right: 10px;
   margin-bottom: 10px;
@@ -1196,6 +1201,17 @@ video {
   background-position: 0 -60px;
   color: #00b3ff;
 }
+.post .post-trends .ssay-wrap {
+  background-color: #efefef;
+  color: #999;
+  padding: 10px 11px;
+}
+.post .post-trends .ssay-wrap .ssay {
+  line-height: 1.5;
+}
+.post .post-trends .ssay-wrap .ssay .i {
+  color: #333;
+}
 .post .post-trends .like .i, .post .post-trends .say .i {
   width: 34px;
   height: 34px;
@@ -1213,7 +1229,8 @@ video {
 }
 .post .post-trends .say {
   line-height: 28px;
-  padding-left: 34px;
+  padding: 15px 0 0 34px;
+  margin: 0 15px;
 }
 .post .post-trends .say .i {
   background-position: -40px -60px;
@@ -1300,6 +1317,14 @@ video {
 }
 
 @media only screen and (max-width: 767px) {
+  .forword .content .head {
+    height: 0;
+  }
+  .forword .post-content {
+    background-color: #efefef;
+    padding-top: 11px;
+  }
+
   .post .post-meta .avatar, .post .post-list .post-item .avatar {
     width: 32px;
     height: 32px;
@@ -1316,8 +1341,12 @@ video {
   .post .post-meta {
     padding: 5px 11px;
   }
+  .post .post-meta .origin {
+    color: #999;
+    font-size: 10px;
+  }
   .post .post-meta .name {
-    line-height: 32px;
+    line-height: 1.5;
     font-size: 16px;
   }
   .post .post-meta .info {
@@ -1334,7 +1363,7 @@ video {
     padding: 0 11px;
   }
   .post .post-trends {
-    padding: 5px 11px;
+    /*padding: 5px 11px;*/
     font-size: 14px;
   }
   .post .post-trends .pag .tag {
@@ -1387,7 +1416,8 @@ video {
   }
   .post .post-trends .say {
     line-height: 20px;
-    padding-left: 22px;
+    padding: 5px 0 5px 22px;
+    margin: 0 11px;
   }
   .post .post-trends .say .i {
     margin-right: 0;
