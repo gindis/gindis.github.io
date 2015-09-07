@@ -55,6 +55,7 @@
    /* padding: 15px;*/
 
     .pag {
+      padding: 10px 15px 0;
       .tag {
         display: inline-block;
         line-height: 1.5;
@@ -131,9 +132,10 @@
     .ssay-wrap {
       background-color: #efefef;
       color: #999;
-      padding: 10px 11px;
+      
       .ssay {
         line-height: 1.5;
+        padding: 0 15px 10px;
         .i {
           color: #333; 
         }
@@ -265,6 +267,11 @@
     }
 
   }
+  .ssay-wrap {
+    .ssay {
+      padding: 0 11px 10px;
+    }
+  }
   .post {
     .post-meta .avatar, .post-list .post-item .avatar {
       width: 32px;
@@ -311,6 +318,7 @@
       font-size: 14px;
 
       .pag {
+        padding: 0 10px;
         .tag {
           line-height: 20px;
           margin-right: 5px;
