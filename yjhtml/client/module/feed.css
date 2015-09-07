@@ -241,8 +241,11 @@
     padding-top: 11px;
   }
 
+  .ssay-wrap {
+    padding-top: 10px;
+  }
   .ssay-wrap .ssay {
-    padding: 0 11px 10px;
+    padding: 5px 11px 10px !important;
   }
 
   .post .post-meta .avatar, .post .post-list .post-item .avatar {
