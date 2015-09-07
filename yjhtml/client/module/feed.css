@@ -50,6 +50,9 @@
 .post .post-trends {
   /* padding: 15px;*/
 }
+.post .post-trends .pag {
+  padding: 10px 15px 0;
+}
 .post .post-trends .pag .tag {
   display: inline-block;
   line-height: 1.5;
@@ -117,10 +120,10 @@
 .post .post-trends .ssay-wrap {
   background-color: #efefef;
   color: #999;
-  padding: 10px 11px;
 }
 .post .post-trends .ssay-wrap .ssay {
   line-height: 1.5;
+  padding: 0 15px 10px;
 }
 .post .post-trends .ssay-wrap .ssay .i {
   color: #333;
@@ -238,6 +241,10 @@
     padding-top: 11px;
   }
 
+  .ssay-wrap .ssay {
+    padding: 0 11px 10px;
+  }
+
   .post .post-meta .avatar, .post .post-list .post-item .avatar {
     width: 32px;
     height: 32px;
@@ -278,6 +285,9 @@
   .post .post-trends {
     /*padding: 5px 11px;*/
     font-size: 14px;
+  }
+  .post .post-trends .pag {
+    padding: 0 10px;
   }
   .post .post-trends .pag .tag {
     line-height: 20px;
