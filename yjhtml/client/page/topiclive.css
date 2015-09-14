@@ -982,6 +982,18 @@ video {
 .post .post-trends .pag .a7 b {
   background-position: 0 -204px;
 }
+.post .post-trends .pag .a8 {
+  color: #7362d6;
+}
+.post .post-trends .pag .a8 b {
+  background-position: 0 -238px;
+}
+.post .post-trends .pag .a9 {
+  color: #a4a4a4;
+}
+.post .post-trends .pag .a9 b {
+  background-position: 0 -272px;
+}
 .post .post-trends .pag .m1 {
   color: #229aef;
 }
@@ -1194,6 +1206,12 @@ video {
   }
   .post .post-trends .pag .a7 b {
     background-position: 0 -120px;
+  }
+  .post .post-trends .pag .a8 b {
+    background-position: 0 -140px;
+  }
+  .post .post-trends .pag .a9 b {
+    background-position: 0 -160px;
   }
   .post .post-trends .pag .m1 b {
     background-size: 57px 57px;

@@ -54,7 +54,7 @@ define(function(require, exports, module) {
   }
 
   initWin(); // 初始化设置width和height
-  initSlide(); // 初始化幻灯
+  //initSlide(); // 初始化幻灯
   //pvtTouch(); // 禁用Touch事件
 
   var wish = require('module/poto/wish');

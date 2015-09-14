@@ -4,7 +4,7 @@ var gulp = require('gulp');
 var del = require('del');
 var compass = require('gulp-compass');
 var prefix = require('gulp-autoprefixer');
-var minify = require('gulp-minify-css');
+var minify = require('gulp-cssmin');
 var coffee = require('gulp-coffee');
 var concat = require('gulp-concat');
 var uglify = require('gulp-uglify');
@@ -51,13 +51,13 @@ gulp.task('sass-to-css', function() {
     .pipe(gulp.dest(paths.produce));
 });
 
-gulp.task('prefix', ['sass-to-css'], function() {
-  return gulp.src(paths.cssRoot)
-    .pipe(prefix("last 2 versions"))
-    .pipe(gulp.dest(paths.produce))
-});
+// gulp.task('prefix', function() {
+//   return gulp.src(paths.cssRoot)
+//     .pipe(prefix())
+//     .pipe(gulp.dest(paths.produce))
+// });
 
-gulp.task('minify-css', ['prefix'], function() {
+gulp.task('minify-css',['sass-to-css'], function() {
   return gulp.src(paths.cssRoot)
     .pipe(minify())
     .pipe(gulp.dest(paths.build))
