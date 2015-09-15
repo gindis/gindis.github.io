@@ -151,7 +151,8 @@ body {
     height: .35rem;
     background-color: #fbd51c;
     position: relative;
-    display: flex;
+    display: flex; 
+    display: -webkit-flex;
     box-sizing: border-box;
     padding: .05rem 0;
 
@@ -160,6 +161,7 @@ body {
     }
     .items {
         flex: 1;
+        -webkit-flex: 1;
         text-align: center;
         color: #fff;
         text-decoration: none;
