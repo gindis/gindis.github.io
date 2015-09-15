@@ -1102,7 +1102,7 @@ body {
   height: .04rem;
   border-radius: .04rem;
   background-color: rgba(255, 255, 255, 0.4);
-  display: inline-block;
+  /*display: inline-block;*/
   margin: .03rem .02rem;
 }
 .pointer span.current {
@@ -1114,6 +1114,7 @@ body {
   background-color: #fbd51c;
   position: relative;
   display: flex;
+  display: -webkit-flex;
   box-sizing: border-box;
   padding: .05rem 0;
 }
@@ -1122,6 +1123,7 @@ body {
 }
 .block-nav .items {
   flex: 1;
+  -webkit-flex: 1;
   text-align: center;
   color: #fff;
   text-decoration: none;
