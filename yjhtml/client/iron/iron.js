@@ -31,8 +31,11 @@ define(function(require, exports, module) {
           //scratch.init(that.getRandomTicket(), 'image');
         }
       }
-      document.getElementById('freshBtn').onclick = function() {
-        scratch.init(that.getRandomTicket(), 'image');
+      var freshBtn = document.getElementById('freshBtn');
+      if (freshBtn) {
+        freshBtn.onclick = function() {
+          scratch.init(that.getRandomTicket(), 'image');
+        }
       }
     },
     getRandomTicket: function () { // 随机出奖
@@ -54,7 +57,7 @@ define(function(require, exports, module) {
           $('.wrap').show();
           that.initScratch();
           
-        }, 20)
+        }, 200)
         
       }, 0)
     }
