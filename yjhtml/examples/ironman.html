@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>钢铁侠</title>
+  <meta content="yes" name="apple-mobile-web-app-capable">
+  <meta content="yes" name="apple-touch-fullscreen">
+  <meta content="telephone=no,email=no" name="format-detection">
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+  <link href="../build/img/app_icon.png" rel="Shortcut Icon" type="image/x-icon">
+  <link href="../build/img/app_icon.png" rel="apple-touch-icon-precomposed">
+  <link rel="stylesheet" href="../build/iron/iron.css">
+  <script>
+// !function(){function a(){var a=window,b=a.innerWidth<=320?320:a.innerWidth,c=100*(b/320);document.documentElement.style.fontSize=c+"px"}function b(){window.onresize=a,setTimeout(function(){a()},0)}b()}();
+</script>
+</head>
+<body>
+<div class="wrap">
+  <div class="block-img banner-iron">
+    <div class="span-img" style="background-image: url(../build/img/iron/banner@2x.png);"></div>
+  </div>
+  <div class="block-img content-iron">
+    <div class="span-img" style="background-image: url(../build/img/iron/conbg@2x.png);">
+      <div class="fundus">
+        <div id="iron"></div>
+      </div>
+      <button id="freshBtn">重刮</button>
+    </div>
+  </div>
+</div>
+<script src="../build/vendor/js/sea.js"></script>
+<script>
+
+  // Environment, Default production
+  // 静态资源目录路径
+  var ASSET = "../build/";
+
+  // For development
+  if (location.href.indexOf("?dev") > 0) {
+    ASSET = "../client/";
+  }
+
+  // Set configuration
+  seajs.config({
+    base: ASSET,
+    alias: {
+      "zepto": "vendor/js/zepto"
+    }
+  });
+
+  // Init
+  seajs.use("iron/iron");
+
+</script>
+</body>
+</html>

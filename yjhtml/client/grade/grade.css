@@ -946,26 +946,24 @@ li {
   -webkit-line-clamp: 2;
 }
 
-html {
-  font-size: 100px;
-}
-
 body {
   background-color: #efefef;
   color: #333;
-  font-size: .12rem;
+  font-size: 0.12rem;
 }
 
 .wrap {
-  padding-bottom: .8rem;
+  padding-bottom: 0.8rem;
 }
 
 .info {
   line-height: 1.5;
-  padding: .1rem;
+  padding: 0.1rem;
 }
 
-.name, .jujuid, .score {
+.name,
+.jujuid,
+.score {
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
@@ -1039,7 +1037,7 @@ body {
   color: #fff;
   position: absolute;
   right: .1rem;
-  bottom: .03rem;
+  bottom: 0.03rem;
 }
 
 .bir1 {
@@ -1081,13 +1079,7 @@ body {
   color: #333;
   position: absolute;
   right: .09rem;
-  bottom: .09rem;
-  /*background-color: #fff;
-                       padding-left: .1rem;
-                       border-radius: .05rem;
-                       box-sizing: border-box;
-                       text-decoration: none;
-                       box-shadow: 0 .02rem .01rem rgba(0,0,0,.1);*/
+  bottom: 0.09rem;
 }
 
 .pointer {
@@ -1101,8 +1093,9 @@ body {
   width: .04rem;
   height: .04rem;
   border-radius: .04rem;
+  -webkit-border-radius: .04rem;
   background-color: rgba(255, 255, 255, 0.4);
-  /*display: inline-block;*/
+  display: inline-block;
   margin: .03rem .02rem;
 }
 .pointer span.current {
@@ -1128,7 +1121,7 @@ body {
   color: #fff;
   text-decoration: none;
   font-size: .14rem;
-  line-height: .2rem;
+  line-height: 0.2rem;
 }
 .block-nav .current {
   color: #333;
@@ -1139,7 +1132,8 @@ body {
   background-color: #fbd51c;
   position: relative;
 }
-.block-head .month, .block-head .total {
+.block-head .month,
+.block-head .total {
   width: .875rem;
   height: .28rem;
   background-size: contain;
@@ -1156,7 +1150,8 @@ body {
 .block-head .total {
   background-image: url(../img/grade/total_chart@2x.png);
 }
-.block-head .more, .block-head .update {
+.block-head .more,
+.block-head .update {
   width: .875rem;
   height: .24rem;
   background-size: contain;
@@ -1200,7 +1195,7 @@ body {
   background-repeat: no-repeat;
   position: absolute;
   left: 0;
-  top: .05rem !important;
+  top: 0.05rem !important;
 }
 .block-body .top-1 .top-img .r-1 {
   background-image: url(../img/grade/top1@2x.png);
@@ -1228,7 +1223,7 @@ body {
 .block-body .mod .info {
   line-height: 1.2;
   padding: .04rem;
-  font-size: .08rem;
+  font-size: 0.08rem;
 }
 
 .fixbottom {
@@ -1290,11 +1285,11 @@ body {
 .btn-login .tit {
   color: #fff;
   font-size: .14rem;
-  padding-top: .05rem;
+  padding-top: 0.05rem;
 }
 .btn-login .tips {
   color: #b2e5fa;
-  font-size: .1rem;
+  font-size: 0.1rem;
 }
 
 .block-item {
@@ -1306,13 +1301,15 @@ body {
   margin-bottom: 0;
 }
 
-.block-item-inner, .block-item-main {
+.block-item-inner,
+.block-item-main {
   border-radius: .06rem;
   height: 100%;
   position: relative;
 }
 
-.block-item-top, .block-item-img {
+.block-item-top,
+.block-item-img {
   height: .78rem;
   position: relative;
   background-size: cover;
@@ -1342,7 +1339,7 @@ body {
   font-size: .12rem;
   box-sizing: border-box;
   padding-left: .05rem;
-  padding-top: .05rem;
+  padding-top: 0.05rem;
 }
 
 .block-item-img {
@@ -1365,15 +1362,17 @@ body {
 }
 
 .grade-list .block-item {
-  padding-top: .05rem;
+  padding-top: 0.05rem;
 }
-.grade-list .block-item-inner, .grade-list .block-item-main {
-  height: .68rem;
+.grade-list .block-item-inner,
+.grade-list .block-item-main {
+  height: 0.68rem;
 }
 .grade-list .block-item-inner {
   background-color: #fff;
 }
-.grade-list .block-item-top, .grade-list .block-item-img {
+.grade-list .block-item-top,
+.grade-list .block-item-img {
   -webkit-transform: translate(0, -0.05rem);
   -ms-transform: translate(0, -0.05rem);
   -o-transform: translate(0, -0.05rem);
@@ -1389,5 +1388,16 @@ body {
   box-shadow: 0 0 0.03rem rgba(0, 0, 0, 0.2);
 }
 .rank-list .juid {
-  padding-bottom: .1rem;
+  padding-bottom: 0.1rem;
+}
+
+.banner-detail {
+  width: 2.98rem;
+  height: 1.74rem;
+  overflow: hidden;
+  border-top-left-radius: .06rem;
+  border-bottom-left-radius: .06rem;
+  border-top-right-radius: .06rem;
+  border-bottom-right-radius: .06rem;
+  padding-top: 58%;
 }
