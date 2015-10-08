@@ -53,11 +53,11 @@ define(function(require, exports, module) {
       // }
       setTimeout(function() {
         that._resetFont();
-        setTimeout(function(){
+        //setTimeout(function(){
           $('.wrap').show();
           that.initScratch();
           
-        }, 20)
+        //}, 20)
         
       }, 0)
     }
