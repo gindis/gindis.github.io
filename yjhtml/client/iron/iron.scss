@@ -1,0 +1,48 @@
+@import '../scss/juju';
+
+html {
+  font-size: 100px
+}
+
+body {
+  background-color: #141414;
+  color: #333;
+  font-size: .12rem
+}
+.block-img {
+  margin: 0 auto;
+}
+
+.banner-iron {
+  width: 3.2rem;
+  padding-top: 61.40625%;
+}
+
+.content-iron {
+  width: 3.2rem;
+  padding-top: 100%;
+}
+
+.fundus {
+  width: 2rem;
+  height: 2rem;
+  background-image: url(../img/iron/bg@2x.png);
+  background-size: contain;
+  background-repeat: no-repeat;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  margin: -1rem 0 0 -1rem;
+}
+.wrap {
+  display: none;
+}
+#iron {
+  width: 1.76rem;
+  height: 1.76rem;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  margin: -.88rem 0 0 -.88rem;
+  cursor: url(../img/iron/cursor@2x.png), auto;
+}
