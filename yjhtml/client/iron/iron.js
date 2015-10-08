@@ -57,7 +57,7 @@ define(function(require, exports, module) {
           $('.wrap').show();
           that.initScratch();
           
-        }, 200)
+        }, 20)
         
       }, 0)
     }
