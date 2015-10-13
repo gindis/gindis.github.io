@@ -46,3 +46,43 @@ body {
   margin: -.88rem 0 0 -.88rem;
   cursor: url(../img/iron/cursor@2x.png), auto;
 }
+.smFrom {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  text-align: center;
+  width: 100%;
+  z-index: 2;
+  padding: .1rem;
+  .ipt {
+    margin-bottom: .1rem;
+  }
+  .tel {
+    outline: none;
+    border:1px solid #9e0605;
+    height: .28rem;
+    width: 1.8rem;
+    background-color: #1b1b1b;
+    box-sizing: border-box;
+    border-radius: 5px;
+    padding: 10px;
+    text-align: center;
+    color: #5d5d5d;
+    &:foucs {
+      outline: none;
+    }
+  }
+  .sbt {
+    width: .6rem;
+    height: .6rem;
+    border: none;
+    outline: none;
+    background-image: url(../img/iron/ok@2x.png);
+    background-size: contain;
+    display: inline-block;
+    background-color: transparent;
+    &:foucs {
+      outline: none;
+    }
+  }
+}

@@ -10,14 +10,18 @@
     <link href="../build/img/app_icon.png" rel="apple-touch-icon-precomposed">
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
     <link rel="stylesheet" href="../build/grade/grade.css">
+    <script>
+!function(){function a(){var a=window,b=a.innerWidth<=320?320:a.innerWidth>=640?640:a.innerWidth,c=100*(b/320);document.documentElement.style.fontSize=c+"px"}function b(){window.onresize=a,setTimeout(function(){a()},0)}b()}();
+</script>
 </head>
 <body>
+<div class="grade-detail">
     <div class="block-head-2">
         <div class="title">天水山千名字有点长有十四个字</div>
-        <div class="love-num">1234 人喜欢</div>
+        <div class="love-num">1234 人喜欢<b></b></div>
     </div>
     <div class="block-img banner-detail">
-        <div class="span-img" style="background-image: url(http://placehold.it/640x346?text=JU,1,598x348);"></div>
+        <div class="span-img" style="background-image: url(http://placehold.it/598x348?text=JU,598x348);"></div>
     </div>
     <div class="dynamic-list">
         <div class="dynamic-item">
@@ -37,14 +41,49 @@
             <div class="tit">累计排名</div>
         </div>
     </div><!--/.dynamic-list-->
-    <button class="btn btn-love"><b></b>我也喜欢</button>
+    <button class="btn btn-love"><b></b>我也喜欢~\(≧▽≦)/~</button>
     <button class="btn btn-rate"><b></b>我来打分</button>
-
-    <div class="fixbottom">
+    <div class="grid-halve">
+    <ul class="ui-grid-halve">
+        <li class="n1">
+            <div class="ui-grid-halve-img"><div class="ui-img-s">1分</div></div>
+        </li>
+        <li class="n2">
+            <div class="ui-grid-halve-img"><div class="ui-img-s">2分</div></div>
+        </li>
+        <li class="n3">
+            <div class="ui-grid-halve-img"><div class="ui-img-s">3分</div></div>
+        </li>
+        <li class="n4">
+            <div class="ui-grid-halve-img"><div class="ui-img-s">4分</div></div>
+        </li>
+        <li class="n5">
+            <div class="ui-grid-halve-img"><div class="ui-img-s">5分</div></div>
+        </li>
+        <li class="n6">
+            <div class="ui-grid-halve-img"><div class="ui-img-s">6分</div></div>
+        </li>
+        <li class="n7">
+            <div class="ui-grid-halve-img"><div class="ui-img-s">7分</div></div>
+        </li>
+        <li class="n8">
+            <div class="ui-grid-halve-img"><div class="ui-img-s">8分</div></div>
+        </li>
+        <li class="n9">
+            <div class="ui-grid-halve-img"><div class="ui-img-s">9分</div></div>
+        </li>
+        <li class="n10">
+            <div class="ui-grid-halve-img"><div class="ui-img-s">10分 ～(▔▽▔)～ 完美</div></div>
+        </li>
+    </ul>
+    </div>
+</div>
+    <div class="fixbottom detail-fix">
         <a class="btn-login" href="javascript:void(0);">
             <span class="tit">使用JUJU号登录</span>
             <span class="tips">(登录可查看排名及分数)</span>
         </a>
+        <img src="../build/img/grade/icon@2x.png" class="flogo" width="50" alt="">
     </div><!--/.fixbottom-->
 </body>
 </html>
