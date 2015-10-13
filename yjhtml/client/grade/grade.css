@@ -1236,6 +1236,11 @@ body {
   box-sizing: border-box;
   z-index: 99;
 }
+.fixbottom .flogo {
+  position: absolute;
+  right: .04rem;
+  top: .17rem;
+}
 .fixbottom .open {
   width: .92rem;
   height: .15rem;
@@ -1393,11 +1398,195 @@ body {
 
 .banner-detail {
   width: 2.98rem;
-  height: 1.74rem;
+  min-height: 1.74rem;
   overflow: hidden;
   border-top-left-radius: .06rem;
   border-bottom-left-radius: .06rem;
   border-top-right-radius: .06rem;
   border-bottom-right-radius: .06rem;
-  padding-top: 58%;
+  margin: 0 auto;
+}
+.banner-detail img {
+  display: block;
+}
+
+.block-head-2 {
+  display: -webkit-box;
+  padding: .1rem .21rem 0;
+  text-align: center;
+}
+.block-head-2 .title {
+  background-color: #ea4531;
+  height: .27rem;
+  line-height: .27rem;
+  width: 1.83rem;
+  color: #fff;
+  border-top-left-radius: .06rem;
+  border-top-right-radius: .06rem;
+  margin-right: .08rem;
+  position: relative;
+  bottom: -.02rem;
+}
+.block-head-2 .love-num {
+  height: .2rem;
+  line-height: .2rem;
+  background-color: #fff;
+  border: #c9cacb 1px solid;
+  border-bottom: none;
+  border-top-left-radius: .06rem;
+  border-top-right-radius: .06rem;
+  color: #333;
+  padding: 0 .1rem;
+  margin-top: .08rem;
+  font-size: .1rem;
+}
+.block-head-2 .love-num b {
+  width: .1rem;
+  height: .1rem;
+  display: inline-block;
+  background-image: url(../img/grade/star2@2x.png);
+  background-size: contain;
+  background-repeat: no-repeat;
+  position: relative;
+  top: .02rem;
+  margin-left: .02rem;
+  font-size: .1rem;
+}
+
+.dynamic-list {
+  width: 2.98rem;
+  height: .64rem;
+  border: #c9cacb 1px solid;
+  margin: 0 auto;
+  border-radius: .06rem;
+  position: relative;
+  top: -.06rem;
+  box-sizing: border-box;
+  box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+  z-index: 2;
+  background-color: #fff;
+  display: flex;
+  margin-bottom: .2rem;
+}
+.dynamic-list .dynamic-item {
+  flex: 1;
+  text-align: center;
+  height: .29rem;
+  margin-bottom: .2rem;
+  border-right: #c9cacb 1px solid;
+  margin-top: .16rem;
+}
+.dynamic-list .dynamic-item:last-child {
+  border-right: none;
+}
+.dynamic-list .dynamic-item:nth-child(2) {
+  height: .38rem;
+  margin-top: .12rem;
+  box-sizing: border-box;
+  padding-top: .04rem;
+}
+.dynamic-list .dynamic-item .tit {
+  font-size: .14rem;
+  color: #999;
+  padding-top: .02rem;
+}
+
+.btn-love,
+.btn-rate {
+  width: 2.98rem;
+  box-sizing: border-box;
+  margin: 0 auto;
+  display: block;
+  height: .35rem;
+  line-height: .35rem;
+  text-align: center;
+  font-size: .14rem;
+  color: #333;
+  background-color: #fff;
+  margin-bottom: .1rem;
+}
+.btn-love b,
+.btn-rate b {
+  width: .2rem;
+  height: .19rem;
+  background-size: contain;
+  background-repeat: no-repeat;
+  display: inline-block;
+  position: relative;
+  top: .05rem;
+  margin-right: .05rem;
+}
+.btn-love:before,
+.btn-rate:before {
+  border-color: #c9cacb;
+}
+
+.btn-love b {
+  background-image: url(../img/grade/star2@2x.png);
+}
+
+.btn-rate b {
+  background-image: url(../img/grade/star@2x.png);
+}
+
+.grade-detail {
+  padding-bottom: .8rem;
+}
+
+.grid-halve {
+  padding: 0 0 0 0.11rem;
+}
+
+.ui-grid-halve {
+  overflow: hidden;
+}
+
+.ui-grid-halve > li {
+  width: .98rem;
+  height: .36rem;
+  line-height: .36rem;
+  float: left;
+  position: relative;
+  -webkit-box-sizing: border-box;
+  margin-bottom: .02rem;
+  margin-right: .02rem;
+  text-align: center;
+  border-radius: .06rem;
+  font-size: .14rem;
+}
+.ui-grid-halve > li.n1 {
+  background-color: #ffd800;
+}
+.ui-grid-halve > li.n2 {
+  background-color: #ffc600;
+}
+.ui-grid-halve > li.n3 {
+  background-color: #ffae00;
+}
+.ui-grid-halve > li.n4 {
+  background-color: #ff9c00;
+}
+.ui-grid-halve > li.n5 {
+  background-color: #ff8a00;
+}
+.ui-grid-halve > li.n6 {
+  background-color: #ff7200;
+}
+.ui-grid-halve > li.n7 {
+  background-color: #f1620d;
+}
+.ui-grid-halve > li.n8 {
+  background-color: #ea5d19;
+}
+.ui-grid-halve > li.n9 {
+  background-color: #ea5d19;
+}
+.ui-grid-halve > li.n10 {
+  background-color: #ea5426;
+  width: 2.98rem;
+  color: #fff;
+}
+
+.detail-fix {
+  padding-right: .58rem;
 }
