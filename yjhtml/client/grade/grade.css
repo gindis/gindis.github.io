@@ -1240,6 +1240,7 @@ body {
   position: absolute;
   right: .04rem;
   top: .17rem;
+  width: .5rem;
 }
 .fixbottom .open {
   width: .92rem;
