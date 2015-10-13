@@ -1414,6 +1414,8 @@ body {
   display: -webkit-box;
   padding: .1rem .21rem 0;
   text-align: center;
+  width: 2.82rem;
+  margin: 0 auto;
 }
 .block-head-2 .title {
   background-color: #ea4531;
