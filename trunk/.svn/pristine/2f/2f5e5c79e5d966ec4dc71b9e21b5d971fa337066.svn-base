@@ -1,0 +1,1 @@
+define("detail/views/recpost-render",["./recpost","xtemplate/runtime"],function(e,t,r){var n=e("./recpost"),p=e("xtemplate/runtime"),i=new p(n);r.exports=function(){return i.render.apply(i,arguments)}});

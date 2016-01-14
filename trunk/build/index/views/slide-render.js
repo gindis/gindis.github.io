@@ -1,0 +1,1 @@
+define("index/views/slide-render",["./slide","xtemplate/runtime"],function(e,n,r){var t=e("./slide"),i=e("xtemplate/runtime"),d=new i(t);r.exports=function(){return d.render.apply(d,arguments)}});

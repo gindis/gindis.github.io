@@ -1,0 +1,1 @@
+define("module/views/tips-render",["./tips","xtemplate/runtime"],function(e,t,n){var r=e("./tips"),i=e("xtemplate/runtime"),p=new i(r);n.exports=function(){return p.render.apply(p,arguments)}});

@@ -1,0 +1,88 @@
+.banner {
+  background-color: #d8d8d8;
+  padding-top: 66.66666666666666%;
+  .span-img {
+    overflow: hidden;
+  }
+  .slide {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+  }
+  .item {
+    width: 100%;
+    height: 100%;
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    float: left;
+    position: relative;
+  }
+  .mask {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    background-color: rgba(0, 0, 0, .3);
+  }
+}
+.mark {
+  position: absolute;
+  .tit {
+    height: 30px;
+    line-height: 30px;
+    padding: 0 10px;
+    background-color: rgba(0,0,0,.7);
+    border-radius: 30px;
+    color: #fff;
+    display: inline-block;
+    font-size: 12px;
+  }
+  .dot {
+    width: 6px;
+    height: 6px;
+    background-color: rgba(255,255,255,.7);
+    border-radius: 100px;
+    display: inline-block;
+    position: absolute;
+    
+  }
+  &.right {
+    .dot{
+      right: -10px;
+      top: 50%;
+      margin-top: -3px;
+    }
+  }
+  &.left {
+    .dot {
+      left: -10px;
+      top: 50%;
+      margin-top: -3px;
+    }
+  }
+
+}
+
+.dots {
+  width: 100%;
+  text-align: center;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  z-index: 2;
+  font-size: 0;
+  padding: 18px 0;
+  span {
+    width: 6px;
+    height: 6px;
+    background-color: rgba(255, 255, 255, .3);
+    display: inline-block;
+    border-radius: 6px;
+    margin: 0 2px;
+    &.current {
+      background-color: rgba(255, 255, 255, .7);
+    }
+  }
+}

@@ -1,0 +1,1 @@
+define("index/mods/a",[],function(n,t,i){"use strict";function o(){this.init.apply(this,arguments)}o.prototype={init:function(){},loadData:function(n){},bindEvent:function(){}},i.exports=o});

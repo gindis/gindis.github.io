@@ -1,0 +1,1 @@
+define("detail/views/matchgoods-render",["./matchgoods","xtemplate/runtime"],function(e,t,n){var r=e("./matchgoods"),a=e("xtemplate/runtime"),o=new a(r);n.exports=function(){return o.render.apply(o,arguments)}});

@@ -1,0 +1,1 @@
+define("example/views/hello-render",["./hello","xtemplate/runtime"],function(e,n,r){var t=e("./hello"),l=e("xtemplate/runtime"),a=new l(t);r.exports=function(){return a.render.apply(a,arguments)}});

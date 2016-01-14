@@ -1,0 +1,31 @@
+{{#if (picList.length > 0)}}
+<div class="block-img banner ">
+<div class="span-img">
+  <div class="slide J_slide">
+  {{#each (picList)}}
+  <div class="item" style="display:block;background-image:url({{url}})">
+    <div class="mask"></div>
+    <!-- <a class="alink" href="detail-goods.html?id={{id}}"></a> -->
+  </div>
+  {{/each}}
+  </div>
+</div>
+<div class="dots J_dots">
+  {{#each (picList)}}
+  <span {{#if (xindex === 0)}}class="current"{{/if}}></span>
+  {{/each}}
+</div>
+</div>
+{{/if}}
+
+<div class="tags">
+  <ul class="taglist">
+    <li class="item tag J_reg"><b></b>{{brandName}}</li>
+    <li class="item category J_reg"><b></b>{{categoryName}}</li>
+    <li class="item color J_reg"><b></b>{{colorName}}</li>
+  </ul>
+</div>
+
+<div class="action border-b">
+  <button class="ui-btn-lg J_reg">购买</button>
+</div>
