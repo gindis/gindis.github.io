@@ -1,0 +1,1 @@
+define("detail/views/talent-render",["./talent","xtemplate/runtime"],function(e,t,n){var r=e("./talent"),a=e("xtemplate/runtime"),i=new a(r);n.exports=function(){return i.render.apply(i,arguments)}});

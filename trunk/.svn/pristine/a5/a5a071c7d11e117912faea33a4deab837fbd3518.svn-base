@@ -1,0 +1,1 @@
+define("topic/mods/a",[],function(t,n,i){"use strict";function o(){this.init.apply(this,arguments)}o.prototype={init:function(){var t=this;t._loadData(),t._bindEvent()},_loadData:function(){},_bindEvent:function(){}},i.exports=o});

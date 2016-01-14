@@ -1,0 +1,1 @@
+define("detail/views/hotpost-render",["./hotpost","xtemplate/runtime"],function(e,t,n){var r=e("./hotpost"),o=e("xtemplate/runtime"),p=new o(r);n.exports=function(){return p.render.apply(p,arguments)}});

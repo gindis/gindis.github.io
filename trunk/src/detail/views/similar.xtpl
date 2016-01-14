@@ -1,0 +1,16 @@
+{{#if (list.length > 0)}}
+<div class="mod-inner">
+  <h2 class="title">相似单品</h2>
+  <div class="stuff">
+  <ul class="stuff-list" style="width:{{#if (list.length <= 9)}}{{(list.length*115)}}{{else}}{{(9*115)}}{{/if}}px;">
+    {{#each (list)}}
+    {{#if (xindex < 9)}}
+    <li class="item"><div class="ele" style="background-image:url({{picList[0].url}})">
+      <a href="detail-goods.html?id={{id}}" class="alink"></a>
+    </div></li>
+    {{/if}}
+    {{/each}}
+  </ul>
+  </div>
+</div>
+{{/if}}

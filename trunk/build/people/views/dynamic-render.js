@@ -1,0 +1,1 @@
+define("people/views/dynamic-render",["./dynamic","xtemplate/runtime"],function(e,n,r){var t=e("./dynamic"),i=e("xtemplate/runtime"),a=new i(t);r.exports=function(){return a.render.apply(a,arguments)}});

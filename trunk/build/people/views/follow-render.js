@@ -1,0 +1,1 @@
+define("people/views/follow-render",["./follow","xtemplate/runtime"],function(e,n,r){var t=e("./follow"),l=e("xtemplate/runtime"),o=new l(t);r.exports=function(){return o.render.apply(o,arguments)}});

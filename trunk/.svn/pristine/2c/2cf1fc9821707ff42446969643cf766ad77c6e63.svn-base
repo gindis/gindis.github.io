@@ -1,0 +1,1 @@
+define("example/mods/a",[],function(t,n,i){"use strict";function o(){this.init.apply(this,arguments)}o.prototype={init:function(){},loadData:function(t){},bindEvent:function(){}},i.exports=o});

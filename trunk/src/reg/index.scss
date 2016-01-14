@@ -1,0 +1,75 @@
+
+// Common
+@import "common/scss/nothing";
+@import "module/scss/topbar";
+
+.ui-form {
+  margin-left: 15px;
+}
+.action {
+  padding: 20px 15px 20px 0;
+}
+.tips-text {
+  font-size: 15px;
+  color: #C0C0C0;
+  text-align: center;
+  margin-right: 25px;
+}
+.ui-form-item {
+  padding-left: 0;
+  height: .44rem;
+  line-height: .44rem;
+}
+.ui-form-item-r {
+  button {
+    height: .43rem;
+    font-size: .13rem;
+  }
+}
+
+.reg-other {
+  margin-top: 150px;
+  margin-right: 15px;
+  .tit {
+    color: #737373;
+    text-align: center;
+    font-size: 13px;
+  }
+  .list {
+    display: flex;
+    padding-top: 10px;
+    margin: 0 50px;
+    .item {
+      flex: 1;
+      height: 60px;
+      text-align: center;
+      b {
+        width: 60px;
+        height: 60px;
+        display: inline-block;
+        font-size: 0;
+        border-radius: 60px;
+        background-size: contain;
+        background-repeat: no-repeat;
+      }
+      &.wchat {
+        b {
+          background-image: url(../module/images/login_wechat@3x.png)
+        }
+      }
+      &.weibo {
+        b {
+          background-image: url(../module/images/login_weibo@2x.png)
+        }
+      }
+      &.qq {
+        b {
+          background-image: url(../module/images/login_qq@3x.png)
+        }
+      }
+    }
+  }
+}
+.ui-icon-close {
+  display: none;
+}

@@ -1,0 +1,74 @@
+{
+  "name": "gulp-seajs-transport",
+  "version": "0.3.1",
+  "description": "transport seajs modules gulp plugin",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/guilipan/gulp-seajs-transport.git"
+  },
+  "author": {
+    "name": "guilipan",
+    "email": "guilipan@163.com",
+    "url": "http://shaynegui.com"
+  },
+  "engines": {
+    "node": "*"
+  },
+  "scripts": {
+    "test": "mocha test/transport-spec.js"
+  },
+  "main": "index.js",
+  "files": [
+    "index.js"
+  ],
+  "keywords": [
+    "gulpplugin",
+    "seajs",
+    "transport"
+  ],
+  "dependencies": {
+    "gulp-util": "^3.0.0",
+    "through2": "^0.6.1",
+    "cmd-util": "^0.3.13"
+  },
+  "devDependencies": {
+    "chai": "^2.3.0",
+    "coveralls": "^2.11.1",
+    "event-stream": "^3.1.7",
+    "gulp": "^3.8.7",
+    "gulp-util": "^3.0.1",
+    "istanbul": "^0.3.2",
+    "mocha": "^1.21.4"
+  },
+  "bugs": {
+    "url": "https://github.com/guilipan/gulp-seajs-transport/issues"
+  },
+  "homepage": "https://github.com/guilipan/gulp-seajs-transport",
+  "_id": "gulp-seajs-transport@0.3.1",
+  "_shasum": "4d12086dbe4a8b67e0bac01cab65d73cb1697af5",
+  "_from": "gulp-seajs-transport@>=0.3.1 <0.4.0",
+  "_npmVersion": "1.4.9",
+  "_npmUser": {
+    "name": "guilipan",
+    "email": "guilipan@163.com"
+  },
+  "maintainers": [
+    {
+      "name": "guilipan",
+      "email": "guilipan@163.com"
+    }
+  ],
+  "dist": {
+    "shasum": "4d12086dbe4a8b67e0bac01cab65d73cb1697af5",
+    "size": 2446,
+    "noattachment": false,
+    "key": "gulp-seajs-transport/-/gulp-seajs-transport-0.3.1.tgz",
+    "tarball": "http://registry.npm.alibaba-inc.com/gulp-seajs-transport/download/gulp-seajs-transport-0.3.1.tgz"
+  },
+  "directories": {},
+  "publish_time": 1431670840868,
+  "_cnpm_publish_time": 1431670840868,
+  "_resolved": "http://registry.npm.alibaba-inc.com/gulp-seajs-transport/download/gulp-seajs-transport-0.3.1.tgz",
+  "readme": "ERROR: No README data found!"
+}

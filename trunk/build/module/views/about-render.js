@@ -1,0 +1,1 @@
+define("module/views/about-render",["./about","xtemplate/runtime"],function(e,t,n){var r=e("./about"),u=e("xtemplate/runtime"),a=new u(r);n.exports=function(){return a.render.apply(a,arguments)}});

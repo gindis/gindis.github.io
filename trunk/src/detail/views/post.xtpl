@@ -1,0 +1,14 @@
+{{#if (list.length > 0)}}
+<div class="mod-inner">
+<h2 class="title">搭配排行榜</h2>
+<div class="rank">
+  <ul class="goods-list">
+    {{#each (list)}}
+    {{#if (xindex < 9)}}
+    <li data-index="{{xindex}}" class="item"><div class="ele"><div class="ele-inner" style="background-image:url({{match.picture.url}})"><a class="alink" href="detail-posts.html?id={{id}}"></a></div><div class="fans"><b class="b{{xindex+1}}"></b><span class="num">{{match.hotNum}}</span></div></div></li>
+    {{/if}}
+    {{/each}}
+  </ul>
+</div>
+</div>
+{{/if}}
