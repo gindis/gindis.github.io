@@ -1,3 +1,0 @@
-{{#if(true)}}
-  Hello, World! - {{name}}
-{{/if}}
