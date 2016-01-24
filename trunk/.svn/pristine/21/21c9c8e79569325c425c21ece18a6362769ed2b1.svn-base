@@ -1,0 +1,1 @@
+define("topic/views/topicdetail-render",["./topicdetail","xtemplate/runtime"],function(e,t,i){var n=e("./topicdetail"),r=e("xtemplate/runtime"),p=new r(n);i.exports=function(){return p.render.apply(p,arguments)}});

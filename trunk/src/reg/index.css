@@ -688,9 +688,9 @@ button {
  * 按钮
  */
 .ui-btn, .ui-btn-lg, .ui-btn-s {
-  height: 30px;
-  line-height: 30px;
-  padding: 0 11px;
+  height: 0.3rem;
+  line-height: 0.3rem;
+  padding: 0 0.11rem;
   min-width: 55px;
   display: inline-block;
   position: relative;
@@ -822,6 +822,18 @@ button {
     border-radius: 10px;
   }
 }
+.ui-loading {
+  -webkit-animation: rotate 1s steps(12) infinite;
+}
+
+.ui-loading-bright {
+  -webkit-animation: rotate2 1s steps(12) infinite;
+}
+
+.ui-icon-refresh.loading {
+  -webkit-animation: rotate3 1s infinite linear;
+}
+
 @-webkit-keyframes rotate {
   from {
     background-position: 0 0;
@@ -1492,6 +1504,50 @@ button {
   text-overflow: ellipsis;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
+}
+
+.ui-dialog-notice {
+  background: transparent;
+}
+.ui-dialog-notice .ui-dialog-cnt {
+  width: 130px;
+  height: 110px;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-box-pack: center;
+  -webkit-box-align: center;
+  text-align: center;
+  background: rgba(0, 0, 0, 0.65);
+  /*background-color: rgba(31, 35, 55, 1);*/
+  border-radius: 6px;
+  color: #fff;
+}
+
+.ui-loading-wrap {
+  display: -webkit-box;
+  -webkit-box-pack: center;
+  -webkit-box-align: center;
+  text-align: center;
+  height: 40px;
+}
+.ui-loading-wrap .ui-loading {
+  margin: 10px;
+}
+
+.ui-loading {
+  width: 20px;
+  height: 20px;
+  display: block;
+  background: url(//gtms01.alicdn.com/tps/i1/TB1rC_3IXXXXXacXXXXVWZVUXXX-480-40.png);
+  -webkit-background-size: auto 20px;
+}
+
+.ui-loading-bright {
+  width: 37px;
+  height: 37px;
+  display: block;
+  background-image: url(//gtms04.alicdn.com/tps/i4/TB1hOPyIXXXXXb6XVXX3HBoFVXX-888-74.png);
+  -webkit-background-size: auto 37px;
 }
 
 body {

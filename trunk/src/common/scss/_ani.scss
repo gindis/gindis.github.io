@@ -1,3 +1,12 @@
+.ui-loading{
+  -webkit-animation: rotate 1s steps(12) infinite;
+}
+.ui-loading-bright{
+   -webkit-animation: rotate2 1s steps(12) infinite;
+}
+.ui-icon-refresh.loading{
+    -webkit-animation: rotate3 1s infinite linear;
+}
 @-webkit-keyframes rotate {
   from {
     background-position: 0 0;

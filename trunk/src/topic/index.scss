@@ -111,6 +111,7 @@ body {
         margin: 0 auto;
         > li {
           float: left;
+          width: .9472000000000001rem;
           margin-right: .0512rem;
           text-align: center;
           position: relative;
@@ -142,10 +143,14 @@ body {
         color: #737373;
       }
     }
+    }
+    .separator-wrap {
+      padding-top: .30720000000000010rem;
+    }
     .separator {
       position: relative;
       text-align: center;
-      margin-top: .30720000000000010rem;
+      
       padding: .08533333333333333rem .17066666666666666rem;
       color: #BFC6D4;
       .n {
@@ -187,7 +192,7 @@ body {
       color: #939EB5;
       text-align: center;
       padding-bottom: .08533333333333333rem;
-      margin-top: .12800000000000004rem;
+      padding-top: .12800000000000004rem;
       .title {
         padding-bottom: .06826666666666667rem;
       }
@@ -197,6 +202,7 @@ body {
         margin: 0 auto;
         border-radius: 1rem;
         overflow: hidden;
+        background-color: rgba(0,0,0,.1);
         img {
           width: .4266666666666667rem;
           border-radius: 1rem;
@@ -206,11 +212,13 @@ body {
 
     .matchs {
       /*padding-bottom: .3413333333333333rem;*/
-      width: 100%;
+      width: 3.2rem;
       margin: 0 auto;
       overflow: hidden;
       .matchs-inner {
         width: 3.3rem;
+        overflow: hidden;
+        margin: 0 auto;
       }
       .item {
         width: 1.5872rem;
@@ -338,6 +346,12 @@ body {
       text-overflow: ellipsis;
       white-space: nowrap;
     }
+    .topics-wrap,
+    .matchs,
+    .separator-wrap,
+    .author {
+      background-color: #fff;
+    }
     .topics {
       .topic-item {
         width: 100%;
@@ -362,7 +376,7 @@ body {
             background-repeat: no-repeat;
             background-position: center center;
             left: .05rem;
-            top: .05rem;
+            top: .07rem;
           }
         }
         .body {
@@ -384,7 +398,7 @@ body {
       color: #C6D0E5;
       font-size: .11093333333333334rem;
     }
-  }
+  
 }
 .m8 {
   margin-bottom: .08533333333333333rem;
@@ -441,7 +455,6 @@ html[data-dpr="2"] {
         }
       }
     }
-
   }
 }
 

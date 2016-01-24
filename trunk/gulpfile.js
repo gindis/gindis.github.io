@@ -65,8 +65,8 @@ gulp.task('xtpl', function() {
 gulp.task('uglifyJs', ['xtpl'], function() {
   return gulp.src(paths.scripts)
     .pipe(transport())
-    //.pipe(jshint('.jshintrc'))
-    //.pipe(jshint.reporter(stylish))
+    // .pipe(jshint('.jshintrc'))
+    // .pipe(jshint.reporter(stylish))
     .pipe(uglify())
     .pipe(gulp.dest(paths.dest))
     .pipe(connect.reload());
@@ -87,18 +87,15 @@ gulp.task('scss', function() {
 // Prefix CSS
 gulp.task('prefix', ['scss'], function() {
   return gulp.src(paths.cssRoot)
-    .pipe(prefix({
-      browsers: ['last 2 versions'],
-      cascade: false
-    }))
+    .pipe(prefix())
     .pipe(cssmin())
     .pipe(gulp.dest(paths.dest))
     .pipe(connect.reload());
 })
 
 // COPY IMGAGES
-gulp.task('images', function() {
-  return gulp.src(paths.images)
+gulp.task('copy', function() {
+  return gulp.src(paths.images.concat('src/vendor/**/*.js'))
     .pipe(copy(paths.dest, {
       prefix: 1
     }))
@@ -124,17 +121,20 @@ gulp.task('html', function() {
 
 // Rerun the task when a file changes
 gulp.task('watch', function() {
-  gulp.watch(paths.sassRoot, ['prefix']);
+  gulp.watch(paths.sassRoot, ['scss']);
+  gulp.watch(paths.cssRoot, ['prefix']);
+  gulp.watch(paths.xtpl, ['xtpl']);
   gulp.watch(paths.scripts, ['uglifyJs']);
   gulp.watch(paths.images, ['images']);
   gulp.watch(['./demo/*.html'], ['html']);
 })
 
+
 // DEFAULT
-gulp.task('default', ['watch', 'uglifyJs', 'prefix', 'images', 'concat']);
+gulp.task('default', ['watch', 'uglifyJs', 'prefix', 'copy']);
 
 // SERVE
 gulp.task('serve', ['connect', 'watch']);
 
 // BUILD
-gulp.task('build', ['uglifyJs', 'prefix', 'images', 'concat']);
+gulp.task('build', ['uglifyJs', 'prefix', 'copy']);
