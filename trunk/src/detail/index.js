@@ -21,8 +21,9 @@ define(function(require, exports, module) {
   var Talent = require('./views/talent-render');
   var Similar = require('./views/similar-render');
 
+  // 处理穿透事件冒泡
   var attachFastClick = require('module/js/fastclick');
-  attachFastClick(document.body); // 处理穿透事件冒泡
+  attachFastClick(document.body);
 
   var net = new Net();
   var req = new Object();

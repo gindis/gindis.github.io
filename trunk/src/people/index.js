@@ -11,7 +11,7 @@ define(function(require, exports, module) {
   var Util = require('common/js/util');
   var Net = require('module/js/net');
   var Modal = require('module/js/modal');
-  var a = require('./mods/a');
+  // var a = require('./mods/a');
   var userInfo = require('./views/userinfo-render');
   var Dynamic = require('./views/dynamic-render');
   var Follow = require('./views/follow-render');

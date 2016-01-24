@@ -6,9 +6,9 @@ define(function(require, exports, module) {
 
   // 默认模板
   var _loadingTpl = function(data) {
-    return '<div class="dialog dialog-notice show">' +
-      '<div class="dialog-cnt">' +
-      '<i class="loading-bright"></i>' +
+    return '<div class="ui-dialog ui-dialog-notice show">' +
+      '<div class="ui-dialog-cnt">' +
+      '<i class="ui-loading-bright"></i>' +
       '<p>' + data.content + '</p>' +
       '</div>' +
       '</div>';

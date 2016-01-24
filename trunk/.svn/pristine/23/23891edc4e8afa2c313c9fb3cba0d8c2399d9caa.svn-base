@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>专题 - 搭配类</title>
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" href="../build/topic/index.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0,user-scalable=no">
+    <script>
+;(function(){
+var win = window, docElem = document.documentElement, timeoutId;
+
+setUnitA();
+docElem.setAttribute('data-dpr', win.devicePixelRatio);
+win.addEventListener('resize', delaySetUnitA, false);
+win.addEventListener('pageshow', function(e){
+  e.persisted && delaySetUnitA();
+}, false);
+
+function delaySetUnitA(){
+  clearTimeout(timeoutId);
+  timeoutId = setTimeout(setUnitA, 300);
+}
+
+function setUnitA(){
+  if (docElem.getBoundingClientRect().width <=640) {
+    win.rem = docElem.getBoundingClientRect().width / 3.2;
+  } else {
+    win.rem = 640 / 3.2
+  }
+  
+  docElem.style.fontSize = win.rem + 'px';
+}
+})();
+</script>
+</head>
+
+<body>
+<header style="background-image: url(./img/h.png);" class="header">
+  <h2 class="title">黑色单品全在这</h2>
+  <p class="partition">—</p>
+  <p class="say">博主教你怎么搭</p>
+  <p class="clothes"><span class="icon">16</span></p>
+</header>
+<section class="container">
+  <div class="post">
+    <div class="matchs">
+      <div class="matchs-inner">
+      <div class="item">
+        <div class="item-head">
+          <div class="avatar"><img src="http://7xljza.com2.z0.glb.qiniucdn.com/head_aff6d87a14a94c568608a9a9aada4e16.png" alt=""></div>
+          <div class="information">
+            <div class="name">小明</div>
+            <div class="attr">杭州市/182CM</div>
+          </div>
+        </div>
+        <div  style="background-image: url(./img/matchs.png);" class="cover"><span class="fav">1888</span><a class="link" href="###"></a></div>
+      </div>
+      <div class="item">
+        <div class="item-head">
+          <div class="avatar"><img src="http://7xljza.com2.z0.glb.qiniucdn.com/head_aff6d87a14a94c568608a9a9aada4e16.png" alt=""></div>
+          <div class="information">
+            <div class="name">小明</div>
+            <div class="attr">杭州市/182CM</div>
+          </div>
+        </div>
+        <div  style="background-image: url(./img/matchs.png);" class="cover"><span class="fav">1888</span><a class="link" href="###"></a></div>
+      </div>
+      <div class="item">
+        <div class="item-head">
+          <div class="avatar"><img src="http://7xljza.com2.z0.glb.qiniucdn.com/head_aff6d87a14a94c568608a9a9aada4e16.png" alt=""></div>
+          <div class="information">
+            <div class="name">张三</div>
+            <div class="attr">上海市/172CM</div>
+          </div>
+        </div>
+        <div  style="background-image: url(./img/matchs.png);" class="cover"><span class="fav">1888</span><a class="link" href="###"></a></div>
+      </div>
+      <div class="item">
+        <div class="item-head">
+          <div class="avatar"></div>
+          <div class="information">
+            <div class="name">李四</div>
+            <div class="attr">北京市/180CM</div>
+          </div>
+        </div>
+        <div  style="background-image: url(./img/matchs.png);" class="cover"><span class="fav">1888</span><a class="link" href="###"></a></div>
+      </div>
+      </div>
+    </div>
+
+    <div class="separator">
+      <div class="line ui-border-b"></div>
+      <div class="n"><span class="pageview">18888</span><span class="follows">16666</span></div>
+    </div><!--/.separator-->
+    <!-- <div class="author">
+      <div class="title">专题作者</div>
+      <div class="avatar"><a href="###"><img src="http://7xljza.com2.z0.glb.qiniucdn.com/head_aff6d87a14a94c568608a9a9aada4e16.png" alt=""></a></div>
+    </div> -->
+    <div class="separator">
+      <div class="line ui-border-b"></div>
+      <div class="n">推荐专题</div>
+    </div><!--/.separator-->
+    <div class="topics">
+      <div style="background-image: url(./img/topic_cover.png);" class="topic-item">
+        <div class="title t1">搭配专题</div>
+        <div class="body">
+          <p>选对一件超长大衣</p>
+          <p class="bwt">轻松穿出风格</p>
+        </div>
+      </div>
+      <div style="background-image: url(./img/topic_cover.png);" class="topic-item">
+        <div class="title t2">单品合集</div>
+        <div class="body">
+          <p>配短靴最好看的六条裤子</p>
+          <p class="bwt">轻松穿出风格</p>
+        </div>
+      </div>
+      <div style="background-image: url(./img/topic_cover.png);" class="topic-item">
+        <div class="title t2">单品合集</div>
+        <div class="body">
+          <p>配短靴最好看的六条裤子</p>
+          <p class="bwt">轻松穿出风格</p>
+        </div>
+      </div>
+      <div style="background-image: url(./img/topic_cover.png);" class="topic-item">
+        <div class="title t2">单品合集</div>
+        <div class="body">
+          <p>配短靴最好看的六条裤子</p>
+          <p class="bwt">轻松穿出风格</p>
+        </div>
+      </div>
+      <div style="background-image: url(./img/topic_cover.png);" class="topic-item">
+        <div class="title t2">单品合集</div>
+        <div class="body">
+          <p>配短靴最好看的六条裤子</p>
+          <p class="bwt">轻松穿出风格</p>
+        </div>
+      </div>
+    </div>
+    <div class="more">
+      没有更多
+    </div>
+  </div><!--/.post-->
+</section>
+<script src="../build/vendor/sea.js"></script>
+
+<script>
+
+  var _GLOBAL_CONFIG_ = {
+    topic: {
+      type: 'match'
+    }
+  }
+  // Environment, Default production
+  var ASSET = "../build/";
+
+  // Set configuration
+  seajs.config({
+    base: ASSET,
+    alias: {
+      "zepto": "vendor/zepto"
+    }
+  });
+
+  // Init
+  seajs.use("topic/index", function(index) {
+    new index();
+  });
+</script>
+</body>
+</html>
