@@ -8,3 +8,4 @@ app/components
 test*.js
 .Ds_Store
 .git
+.svn
