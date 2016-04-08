@@ -1,0 +1,47 @@
+<div id="wrap">
+  <nav class="nav ui-border-b">
+    <a href="./category.html?choose=0" class="item {{#if (choose === 0)}}active{{/if}}">搭配</a>
+    <a href="./category.html?choose=1" class="item {{#if (choose === 1)}}active{{/if}}">单品</a>
+  </nav>
+  <div class="main">
+    {{#if (choose === 0)}}
+      {{#if (dynamics.list.length > 0)}}
+      <div id="columns">
+      {{#each (dynamics.list)}}
+        <figure>
+          <img src="{{match.picture.url}}">
+          <figcaption>
+            <p class="des nowrap-multi">{{match.description}}</p>
+            <p class="info"><span class="name">{{match.user.name}}</span> <span class="like {{#if (match.isPraise)}}liked{{/if}}">{{match.praiseCount}}</span></p>
+          </figcaption>
+          <a class="link" data-type="dynamic" data-id="{{id}}" href="./detail-goods.html?id={{id}}"></a>
+        </figure>
+      {{/each}}
+      </div>
+      {{else}}
+      <div class="nomore">没有找到相关搭配</div>
+      {{/if}}
+    {{/if}}
+
+    {{#if (choose === 1)}}
+      {{#if (products.list.length > 0)}}
+        <div id="columns">
+        {{#each (products.list)}}
+        <figure>
+          <img src="{{picture.url}}">
+          <figcaption>
+            <p class="des nowrap-multi">{{description}}</p>
+            <p class="price"><span>&yen;{{price}}</span></p>
+          </figcaption>
+          <a class="link" data-type="product" data-id="{{id}}" href="./detail-goods.html?id={{id}}"></a>
+        </figure>
+        {{/each}}
+        </div>
+      {{else}}
+        <div class="nomore">没有找到相关单品</div>
+      {{/if}}
+    {{/if}}
+
+  </div>
+  </div>
+</div>

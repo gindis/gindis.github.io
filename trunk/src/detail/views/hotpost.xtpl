@@ -1,0 +1,16 @@
+{{#if (list.length > 0)}}
+<div class="mod border-tb recommend">
+  <div class="mod-inner">
+    <h2 class="title">{{root.username}}发过的其它搭配</h2>
+    <div class="posts J_posts">
+    <ul class="posts-list" style="width:{{#if (list.length <= 9)}}{{(list.length*115)}}{{else}}{{(9*115)}}{{/if}}px;">
+      {{#each (list)}}
+      {{#if (xindex < 9)}}
+      <li class="item"><div class="ele" style="background-image:url({{match.picture.url}})"><a class="alink" href="detail-posts.html?id={{id}}"></a></div></li>
+      {{/if}}
+      {{/each}}
+    </ul>
+    </div>
+  </div>
+</div>
+{{/if}}

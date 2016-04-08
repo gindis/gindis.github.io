@@ -1,0 +1,28 @@
+{{#if (list.length > 0)}}
+<div class="mod border-tb post-rank">
+  <div class="rank">
+    <ul class="goods-list">
+      {{#if (list.length > 0)}}
+      {{#each ( list)}}
+      <li class="item"><div class="ele"><div class="ele-inner" style="background-image:url({{match.picture.url}})"><a href="detail-posts.html?id={{id}}" class="alink"></a></div></li>
+      {{/each}}
+      {{else}}
+      <li class="null"></li>
+      {{/if}}
+    </ul>
+  </div>
+</div>
+{{else}}
+{{#if (ptype === 'userDynamic')}}
+<div class="norepost">
+  <div class="icon"></div>
+  <div class="lna">ta还没有发布</div>
+</div>
+{{/if}}
+{{#if (ptype === 'userRepost')}}
+<div class="nopost">
+  <div class="icon"></div>
+  <div class="lna">ta还没有转发</div>
+</div>
+{{/if}}
+{{/if}}

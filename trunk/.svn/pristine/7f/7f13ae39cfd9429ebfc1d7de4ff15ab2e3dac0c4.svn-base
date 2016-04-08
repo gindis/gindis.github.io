@@ -1,0 +1,1 @@
+define("tag/views/tag-render",["./tag","xtemplate/runtime"],function(e,t,n){var r=e("./tag"),a=e("xtemplate/runtime"),i=new a(r);n.exports=function(){return i.render.apply(i,arguments)}});

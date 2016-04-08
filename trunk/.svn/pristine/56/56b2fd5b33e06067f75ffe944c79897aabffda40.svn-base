@@ -1,0 +1,1 @@
+define("magazine/views/magazine-render",["./magazine","xtemplate/runtime"],function(e,n,a){var i=e("./magazine"),r=e("xtemplate/runtime"),t=new r(i);a.exports=function(){return t.render.apply(t,arguments)}});

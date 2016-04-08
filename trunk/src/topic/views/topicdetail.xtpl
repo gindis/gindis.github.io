@@ -1,0 +1,143 @@
+<header style="background-image: url({{picture.url}});" class="header">
+  <h2 class="title">{{title}}</h2>
+  <p class="partition">—</p>
+  <p class="say">{{subTitle}}</p>
+  <!-- <p class="clothes"><span class="icon">{{#if (matchNum !== 0)}}{{matchNum}}{{else}}{{productNum}}{{/if}}</span></p> -->
+  <p class="btns"><button data-type="topic" data-id="{{id}}" class="btn-follow follow {{#if (isFollow)}}isFollow{{/if}}">{{#if (isFollow)}}{{#if (type === 3)}}已关注{{else}}已收藏{{/if}}{{else}}{{#if (type === 3)}}关注{{else}}收藏{{/if}}{{/if}}</button></p>
+</header>
+<section class="container {{#if (type === 3)}}product{{elseif (type===1)}}dynamics{{/if}}">
+  <div class="author ui-border-b" {{#if (type === 2)}}style="padding-bottom: .21333333333333332rem;"{{/if}}>
+    {{#if (type !== 2)}}
+    {{#if (user.name !== '')}}<div class="title">作者: {{user.name}}</div>{{/if}}
+    <div class="avatar"><a class="link" data-type="user" data-id="{{user.id}}" href="./people.html?uid={{user.id}}">{{#if (user.head.url)}}<img src="{{user.head.url}}" alt="">{{/if}}</a></div>
+    {{/if}}
+    <div class="dynamic-data" {{#if (type === 2)}}style="margin-top: 0;"{{/if}}><span class="pageview">浏览 {{viewNum}}</span> <b class="line ui-border-r"></b> <span class="follows">关注 {{followNum}}</span></div>
+  </div>
+  {{#if (type === 1 && dynamics && (dynamics.list.length > 0) )}}
+  {{#each (dynamics.list)}}
+  <div class="post">
+    {{#if (xindex === 0)}}<div class="description">{{root.content}}</div>{{/if}}
+    {{#if (match.user)}}
+    <div class="head">
+      <div class="avatar"><a class="link" data-type="user" data-id="{{id}}" href="./people.html?uid={{id}}"><img src="{{match.user.head.url}}" alt=""></a></div>
+      <div class="information">
+        <div class="name">{{match.user.name}}</div>
+        <div class="attr">{{match.user.area.name}}/{{match.user.height}}CM/{{match.user.hair.name}}</div>
+        <a class="follow" data-type="user" data-id="{{match.user.id}}" href="javascript:;"></a>
+      </div>
+    </div>
+    {{/if}}
+    <div class="description">{{match.description}}</div>
+    {{#if (match.picList[0] && match.picList.length > 0)}}
+    <div class="cover-wrap">
+    {{#each (match.picList)}}
+    <div class="cover">
+      {{#if (url)}}
+      <img width="100%" src="{{url}}" alt="">
+      {{/if}}
+    </div>
+    {{/each}}
+    </div>
+    {{/if}}
+    {{#if (match.prodList.length > 0)}}
+    <div class="goods">
+      <ul class="list">
+        {{#each (match.prodList)}}
+        <li>
+          <div style="background-image: url({{picture.url}});" class="cover"></div>
+          <div class="name nowrap">{{#if (name)}}{{name}}{{else}}{{brandName}}{{/if}}</div>
+          <div class="price">{{#if (currency && currency === 2 )}}${{elseif (currency && currency === 3)}}&euro;{{else}}&yen;{{/if}} {{price}}</div>
+          <a class="link" data-type="product" data-id="{{id}}" href="./detail-goods.html?id={{id}}"></a>
+        </li>
+        {{/each}}
+      </ul>
+    </div>
+    {{/if}}
+  </div><!--/.post-->
+  {{/each}}
+  <div class="mcounsel"></div>
+  <div data-type="counsel" {{#if (!dynamics.hasNextPage)}}style="display: none;"{{/if}} style="line-height: 1;" data-firsttime="{{dynamics.firstTime}}" data-pagesize="{{dynamics.pageSize}}" data-startId="{{dynamics.list[dynamics.list.length-1].match.numId}}" class="more J_more {{#if (!dynamics.hasNextPage)}}disabled{{/if}}">
+        {{#if (!dynamics.hasNextPage)}}<span class="btn-more disabled">没有更多</span>{{else}}<span class="btn-more">加载更多</span>{{/if}}
+      </div>
+  {{elseif (type === 2 && dynamics && (dynamics.list.length > 0))}}
+  <div class="post">
+    <div class="matchs">
+      <div class="matchs-inner">
+        {{#each (dynamics.list)}}
+        <div class="item">
+          <div style="background-image: url({{match.picture.url}});" class="cover"><span  data-id="{{id}}" class="fav {{#if (match.isPraise)}}faved{{/if}} J_fav">{{match.praiseCount}}</span><a class="link" data-type="dynamic" data-id="{{id}}" href="./detail-posts.html?id={{id}}"></a></div>
+          <div class="item-head">
+            <div class="avatar">
+              {{#if (match.user.head.url)}}<img src="{{match.user.head.url}}" alt="">{{/if}}
+              <a data-type="user" data-id="{{match.user.id}}" href="./people.html?uid={{match.user.id}}" class="link"></a>
+            </div>
+            <div class="information">
+              <div class="name">{{match.user.name}}</div>
+              <div class="attr">{{match.user.area.name}}{{#if (match.user.height)}}{{match.user.height}}/CM{{/if}}</div>
+            </div>
+          </div>
+        </div>
+        {{/each}}
+      </div>
+      <div {{#if (!dynamics.hasNextPage)}}style="display: none;"{{else}}style="line-height: 1;height:auto;"{{/if}} data-type="dynamic" data-firsttime="{{dynamics.firstTime}}" data-pagesize="{{dynamics.pageSize}}" data-startId="{{dynamics.list[dynamics.list.length-1].match.numId}}" class="more J_more {{#if (!dynamics.hasNextPage)}}disabled{{/if}}">
+        {{#if (!dynamics.hasNextPage)}}<span class="btn-more disabled">没有更多</span>{{else}}<span class="btn-more">加载更多</span>{{/if}}
+      </div>
+    </div>
+  </div>
+  {{elseif (type === 3)}}
+  <div class="post">
+    <div class="description">{{content}}</div>
+    {{#if (products && (products.list.length > 0))}}
+    {{#each (products.list)}}
+    <div class="sku" {{#if (xindex === (products.list.length - 1))}} style="padding-bottom: 40px;" {{/if}} {{#if (xindex === 0)}}style="padding-top:0;"{{/if}}>
+      <!-- <div class="sku-head">{{brandName}}</div> -->
+      <div class="body">
+        {{#each (picList)}}
+        <img width="100%" src="{{url}}">
+        {{/each}}
+        <p>{{description}}</p>
+      </div>
+      <div class="like-item">
+        <div class="cover">{{#if (picture.url)}}<img width="100%" src="{{picture.url}}" alt="{{name}}">{{/if}}</div>
+        <div class="information">
+          {{#if (price && price > 0)}}<div class="price">{{#if (currency && currency === 2 )}}${{elseif (currency && currency === 3)}}&euro;{{else}}&yen;{{/if}} {{price}}</div>{{/if}}
+          <div class="name nowrap">{{#if (name && name !== '')}}{{name}}{{else}}{{brandName}}{{/if}}</div>
+          <!-- <div class="source">来源: {{brandName}}</div> -->
+          <span class="btn-buy">购买</span>
+        </div>
+        <a class="link" data-type="product" data-id="{{id}}" href="./detail-goods.html?id={{id}}"></a>
+      </div>
+    </div><!--/.sku-->
+    {{/each}}
+    {{/if}}
+  </div>
+  <div {{#if (!products.hasNextPage)}}style="display: none;"{{/if}} data-type="product" data-startId="{{numId}}" data-firsttime="{{products.firstTime}}" data-pagesize="{{products.pageSize}}" class="more J_more {{#if (!products.hasNextPage)}}disabled{{/if}}">
+    {{#if (!products.hasNextPage)}}<span class="btn-more disabled">没有更多</span>{{else}}<span class="btn-more">加载更多</span>{{/if}}
+  </div>
+  {{/if}}
+  {{#if (subjects.length > 0)}}
+  <div class="separator-wrap">
+  <div class="separator">
+    <div class="line ui-border-b"></div>
+    <div class="n">推荐专题</div>
+  </div><!--/.separator-->
+  </div>
+  <div class="topics-wrap">
+  <div class="topics">
+    {{#each (subjects)}}
+    <div style="background-image: url({{picture.url}});{{#if (xindex === (subjects.length-1))}}margin-bottom: 0;{{/if}}" class="topic-item">
+      <!-- <div class="title {{#if (type === 1)}}t1{{elseif (type=== 2)}}t1{{else}}t2{{/if}}">{{#if (type === 1)}}穿搭示范{{elseif (type=== 2)}}搭配专题{{else}}单品合集{{/if}}</div> -->
+      <div class="body">
+        <p>{{title}}</p>
+        <p class="bwt">{{subTitle}}</p>
+      </div>
+      <a class="linka" href="./{{#if (type === 1)}}topic-counsel{{elseif (type=== 2)}}topic-match{{else}}topic-products{{/if}}.html?id={{id}}&title={{encodeURI(title)}}{{#if (accessToken)}}&accessToken={{accessToken}}{{/if}}{{#if (deviceType)}}&deviceType={{deviceType}}{{/if}}&randomstr={{randomstr}}"></a>
+    </div>
+    {{/each}}
+  </div>
+  <div class="more">
+    没有更多
+  </div>
+  {{/if}}
+  </div>
+</section>

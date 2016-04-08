@@ -1,0 +1,29 @@
+{{#if (choose === 0)}}
+{{#if (dynamics.list.length > 0)}}
+  {{#each (dynamics.list)}}
+    <figure>
+      <img src="{{match.picture.url}}">
+      <figcaption>
+        <p class="des nowrap-multi">{{match.description}}</p>
+        <p class="info"><span class="name">{{match.user.name}}</span> <span class="like {{#if (match.isPraise)}}liked{{/if}}">{{match.praiseCount}}</span></p>
+      </figcaption>
+      <a class="link" data-type="dynamic" data-id="{{id}}" href="./detail-goods.html?id={{id}}"></a>
+    </figure>
+  {{/each}}
+{{/if}}
+{{/if}}
+
+{{#if (choose === 1)}}
+  {{#if (products.list.length > 0)}}
+    {{#each (products.list)}}
+    <figure>
+      <img src="{{picture.url}}">
+      <figcaption>
+        <p class="des nowrap-multi">{{description}}</p>
+        <p class="price"><span>&yen;{{price}}</span></p>
+      </figcaption>
+      <a class="link" data-type="product" data-id="{{id}}" href="./detail-goods.html?id={{id}}"></a>
+    </figure>
+    {{/each}}
+  {{/if}}
+{{/if}}

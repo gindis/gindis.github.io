@@ -1,0 +1,79 @@
+{{#if (type === 'dynamic')}}
+{{#each (list)}}
+<div class="item">
+  <div style="background-image: url({{match.picture.url}});" class="cover"><span class="fav {{#if (match.isPraise)}}faved{{/if}} J_fav">{{match.praiseCount}}</span><a class="link" data-type="dynamic" data-id="{{id}}" href="./detail-posts.html?id={{id}}"></a></div>
+  <div class="item-head">
+    <div class="avatar">
+      {{#if (match.user.head.url)}}<img src="{{match.user.head.url}}" alt="">{{/if}}
+      <a data-type="user" data-id="{{match.user.id}}" href="./people.html?uid={{match.user.id}}" class="link"></a>
+    </div>
+    <div class="information">
+      <div class="name">{{match.user.name}}</div>
+      <div class="attr">{{match.user.area.name}}{{#if (match.user.height)}}{{match.user.height}}/CM{{/if}}</div>
+    </div>
+  </div>
+</div>
+{{/each}}
+{{elseif (type === 'product')}}
+{{#each (list)}}
+<div class="sku {{#if (xindex !== (products.list.length - 1))}}ui-border-b{{/if}}" {{#if (xindex === (products.list.length - 1))}} style="padding-bottom: 0;" {{/if}}>
+  <div class="sku-head">{{brandName}}</div>
+  <div class="body">
+    {{#if (picture.url)}}
+    <img width="100%" src="{{picture.url}}" alt="{{brandName}}">
+    {{/if}}
+    <p>{{description}}</p>
+  </div>
+  <div class="like-item">
+    <div class="cover">{{#if (picture.url)}}<img width="100%" src="{{picture.url}}" alt="{{name}}">{{/if}}</div>
+    <div class="information">
+      <div class="name nowrap">{{#if (name && name !== '')}}{{name}}{{else}}{{brandName}}{{/if}}</div>
+      {{#if (price && price > 0)}}<div class="price">{{#if (currency && currency === 2 )}}${{elseif (currency && currency === 3)}}&euro;{{else}}&yen;{{/if}} {{price}}</div>{{/if}}
+      <span class="btn-buy">购买</span>
+    </div>
+    <a class="link" data-type="product" data-id="{{id}}" href="./detail-goods.html?id={{id}}"></a>
+  </div>
+</div><!--/.sku-->
+{{/each}}
+{{elseif (type === 'counsel')}}
+{{#each (list)}}
+  <div class="post">
+    {{#if (match.user)}}
+    <div class="head">
+      <div class="avatar"><a class="link" data-type="user" data-id="{{id}}" href="./people.html?uid={{id}}"><img src="{{match.user.head.url}}" alt=""></a></div>
+      <div class="information">
+        <div class="name">{{match.user.name}}</div>
+        <div class="attr">{{match.user.area.name}}/{{match.user.height}}CM/{{match.user.hair.name}}</div>
+        <a class="follow" data-type="user" data-id="{{match.user.id}}" href="javascript:;"></a>
+      </div>
+    </div>
+    {{/if}}
+    {{#if (match.picList[0] && match.picList.length > 0)}}
+    <div class="cover-wrap">
+    {{#each (match.picList)}}
+    <div class="cover">
+      {{#if (url)}}
+      <img width="100%" src="{{url}}" alt="">
+      {{/if}}
+    </div>
+    {{/each}}
+    </div>
+    {{/if}}
+    <div class="description">{{match.description}}</div>
+    {{#if (match.prodList.length > 0)}}
+    <div class="goods">
+      <ul class="list">
+        {{#each (match.prodList)}}
+        <li>
+          <div style="background-image: url({{picture.url}});" class="cover"></div>
+          <div class="name nowrap">{{#if (name)}}{{name}}{{else}}{{brandName}}{{/if}}</div>
+          <div class="price">{{#if (currency && currency === 2 )}}${{elseif (currency && currency === 3)}}&euro;{{else}}&yen;{{/if}} {{price}}</div>
+          <a class="link" data-type="product" data-id="{{id}}" href="./detail-goods.html?id={{id}}"></a>
+        </li>
+        {{/each}}
+      </ul>
+    </div>
+    {{/if}}
+  </div><!--/.post-->
+  {{/each}}
+{{/if}}

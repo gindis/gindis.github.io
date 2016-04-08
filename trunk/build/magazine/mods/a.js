@@ -1,0 +1,1 @@
+define("magazine/mods/a",[],function(t,n,i){"use strict";function a(){this.init.apply(this,arguments)}a.prototype={init:function(){var t=this;t._loadData(),t._bindEvent()},_loadData:function(){},_bindEvent:function(){}},i.exports=a});
