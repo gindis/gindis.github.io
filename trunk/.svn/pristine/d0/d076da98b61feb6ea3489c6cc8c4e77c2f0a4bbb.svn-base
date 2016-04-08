@@ -1,0 +1,18 @@
+{{#if (list.length > 0)}}
+<div id="wrap">
+  <div id="columns">
+    {{#each (list)}}
+    <figure>
+      <img src="{{match.picture.url}}">
+      <figcaption>
+        <p class="des nowrap-multi">{{match.description}}</p>
+        <p class="info"><span class="name"><a class="link" data-typ="user" data-id="{{match.user.id}}" href="./people.html?uid={{match.user.id}}">{{match.user.name}}</a></span> <span data-id="{{match.id}}" class="J_fav like">{{match.praiseCount}}</span></p>
+      </figcaption>
+      <a class="link" data-type="dynamic" data-id="{{match.id}}" href="./detail-goods.html?id={{match.id}}"></a>
+    </figure>
+    {{/each}}
+  </div>
+</div>
+{{else}}
+该标签下没有相关搭配～
+{{/if}}

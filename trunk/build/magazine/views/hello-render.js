@@ -1,0 +1,1 @@
+define("magazine/views/hello-render",["./hello","xtemplate/runtime"],function(e,n,r){var t=e("./hello"),l=e("xtemplate/runtime"),i=new l(t);r.exports=function(){return i.render.apply(i,arguments)}});

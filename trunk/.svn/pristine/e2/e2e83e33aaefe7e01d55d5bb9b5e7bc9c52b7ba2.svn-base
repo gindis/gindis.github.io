@@ -1,0 +1,86 @@
+
+<!doctype html>
+<html><head>
+    <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1.0">
+</head><body>
+<button id="btn">点击</button>
+  <script>
+  function connectWebViewJavascriptBridge(callback) {
+    if (window.WebViewJavascriptBridge) {
+      callback(WebViewJavascriptBridge)
+    } else {
+      document.addEventListener('WebViewJavascriptBridgeReady', function() {
+        callback(WebViewJavascriptBridge)
+      }, false)
+    }
+  }
+
+  // 调用处理
+  function callHandler(evt, data, callback) {
+      connectWebViewJavascriptBridge(function(bridge) {
+        bridge.callHandler(evt, data, callback)
+      })
+  }
+  
+  document.getElementById('btn').onclick = function () {
+    alert(1);
+    callHandler('openurl', "http://www.baidu.com", function(response) {})
+    //connectWebViewJavascriptBridge(function(bridge) {
+
+    //======关闭webview
+    // bridge.callHandler('close', null, function(response) {
+    // });
+
+    //======后退到上一个网页
+    // bridge.callHandler('back', null, function(response) {
+    // });
+
+    //======打开用户页面 传userid
+    // bridge.callHandler('user', "04b508737e1111e5830f6476bab0cf04", function(response) {
+    // });
+
+    //======打开品牌页面 传brandid
+    // bridge.callHandler('brand', "0f61b8be78b311e59199ecf4bbd6a89c", function(response) {
+    // });
+
+    //======打开搭配页面 传 dynamic字典
+    // bridge.callHandler('dynamic', {"id":"22ddcfd1a94f49839174af5aab3b7194"}, function(response) {
+    // });
+
+    //======打开单品页面 传 product字典
+    // bridge.callHandler('product', {"id":"691a70e7b7ee49648fd0559aa6c687ae"}, function(response) {
+    // });
+
+    // //======分享到微博
+    // var link  = "https://item.taobao.com/item.htm?spm=608.7065813.ne.1.SbgqVd&id=522978535973&key=D9Ty4B%2BH0qa3uEXg3Wim99hiDKto6ZWByhNwZlsUKw%3D%3D&tracelog=jubuybigpic";
+    // var title = "title";
+    // var desc = "desc";
+    // var imageSrc = "https://img.alicdn.com/imgextra/i2/2560305711/TB23Xl1gXXXXXcmXXXXXXXXXXXX_!!2560305711.jpg";
+    // bridge.callHandler('shareToQQ', {"title":title,"desc":desc,"imageSrc":imageSrc,"link":link}, function(response) {
+    // });
+
+
+    // //======手机短信
+    // var text = "text";
+    // var phone = "13588232814";
+    // bridge.callHandler('shareToSms', {"text":text,"phone":phone}, function(response) {
+    // });
+
+
+    // //======分享到微信
+    // var link  = "https://item.taobao.com/item.htm?spm=608.7065813.ne.1.SbgqVd&id=522978535973&key=D9Ty4B%2BH0qa3uEXg3Wim99hiDKto6ZWByhNwZlsUKw%3D%3D&tracelog=jubuybigpic";
+    // var title = "title";
+    // var desc = "desc";
+    // var imageSrc = "https://img.alicdn.com/imgextra/i2/2560305711/TB23Xl1gXXXXXcmXXXXXXXXXXXX_!!2560305711.jpg";
+    // bridge.callHandler('shareToWechat', {"title":title,"desc":desc,"imageSrc":imageSrc,"link":link}, function(response) {
+    // });
+
+    //======用app原生浏览器打开一个网址
+//     bridge.callHandler('openurl', "http://www.baidu.com", function(response) {
+//     });
+// });
+  }
+
+  
+  </script>
+</body></html>

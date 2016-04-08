@@ -1,0 +1,48 @@
+<div id="wrap">
+  <header id="header">
+    <h2 class="nowrap">{{title}}</h2>
+    <div class="meta">
+      <div class="user">
+        <div class="avatar">
+          <img src="{{user.head.url}}">
+        </div>
+        {{user.name}}
+        <a class="link" data-typ="user" data-id="{{user.id}}" href="./people.html?uid={{user.id}}"></a>
+      </div>
+      <div class="related">
+        <span class="item">{{matchNum}} 搭配</span>
+        <span class="item">12 单品</span>
+        <span class="item">{{fansNum}} 粉丝</span>
+      </div>
+    </div>
+    <article>
+      {{content}}
+    </article>
+  </header>
+  <div id="main">
+    <div id="columns">
+      {{#each (magazineItems.list)}}
+      {{#if (type === 1)}}
+      <figure>
+        <img src="{{dynamic.match.picture.url}}">
+        <figcaption>
+          <p class="des nowrap-multi">{{dynamic.match.description}}</p>
+          <p class="info"><span class="name">{{dynamic.match.user.name}}</span> <span class="like {{#if (dynamic.match.isPraise)}}liked{{/if}}">{{dynamic.match.praiseCount}}</span></p>
+        </figcaption>
+        <a class="link" data-type="dynamic" data-id="{{dynamic.id}}" href="./detail-goods.html?id={{dynamic.id}}"></a>
+      </figure>
+      {{else}}
+      <figure>
+        <img src="{{product.picture.url}}">
+        <figcaption>
+          <p class="des nowrap-multi">{{product.description}}</p>
+          <p class="price"><span>&yen;{{product.price}}</span></p>
+          <p class="third">senseofplace.com</p>
+        </figcaption>
+        <a class="link" data-type="product" data-id="{{product.id}}" href="./detail-goods.html?id={{product.id}}"></a>
+      </figure>
+      {{/if}}
+      {{/each}}
+    </div>
+  </div>
+</div>

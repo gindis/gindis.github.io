@@ -1,0 +1,29 @@
+@import "common/scss/nothing";
+
+
+/**
+ * Define Color
+ */
+$c1: #000;
+$c2: #939393;
+$c3: #C0C0C0;
+$c4: #D8D8D8;
+$c5: #F1F1F1;
+$c6: #F5F7FB;
+$c7: #fff;
+$c8: #FE644A;
+$c9: #737373;
+
+@import "scss/showcase";
+
+
+body {
+  font-size: 12px;
+}
+
+#wrap {
+  padding: 0 .22rem;
+  max-width: 3.75rem;
+  margin: .24rem auto 0;
+  box-sizing: border-box;
+}

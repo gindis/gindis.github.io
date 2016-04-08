@@ -1,0 +1,83 @@
+@import "common/scss/nothing";
+
+
+/**
+ * Define Color
+ */
+$c1: #000;
+$c2: #939393;
+$c3: #C0C0C0;
+$c4: #D8D8D8;
+$c5: #F1F1F1;
+$c6: #F5F7FB;
+$c7: #fff;
+$c8: #FE644A;
+$c9: #737373;
+
+@import "scss/showcase";
+
+
+body {
+  font-size: 12px;
+}
+
+#wrap {
+  padding: 0 .22rem;
+  max-width: 3.75rem;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+#header {
+  padding: .3rem 0;
+  > h2 {
+    font-size: 25px;
+  }
+  > .meta {
+    margin-top: .18rem;
+    line-height: .22rem;
+    overflow: hidden;
+    .user {
+      float: left;
+      color: $c9;
+      padding-right: .19rem;
+      position: relative;
+      >.avatar {
+        width: .2rem;
+        height: .2rem;
+        border-radius: .4rem;
+        overflow: hidden;
+        float: left;
+        background-color: rgba(0,0,0,.1);
+        margin-right: .06rem;
+        img {
+          width: 100%;
+        }
+      }
+      &:after {
+        content: '';
+        position: absolute;
+        width: .01rem;
+        height: .11rem;
+        background-color: $c5;
+        right: 0;
+        top: 50%;
+        margin-top: -.055rem;
+      }
+    }
+    .related {
+      color: $c2;
+      padding: 0 .13rem;
+      float: left;
+      .item {
+        padding: 0 .07rem;
+      }
+    }
+  }
+  > article {
+    color: $c2;
+    font-size: 14px;
+    line-height: 1.8;
+    margin-top: .14rem;
+  }
+}

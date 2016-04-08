@@ -1,0 +1,61 @@
+@import "common/scss/nothing";
+
+
+/**
+ * Define Color
+ */
+$c1: #000;
+$c2: #939393;
+$c3: #C0C0C0;
+$c4: #D8D8D8;
+$c5: #F1F1F1;
+$c6: #F5F7FB;
+$c7: #fff;
+$c8: #FE644A;
+$c9: #737373;
+
+@import "scss/showcase";
+
+
+body {
+  font-size: 12px;
+}
+
+#wrap {
+  box-sizing: border-box;
+  .main {
+    padding: 0 .22rem;
+    max-width: 3.75rem;
+    margin: 0 auto;
+  }
+}
+.nav {
+  height: .45rem;
+  line-height: .45rem;
+  display: -webkit-box;
+  margin-bottom: .24rem;
+  > .item {
+    -moz-box-flex: 1;
+    flex: 1;
+    display: block;
+    text-align: center;
+    -webkit-box-flex: 1;
+    font-size: 13px;
+    color: $c3;
+    position: relative;
+  }
+  > .active {
+    color: $c8;
+    &:after {
+      content: '';
+      width: 26px;
+      height: 2px;
+      border-radius: .2rem;
+      background-color: $c8;
+      position: absolute;
+      left: 50%;
+      bottom: 0;
+      margin-left: -13px;
+    }
+  }
+}
