@@ -1,1 +1,0 @@
-define("people/views/hello-render",["./hello","xtemplate/runtime"],function(e,n,r){var t=e("./hello"),l=e("xtemplate/runtime"),o=new l(t);r.exports=function(){return o.render.apply(o,arguments)}});
