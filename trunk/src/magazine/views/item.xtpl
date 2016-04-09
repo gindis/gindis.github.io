@@ -13,7 +13,7 @@
   <figure>
     <img src="{{product.picture.url}}">
     <figcaption>
-      <p class="des nowrap-multi">{{product.description}}</p>
+      <p class="des">{{product.description}}</p>
       <p class="price"><span>&yen;{{product.price}}</span></p>
       <!-- <p class="third">senseofplace.com</p> -->
     </figcaption>
