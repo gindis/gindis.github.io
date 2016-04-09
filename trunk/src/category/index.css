@@ -1609,7 +1609,6 @@ button {
 }
 #columns figure > figcaption {
   max-width: 1.56rem;
-  overflow: hidden;
 }
 #columns figure > figcaption > .des {
   color: #000;
