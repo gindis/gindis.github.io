@@ -1680,7 +1680,7 @@ body {
   box-sizing: border-box;
 }
 #wrap .main {
-  padding: 0 .22rem;
+  padding: .69rem .22rem 0;
   max-width: 3.75rem;
   margin: 0 auto;
 }
@@ -1690,6 +1690,12 @@ body {
   line-height: .45rem;
   display: -webkit-box;
   margin-bottom: .24rem;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+  background-color: rgba(255, 255, 255, 0.95);
 }
 .nav > .item {
   -moz-box-flex: 1;

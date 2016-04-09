@@ -27,7 +27,7 @@
         <img src="{{dynamic.match.picture.url}}">
         <figcaption>
           <p class="des nowrap-multi">{{dynamic.match.description}}</p>
-          <p class="info"><span class="name">{{dynamic.match.user.name}}</span> <span class="like {{#if (dynamic.match.isPraise)}}liked{{/if}}">{{dynamic.match.praiseCount}}</span></p>
+          <p class="info"><span class="name"><a class="link" data-typ="user" data-id="{{dynamic.match.user.id}}" href="./people.html?uid={{dynamic.match.user.id}}">{{dynamic.match.user.name}}</a></span> <span data-id="{{dynamic.match.id}}" class="J_fav like {{#if (dynamic.match.isPraise)}}liked{{/if}}">{{dynamic.match.praiseCount}}</span></p>
         </figcaption>
         <a class="link" data-type="dynamic" data-id="{{dynamic.id}}" href="./detail-goods.html?id={{dynamic.id}}"></a>
       </figure>

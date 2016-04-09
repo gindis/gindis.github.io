@@ -97,6 +97,30 @@ define(function(require, exports, module) {
     _bindEvent: function() {
       var self = this;
 
+      $('.J_fav').live(evtClick, function(evt) {
+        evt.preventDefault();
+        var that = $(this);
+        var reqData = {};
+        var apiName = 'praise';
+        reqData.id = that.attr('data-id');
+        if (that.hasClass('liked')) {
+          apiName = 'cancelPraise';
+        }
+        if (deviceType) {
+          net.ajax(apiName, reqData, function(res) {
+            if (that.hasClass('liked')) {
+              that.removeClass('liked');
+              that.html(Number(that.text()) - 1);
+            } else {
+              that.addClass('liked');
+              that.html(Number(that.text()) + 1);
+            }
+          });
+        } else {
+          self.tipsReg();
+        }
+      });
+      
       // 滚动翻页
       $(window).scroll(function() {
         var scrollTop = $(window).scrollTop();
@@ -127,6 +151,23 @@ define(function(require, exports, module) {
             _GLOBAL_CONFIG_.PAGE.startRow += obj.pageSize;
             loadLock = false;
           })
+        }
+      });
+
+
+    },
+    tipsReg: function() {
+      new Modal({
+        content: '需要注册才能执行该操作',
+        button: [{
+          title: '取消'
+        }, {
+          title: '注册'
+        }],
+        callback: function(d, id) {
+          if (id == 1) {
+            location.href = './reg.html';
+          }
         }
       });
     }
