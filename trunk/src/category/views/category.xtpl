@@ -11,7 +11,7 @@
         <figure>
           <img src="{{match.picture.url}}">
           <figcaption>
-            <p class="des nowrap-multi">{{match.description}}</p>
+            <p class="des">{{match.description}}</p>
             <p class="info"><span class="name"><a class="link" data-typ="user" data-id="{{match.user.id}}" href="./people.html?uid={{match.user.id}}">{{match.user.name}}</a></span> <span data-id="{{match.id}}" class="J_fav like {{#if (match.isPraise)}}liked{{/if}}">{{match.praiseCount}}</span></p>
           </figcaption>
           <a class="link" data-type="dynamic" data-id="{{id}}" href="./detail-goods.html?id={{id}}"></a>
