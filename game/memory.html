@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>记忆翻牌</title>
+<style>
+  :root { --bg: #0f172a; --panel: #1e293b; --text: #e2e8f0; --muted: #94a3b8; --accent: #38bdf8; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 14px; background: radial-gradient(ellipse at top, #1e293b, var(--bg));
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Segoe UI", sans-serif;
+    color: var(--text); padding: 20px;
+  }
+  h1 {
+    font-size: 26px; letter-spacing: 6px;
+    background: linear-gradient(90deg, #f472b6, #a78bfa);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  a.back { color: var(--muted); font-size: 13px; text-decoration: none; }
+  a.back:hover { color: var(--accent); }
+  .hud { display: flex; gap: 10px; align-items: stretch; }
+  .card { background: var(--panel); border-radius: 12px; padding: 8px 20px; text-align: center; border: 1px solid rgba(255,255,255,0.06); }
+  .card .label { font-size: 12px; color: var(--muted); }
+  .card .value { font-size: 20px; font-weight: 700; font-variant-numeric: tabular-nums; }
+  #moves .value { color: #f472b6; } #timer .value { color: #fbbf24; } #pairs .value { color: #4ade80; }
+  select, .hud button {
+    background: var(--panel); color: var(--text); border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 12px; padding: 0 16px; font-size: 14px; cursor: pointer; font-family: inherit; font-weight: 700;
+  }
+  .hud button:hover, select:hover { border-color: var(--accent); }
+  .stage { position: relative; width: min(480px, 92vw); }
+  .board { display: grid; gap: 10px; width: 100%; }
+  .cardSlot { aspect-ratio: 1; perspective: 600px; cursor: pointer; }
+  .inner {
+    position: relative; width: 100%; height: 100%;
+    transform-style: preserve-3d; transition: transform .45s cubic-bezier(.4,1.4,.6,1);
+  }
+  .cardSlot.flipped .inner, .cardSlot.matched .inner { transform: rotateY(180deg); }
+  .face {
+    position: absolute; inset: 0; border-radius: 12px; backface-visibility: hidden;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .front {
+    background: linear-gradient(135deg, #334155, #1e293b);
+    border: 1px solid rgba(255,255,255,0.1);
+    font-size: 22px; color: #475569;
+  }
+  .cardSlot:hover:not(.flipped):not(.matched) .front { border-color: var(--accent); }
+  .back {
+    background: linear-gradient(135deg, #2b3a52, #22304a);
+    border: 1px solid rgba(255,255,255,0.15);
+    transform: rotateY(180deg);
+    font-size: clamp(24px, 8vw, 42px);
+  }
+  .cardSlot.matched .back {
+    background: linear-gradient(135deg, #14532d, #166534);
+    border-color: #4ade80;
+    animation: match .4s ease;
+  }
+  @keyframes match { 0% { transform: rotateY(180deg) scale(1); } 50% { transform: rotateY(180deg) scale(1.12); } 100% { transform: rotateY(180deg) scale(1); } }
+  .cardSlot.wrong .back { animation: shake .35s ease; border-color: #f87171; }
+  @keyframes shake {
+    0%, 100% { transform: rotateY(180deg) translateX(0); }
+    25% { transform: rotateY(180deg) translateX(-6px); }
+    75% { transform: rotateY(180deg) translateX(6px); }
+  }
+  .overlay {
+    position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 14px; background: rgba(15,23,42,0.88); backdrop-filter: blur(4px); border-radius: 16px;
+    text-align: center; transition: opacity .25s; z-index: 5;
+  }
+  .overlay.hidden { opacity: 0; pointer-events: none; }
+  .overlay h2 { font-size: 26px; }
+  .overlay p { color: var(--muted); font-size: 14px; line-height: 1.9; }
+  .overlay button {
+    padding: 12px 36px; font-size: 16px; font-weight: 700; color: #2e1065;
+    background: linear-gradient(135deg, #f472b6, #a78bfa); border: none; border-radius: 999px; cursor: pointer;
+  }
+</style>
+</head>
+<body>
+
+<h1>记忆翻牌</h1>
+<a class="back" href="index.html">← 返回游戏合集</a>
+
+<div class="hud">
+  <div class="card" id="moves"><div class="label">步数</div><div class="value">0</div></div>
+  <div class="card" id="timer"><div class="label">时间</div><div class="value">0</div></div>
+  <div class="card" id="pairs"><div class="label">配对</div><div class="value">0/8</div></div>
+  <select id="size">
+    <option value="4">4×4</option>
+    <option value="6">6×6</option>
+  </select>
+  <button id="newBtn">重新开始</button>
+</div>
+
+<div class="stage">
+  <div class="board" id="board"></div>
+  <div class="overlay hidden" id="overlay">
+    <h2>🎉 全部配对成功!</h2>
+    <p id="ovText"></p>
+    <button id="againBtn">再来一局</button>
+  </div>
+</div>
+
+<script>
+(() => {
+  const EMOJIS = ['🍎','🍌','🍇','🍉','🍓','🍑','🍍','🥝','🍒','🥑','🌽','🥕','🍄','🌶️','🥦','🧄','🍔','🍕'];
+  const board = document.getElementById('board');
+  const overlay = document.getElementById('overlay');
+  const ovText = document.getElementById('ovText');
+  const movesV = document.querySelector('#moves .value');
+  const timerV = document.querySelector('#timer .value');
+  const pairsV = document.querySelector('#pairs .value');
+  const sizeSel = document.getElementById('size');
+
+  let first = null, lock = false, moves, matched, total, timer, seconds, started;
+
+  function newGame() {
+    const n = +sizeSel.value;
+    total = n * n / 2;
+    moves = 0; matched = 0; seconds = 0; started = false;
+    first = null; lock = false;
+    clearInterval(timer);
+    movesV.textContent = 0; timerV.textContent = 0;
+    pairsV.textContent = `0/${total}`;
+    overlay.classList.add('hidden');
+
+    const pool = [...EMOJIS].sort(() => Math.random() - 0.5).slice(0, total);
+    const deck = [...pool, ...pool].sort(() => Math.random() - 0.5);
+
+    board.style.gridTemplateColumns = `repeat(${n}, 1fr)`;
+    board.innerHTML = '';
+    deck.forEach(emoji => {
+      const slot = document.createElement('div');
+      slot.className = 'cardSlot';
+      slot.dataset.v = emoji;
+      slot.innerHTML = `<div class="inner"><div class="face front">?</div><div class="face back">${emoji}</div></div>`;
+      slot.addEventListener('click', () => flip(slot));
+      board.appendChild(slot);
+    });
+  }
+
+  function flip(slot) {
+    if (lock || slot.classList.contains('flipped') || slot.classList.contains('matched')) return;
+    if (!started) {
+      started = true;
+      timer = setInterval(() => { seconds++; timerV.textContent = seconds; }, 1000);
+    }
+    slot.classList.add('flipped');
+
+    if (!first) { first = slot; return; }
+
+    moves++;
+    movesV.textContent = moves;
+    const a = first, b = slot;
+    first = null;
+
+    if (a.dataset.v === b.dataset.v) {
+      a.classList.add('matched'); b.classList.add('matched');
+      a.classList.remove('flipped'); b.classList.remove('flipped');
+      matched++;
+      pairsV.textContent = `${matched}/${total}`;
+      if (matched === total) win();
+    } else {
+      lock = true;
+      a.classList.add('wrong'); b.classList.add('wrong');
+      setTimeout(() => {
+        a.classList.remove('flipped', 'wrong');
+        b.classList.remove('flipped', 'wrong');
+        lock = false;
+      }, 750);
+    }
+  }
+
+  function win() {
+    clearInterval(timer);
+    const key = 'memory-best-' + sizeSel.value;
+    const prev = Number(localStorage.getItem(key) || Infinity);
+    if (moves < prev) localStorage.setItem(key, moves);
+    ovText.innerHTML = `用时 <b style="color:#fbbf24">${seconds}</b> 秒 · 步数 <b style="color:#f472b6">${moves}</b>` +
+      (moves < prev ? '<br>🏆 最少步数新纪录!' : `<br>历史最少步数 ${Math.min(prev, moves)}`);
+    setTimeout(() => overlay.classList.remove('hidden'), 500);
+  }
+
+  document.getElementById('newBtn').addEventListener('click', newGame);
+  document.getElementById('againBtn').addEventListener('click', newGame);
+  sizeSel.addEventListener('change', newGame);
+
+  newGame();
+})();
+</script>
+</body>
+</html>

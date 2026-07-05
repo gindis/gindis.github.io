@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>推箱子</title>
+<style>
+  :root { --bg: #0f172a; --panel: #1e293b; --text: #e2e8f0; --muted: #94a3b8; --accent: #38bdf8; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 14px; background: radial-gradient(ellipse at top, #1e293b, var(--bg));
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Segoe UI", sans-serif;
+    color: var(--text); padding: 20px;
+  }
+  h1 {
+    font-size: 26px; letter-spacing: 8px;
+    background: linear-gradient(90deg, #fb923c, #fbbf24);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  a.back { color: var(--muted); font-size: 13px; text-decoration: none; }
+  a.back:hover { color: var(--accent); }
+  .hud { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+  .card { background: var(--panel); border-radius: 12px; padding: 8px 18px; text-align: center; border: 1px solid rgba(255,255,255,0.06); }
+  .card .label { font-size: 12px; color: var(--muted); }
+  .card .value { font-size: 18px; font-weight: 700; font-variant-numeric: tabular-nums; }
+  #lvV { color: #fbbf24; } #stepV { color: #4ade80; }
+  select, .hud button {
+    background: var(--panel); color: var(--text); border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 12px; padding: 0 16px; font-size: 14px; cursor: pointer; font-family: inherit; font-weight: 700;
+  }
+  .hud button:hover, select:hover { border-color: var(--accent); }
+  .stage { position: relative; }
+  canvas {
+    display: block; border-radius: 14px;
+    border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    background: #131c33;
+  }
+  .overlay {
+    position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 14px; background: rgba(15,23,42,0.88); backdrop-filter: blur(4px); border-radius: 14px;
+    text-align: center; transition: opacity .25s;
+  }
+  .overlay.hidden { opacity: 0; pointer-events: none; }
+  .overlay h2 { font-size: 26px; }
+  .overlay p { color: var(--muted); font-size: 14px; }
+  .overlay button {
+    padding: 12px 36px; font-size: 16px; font-weight: 700; color: #431407;
+    background: linear-gradient(135deg, #fb923c, #fbbf24); border: none; border-radius: 999px; cursor: pointer;
+  }
+  .tips { color: var(--muted); font-size: 13px; text-align: center; }
+  kbd { background: var(--panel); border: 1px solid rgba(255,255,255,0.15); border-radius: 5px; padding: 1px 7px; font-size: 12px; font-family: inherit; }
+</style>
+</head>
+<body>
+
+<h1>推箱子</h1>
+<a class="back" href="index.html">← 返回游戏合集</a>
+
+<div class="hud">
+  <select id="levelSel"></select>
+  <div class="card"><div class="label">关卡</div><div class="value" id="lvV">1</div></div>
+  <div class="card"><div class="label">步数</div><div class="value" id="stepV">0</div></div>
+  <button id="undoBtn">撤销一步</button>
+  <button id="resetBtn">重置本关</button>
+</div>
+
+<div class="stage">
+  <canvas id="game"></canvas>
+  <div class="overlay hidden" id="overlay">
+    <h2>🎉 过关!</h2>
+    <p id="ovText"></p>
+    <button id="nextBtn">下一关</button>
+  </div>
+</div>
+
+<p class="tips"><kbd>↑</kbd><kbd>↓</kbd><kbd>←</kbd><kbd>→</kbd> 移动 · <kbd>Z</kbd> 撤销 · <kbd>R</kbd> 重置 · 把所有箱子推到红点上</p>
+
+<script>
+(() => {
+  // # 墙  @ 人  $ 箱子  . 目标点  * 箱子在目标点上  + 人在目标点上
+  // 关卡取自 Microban(David W. Skinner,可自由传播)
+  const LEVELS = [
+    [
+      '####',
+      '# .#',
+      '#  ###',
+      '#*@  #',
+      '#  $ #',
+      '#  ###',
+      '####',
+    ],
+    [
+      '######',
+      '#    #',
+      '# #@ #',
+      '# $* #',
+      '# .* #',
+      '#    #',
+      '######',
+    ],
+    [
+      '  ####',
+      '###  ####',
+      '#     $ #',
+      '# #  #$ #',
+      '# . .#@ #',
+      '#########',
+    ],
+    [
+      '########',
+      '#      #',
+      '# .**$@#',
+      '#      #',
+      '#####  #',
+      '    ####',
+    ],
+    [
+      ' #######',
+      ' #     #',
+      ' # .$. #',
+      '## $@$ #',
+      '#  .$. #',
+      '#      #',
+      '########',
+    ],
+    [
+      '###### #####',
+      '#    ###   #',
+      '# $$     #@#',
+      '# $ #...   #',
+      '#   ########',
+      '#####',
+    ],
+  ];
+
+  const CELL = 48;
+  const canvas = document.getElementById('game'), ctx = canvas.getContext('2d');
+  const overlay = document.getElementById('overlay');
+  const ovText = document.getElementById('ovText');
+  const lvV = document.getElementById('lvV'), stepV = document.getElementById('stepV');
+  const levelSel = document.getElementById('levelSel');
+
+  LEVELS.forEach((_, i) => {
+    const o = document.createElement('option');
+    o.value = i; o.textContent = `第 ${i + 1} 关`;
+    levelSel.appendChild(o);
+  });
+
+  let level, walls, goals, boxes, player, steps, history, done;
+
+  function loadLevel(i) {
+    level = i;
+    walls = new Set(); goals = new Set(); boxes = new Set();
+    steps = 0; history = []; done = false;
+    const rows = LEVELS[i];
+    const h = rows.length, w = Math.max(...rows.map(r => r.length));
+    canvas.width = w * CELL; canvas.height = h * CELL;
+    rows.forEach((row, y) => {
+      [...row].forEach((ch, x) => {
+        const key = x + ',' + y;
+        if (ch === '#') walls.add(key);
+        if (ch === '.' || ch === '*' || ch === '+') goals.add(key);
+        if (ch === '$' || ch === '*') boxes.add(key);
+        if (ch === '@' || ch === '+') player = { x, y };
+      });
+    });
+    lvV.textContent = i + 1;
+    stepV.textContent = 0;
+    levelSel.value = i;
+    overlay.classList.add('hidden');
+    draw();
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    const h = LEVELS[level].length;
+    LEVELS[level].forEach((row, y) => {
+      [...row].forEach((ch, x) => {
+        const key = x + ',' + y;
+        const px = x * CELL, py = y * CELL;
+        if (ch === ' ' && !isFloor(x, y)) return;
+
+        // 地板
+        ctx.fillStyle = (x + y) % 2 ? '#1a2540' : '#1d294a';
+        ctx.fillRect(px, py, CELL, CELL);
+
+        if (walls.has(key)) {
+          ctx.fillStyle = '#475569';
+          ctx.beginPath(); ctx.roundRect(px + 1, py + 1, CELL - 2, CELL - 2, 6); ctx.fill();
+          ctx.fillStyle = 'rgba(255,255,255,0.12)';
+          ctx.beginPath(); ctx.roundRect(px + 4, py + 4, CELL - 8, 8, 3); ctx.fill();
+          return;
+        }
+        if (goals.has(key)) {
+          ctx.fillStyle = boxes.has(key) ? 'rgba(74,222,128,0.25)' : 'rgba(248,113,113,0.2)';
+          ctx.beginPath(); ctx.arc(px + CELL/2, py + CELL/2, 8, 0, Math.PI * 2); ctx.fill();
+          ctx.strokeStyle = boxes.has(key) ? '#4ade80' : '#f87171';
+          ctx.lineWidth = 2;
+          ctx.beginPath(); ctx.arc(px + CELL/2, py + CELL/2, 8, 0, Math.PI * 2); ctx.stroke();
+        }
+      });
+    });
+
+    // 箱子
+    boxes.forEach(key => {
+      const [x, y] = key.split(',').map(Number);
+      const px = x * CELL, py = y * CELL;
+      const onGoal = goals.has(key);
+      ctx.fillStyle = onGoal ? '#16a34a' : '#b45309';
+      ctx.beginPath(); ctx.roundRect(px + 5, py + 5, CELL - 10, CELL - 10, 8); ctx.fill();
+      ctx.strokeStyle = onGoal ? '#4ade80' : '#fbbf24';
+      ctx.lineWidth = 3;
+      ctx.strokeRect(px + 12, py + 12, CELL - 24, CELL - 24);
+    });
+
+    // 玩家
+    const px = player.x * CELL + CELL / 2, py = player.y * CELL + CELL / 2;
+    ctx.save();
+    ctx.shadowColor = '#38bdf8'; ctx.shadowBlur = 10;
+    ctx.fillStyle = '#38bdf8';
+    ctx.beginPath(); ctx.arc(px, py, CELL * 0.32, 0, Math.PI * 2); ctx.fill();
+    ctx.restore();
+    ctx.fillStyle = '#082f49';
+    ctx.beginPath();
+    ctx.arc(px - 5, py - 3, 2.6, 0, Math.PI * 2);
+    ctx.arc(px + 5, py - 3, 2.6, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.strokeStyle = '#082f49'; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.arc(px, py + 3, 5, 0.2, Math.PI - 0.2); ctx.stroke();
+  }
+
+  // 简单判断:该空格是否属于关卡内部(左右都有内容的行内)
+  function isFloor(x, y) {
+    const row = LEVELS[level][y] || '';
+    const left = row.slice(0, x).includes('#');
+    const right = row.slice(x + 1).includes('#');
+    return left && right;
+  }
+
+  function move(dx, dy) {
+    if (done) return;
+    const nx = player.x + dx, ny = player.y + dy;
+    const nKey = nx + ',' + ny;
+    if (walls.has(nKey)) return;
+
+    let pushed = null;
+    if (boxes.has(nKey)) {
+      const bx = nx + dx, by = ny + dy;
+      const bKey = bx + ',' + by;
+      if (walls.has(bKey) || boxes.has(bKey)) return;
+      boxes.delete(nKey);
+      boxes.add(bKey);
+      pushed = { from: nKey, to: bKey };
+    }
+
+    history.push({ px: player.x, py: player.y, pushed });
+    player = { x: nx, y: ny };
+    steps++;
+    stepV.textContent = steps;
+    draw();
+    checkWin();
+  }
+
+  function undo() {
+    if (done || !history.length) return;
+    const h = history.pop();
+    player = { x: h.px, y: h.py };
+    if (h.pushed) {
+      boxes.delete(h.pushed.to);
+      boxes.add(h.pushed.from);
+    }
+    steps--;
+    stepV.textContent = steps;
+    draw();
+  }
+
+  function checkWin() {
+    for (const g of goals) if (!boxes.has(g)) return;
+    done = true;
+    const key = 'sokoban-best-' + level;
+    const prev = Number(localStorage.getItem(key) || Infinity);
+    if (steps < prev) localStorage.setItem(key, steps);
+    ovText.innerHTML = `第 ${level + 1} 关完成 · 用了 <b style="color:#4ade80">${steps}</b> 步` +
+      (steps < prev ? '<br>🏆 最少步数新纪录!' : `<br>历史最少 ${Math.min(prev, steps)} 步`);
+    document.getElementById('nextBtn').textContent = level + 1 < LEVELS.length ? '下一关' : '重玩第 1 关';
+    setTimeout(() => overlay.classList.remove('hidden'), 350);
+  }
+
+  document.addEventListener('keydown', (e) => {
+    const map = { ArrowUp: [0,-1], ArrowDown: [0,1], ArrowLeft: [-1,0], ArrowRight: [1,0] };
+    if (map[e.key]) { e.preventDefault(); move(...map[e.key]); }
+    else if (e.key === 'z' || e.key === 'Z') undo();
+    else if (e.key === 'r' || e.key === 'R') loadLevel(level);
+  });
+
+  document.getElementById('undoBtn').addEventListener('click', undo);
+  document.getElementById('resetBtn').addEventListener('click', () => loadLevel(level));
+  document.getElementById('nextBtn').addEventListener('click', () => loadLevel((level + 1) % LEVELS.length));
+  levelSel.addEventListener('change', () => loadLevel(+levelSel.value));
+
+  loadLevel(0);
+})();
+</script>
+</body>
+</html>

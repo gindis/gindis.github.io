@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>小游戏合集</title>
+<style>
+  :root { --bg: #0f172a; --panel: #1e293b; --text: #e2e8f0; --muted: #94a3b8; --accent: #38bdf8; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    min-height: 100vh; display: flex; flex-direction: column; align-items: center;
+    gap: 26px; background: radial-gradient(ellipse at top, #1e293b, var(--bg));
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Segoe UI", sans-serif;
+    color: var(--text); padding: 50px 20px;
+  }
+  header { text-align: center; }
+  h1 {
+    font-size: 36px; letter-spacing: 10px; font-weight: 800;
+    background: linear-gradient(90deg, #4ade80, #38bdf8, #a78bfa);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  header p { color: var(--muted); margin-top: 8px; font-size: 14px; }
+  section { width: min(980px, 94vw); }
+  h2 {
+    font-size: 16px; color: var(--muted); font-weight: 700;
+    letter-spacing: 3px; margin-bottom: 14px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  h2::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.08); }
+  .grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 16px;
+  }
+  a.game {
+    display: flex; flex-direction: column; align-items: center; gap: 9px;
+    background: var(--panel); border-radius: 18px; padding: 22px 14px;
+    text-decoration: none; color: var(--text);
+    border: 1px solid rgba(255,255,255,0.07);
+    transition: transform .18s, border-color .18s, box-shadow .18s;
+  }
+  a.game:hover {
+    transform: translateY(-5px);
+    border-color: var(--card-color, var(--accent));
+    box-shadow: 0 14px 40px rgba(0,0,0,0.45);
+  }
+  .icon {
+    width: 58px; height: 58px; border-radius: 15px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 30px; background: var(--card-color, var(--accent));
+    box-shadow: 0 8px 20px rgba(0,0,0,0.35);
+  }
+  .name { font-size: 16px; font-weight: 700; }
+  .desc { font-size: 12px; color: var(--muted); text-align: center; line-height: 1.6; }
+  footer { color: #475569; font-size: 12px; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>小游戏合集</h1>
+  <p>纯 HTML + Canvas 实现 · 无需安装 · 打开即玩 · 共 16 款</p>
+</header>
+
+<section>
+  <h2>经典街机</h2>
+  <div class="grid">
+    <a class="game" href="snake.html" style="--card-color:#22c55e">
+      <div class="icon">🐍</div><div class="name">贪吃蛇</div>
+      <div class="desc">吃食物变长,越跑越快</div>
+    </a>
+    <a class="game" href="snake2.html" style="--card-color:#16a34a">
+      <div class="icon">🐉</div><div class="name">贪吃蛇进阶版</div>
+      <div class="desc">双人对战 / 穿墙 / 障碍物</div>
+    </a>
+    <a class="game" href="tetris.html" style="--card-color:#a78bfa">
+      <div class="icon">🧱</div><div class="name">俄罗斯方块</div>
+      <div class="desc">旋转、消行、加速</div>
+    </a>
+    <a class="game" href="breakout.html" style="--card-color:#38bdf8">
+      <div class="icon">🏓</div><div class="name">打砖块</div>
+      <div class="desc">挡板反弹小球击碎砖块</div>
+    </a>
+    <a class="game" href="flappy.html" style="--card-color:#fb923c">
+      <div class="icon">🐤</div><div class="name">Flappy Bird</div>
+      <div class="desc">点击飞行穿过管道</div>
+    </a>
+    <a class="game" href="catch.html" style="--card-color:#84cc16">
+      <div class="icon">🧺</div><div class="name">接水果</div>
+      <div class="desc">接住水果,躲开炸弹</div>
+    </a>
+  </div>
+</section>
+
+<section>
+  <h2>益智棋牌</h2>
+  <div class="grid">
+    <a class="game" href="game-2048.html" style="--card-color:#fbbf24">
+      <div class="icon">🔢</div><div class="name">2048</div>
+      <div class="desc">滑动合并,目标 2048</div>
+    </a>
+    <a class="game" href="minesweeper.html" style="--card-color:#f87171">
+      <div class="icon">💣</div><div class="name">扫雷</div>
+      <div class="desc">三种难度,首点必安全</div>
+    </a>
+    <a class="game" href="memory.html" style="--card-color:#f472b6">
+      <div class="icon">🃏</div><div class="name">记忆翻牌</div>
+      <div class="desc">翻卡配对,挑战最少步数</div>
+    </a>
+    <a class="game" href="sokoban.html" style="--card-color:#fb923c">
+      <div class="icon">📦</div><div class="name">推箱子</div>
+      <div class="desc">6 个关卡,支持撤销</div>
+    </a>
+    <a class="game" href="gomoku.html" style="--card-color:#d4a24e">
+      <div class="icon">⚫</div><div class="name">五子棋</div>
+      <div class="desc">双人对战或挑战 AI</div>
+    </a>
+    <a class="game" href="tictactoe.html" style="--card-color:#0ea5e9">
+      <div class="icon">⭕</div><div class="name">井字棋</div>
+      <div class="desc">Minimax AI,永不失误</div>
+    </a>
+  </div>
+</section>
+
+<section>
+  <h2>动作挑战</h2>
+  <div class="grid">
+    <a class="game" href="maze.html" style="--card-color:#6366f1">
+      <div class="icon">🌀</div><div class="name">迷宫</div>
+      <div class="desc">随机生成 + BFS 自动求解</div>
+    </a>
+    <a class="game" href="shooter.html" style="--card-color:#ec4899">
+      <div class="icon">🚀</div><div class="name">太空射击</div>
+      <div class="desc">敌机波次与爆炸粒子</div>
+    </a>
+    <a class="game" href="platformer.html" style="--card-color:#10b981">
+      <div class="icon">🏃</div><div class="name">平台跳跃</div>
+      <div class="desc">金币、尖刺、终点旗</div>
+    </a>
+    <a class="game" href="towerdefense.html" style="--card-color:#8b5cf6">
+      <div class="icon">🏰</div><div class="name">小型塔防</div>
+      <div class="desc">箭塔炮塔,守住 12 波</div>
+    </a>
+  </div>
+</section>
+
+<footer>成绩自动保存在浏览器本地</footer>
+
+</body>
+</html>

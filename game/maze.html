@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>迷宫 · 生成与寻路</title>
+<style>
+  :root { --bg: #0f172a; --panel: #1e293b; --text: #e2e8f0; --muted: #94a3b8; --accent: #38bdf8; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 14px; background: radial-gradient(ellipse at top, #1e293b, var(--bg));
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Segoe UI", sans-serif;
+    color: var(--text); padding: 20px;
+  }
+  h1 {
+    font-size: 26px; letter-spacing: 6px;
+    background: linear-gradient(90deg, #38bdf8, #a78bfa);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  a.back { color: var(--muted); font-size: 13px; text-decoration: none; }
+  a.back:hover { color: var(--accent); }
+  .hud { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+  .card { background: var(--panel); border-radius: 12px; padding: 8px 18px; text-align: center; border: 1px solid rgba(255,255,255,0.06); }
+  .card .label { font-size: 12px; color: var(--muted); }
+  .card .value { font-size: 18px; font-weight: 700; font-variant-numeric: tabular-nums; color: #fbbf24; }
+  select, .hud button {
+    background: var(--panel); color: var(--text); border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 12px; padding: 8px 16px; font-size: 14px; cursor: pointer; font-family: inherit; font-weight: 700;
+  }
+  .hud button:hover, select:hover { border-color: var(--accent); }
+  .stage { position: relative; }
+  canvas {
+    display: block; border-radius: 14px;
+    border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    background: #131c33;
+  }
+  .overlay {
+    position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 14px; background: rgba(15,23,42,0.88); backdrop-filter: blur(4px); border-radius: 14px;
+    text-align: center; transition: opacity .25s;
+  }
+  .overlay.hidden { opacity: 0; pointer-events: none; }
+  .overlay h2 { font-size: 26px; }
+  .overlay p { color: var(--muted); font-size: 14px; }
+  .overlay button {
+    padding: 12px 36px; font-size: 16px; font-weight: 700; color: #082f49;
+    background: linear-gradient(135deg, #38bdf8, #a78bfa); border: none; border-radius: 999px; cursor: pointer;
+  }
+  .tips { color: var(--muted); font-size: 13px; }
+  kbd { background: var(--panel); border: 1px solid rgba(255,255,255,0.15); border-radius: 5px; padding: 1px 7px; font-size: 12px; font-family: inherit; }
+</style>
+</head>
+<body>
+
+<h1>迷宫</h1>
+<a class="back" href="index.html">← 返回游戏合集</a>
+
+<div class="hud">
+  <select id="sizeSel">
+    <option value="15">小迷宫 15×15</option>
+    <option value="25" selected>中迷宫 25×25</option>
+    <option value="35">大迷宫 35×35</option>
+  </select>
+  <div class="card"><div class="label">步数</div><div class="value" id="stepV">0</div></div>
+  <button id="newBtn">生成新迷宫</button>
+  <button id="solveBtn">AI 求解 (BFS)</button>
+</div>
+
+<div class="stage">
+  <canvas id="game"></canvas>
+  <div class="overlay hidden" id="overlay">
+    <h2 id="ovTitle">🎉 走出迷宫!</h2>
+    <p id="ovText"></p>
+    <button id="againBtn">再来一个</button>
+  </div>
+</div>
+
+<p class="tips"><kbd>↑</kbd><kbd>↓</kbd><kbd>←</kbd><kbd>→</kbd> 移动 · 从左上角走到右下角 · AI 求解会展示最短路径</p>
+
+<script>
+(() => {
+  const canvas = document.getElementById('game'), ctx = canvas.getContext('2d');
+  const overlay = document.getElementById('overlay');
+  const ovText = document.getElementById('ovText');
+  const stepV = document.getElementById('stepV');
+  const sizeSel = document.getElementById('sizeSel');
+
+  // 每个格子四面墙:[上, 右, 下, 左]
+  let N, CELL, cells, player, steps, solved, solving, solvePath, trail, won;
+
+  const DIRS = [
+    { dx: 0, dy: -1, wall: 0, opp: 2 },
+    { dx: 1, dy: 0, wall: 1, opp: 3 },
+    { dx: 0, dy: 1, wall: 2, opp: 0 },
+    { dx: -1, dy: 0, wall: 3, opp: 1 },
+  ];
+
+  function generate() {
+    N = +sizeSel.value;
+    CELL = Math.min(22, Math.floor(560 / N));
+    canvas.width = canvas.height = N * CELL + 2;
+
+    cells = Array.from({ length: N * N }, () => [true, true, true, true]);
+    // 迭代式递归回溯生成
+    const visited = new Set([0]);
+    const stack = [0];
+    while (stack.length) {
+      const cur = stack[stack.length - 1];
+      const cx = cur % N, cy = (cur / N) | 0;
+      const options = DIRS
+        .map((d, i) => ({ ...d, i }))
+        .filter(d => {
+          const nx = cx + d.dx, ny = cy + d.dy;
+          return nx >= 0 && nx < N && ny >= 0 && ny < N && !visited.has(ny * N + nx);
+        });
+      if (!options.length) { stack.pop(); continue; }
+      const d = options[(Math.random() * options.length) | 0];
+      const next = (cy + d.dy) * N + (cx + d.dx);
+      cells[cur][d.wall] = false;
+      cells[next][d.opp] = false;
+      visited.add(next);
+      stack.push(next);
+    }
+
+    player = { x: 0, y: 0 };
+    steps = 0; solved = false; solving = false; solvePath = null; won = false;
+    trail = new Set(['0,0']);
+    stepV.textContent = 0;
+    overlay.classList.add('hidden');
+    draw();
+  }
+
+  function canMove(x, y, dirIdx) {
+    return !cells[y * N + x][dirIdx];
+  }
+
+  function bfs() {
+    const prev = new Map();
+    const queue = [0];
+    const seen = new Set([0]);
+    const target = N * N - 1;
+    while (queue.length) {
+      const cur = queue.shift();
+      if (cur === target) break;
+      const cx = cur % N, cy = (cur / N) | 0;
+      DIRS.forEach((d, i) => {
+        if (cells[cur][i]) return;
+        const next = (cy + d.dy) * N + (cx + d.dx);
+        if (seen.has(next)) return;
+        seen.add(next);
+        prev.set(next, cur);
+        queue.push(next);
+      });
+    }
+    const path = [];
+    let cur = target;
+    while (cur !== undefined) { path.push(cur); cur = prev.get(cur); }
+    return path.reverse();
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.save();
+    ctx.translate(1, 1);
+
+    // 走过的痕迹
+    ctx.fillStyle = 'rgba(56,189,248,0.12)';
+    trail.forEach(key => {
+      const [x, y] = key.split(',').map(Number);
+      ctx.fillRect(x * CELL, y * CELL, CELL, CELL);
+    });
+
+    // AI 路径
+    if (solvePath) {
+      ctx.strokeStyle = '#fbbf24';
+      ctx.lineWidth = Math.max(2, CELL * 0.18);
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+      ctx.beginPath();
+      solvePath.forEach((c, i) => {
+        const x = (c % N) * CELL + CELL / 2, y = ((c / N) | 0) * CELL + CELL / 2;
+        if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+      });
+      ctx.stroke();
+    }
+
+    // 墙
+    ctx.strokeStyle = '#64748b';
+    ctx.lineWidth = 2;
+    ctx.lineCap = 'round';
+    for (let y = 0; y < N; y++) for (let x = 0; x < N; x++) {
+      const w = cells[y * N + x];
+      const px = x * CELL, py = y * CELL;
+      ctx.beginPath();
+      if (w[0]) { ctx.moveTo(px, py); ctx.lineTo(px + CELL, py); }
+      if (w[1]) { ctx.moveTo(px + CELL, py); ctx.lineTo(px + CELL, py + CELL); }
+      if (w[2]) { ctx.moveTo(px, py + CELL); ctx.lineTo(px + CELL, py + CELL); }
+      if (w[3]) { ctx.moveTo(px, py); ctx.lineTo(px, py + CELL); }
+      ctx.stroke();
+    }
+
+    // 终点
+    ctx.fillStyle = '#4ade80';
+    const ex = (N - 1) * CELL, ey = (N - 1) * CELL;
+    ctx.beginPath();
+    ctx.arc(ex + CELL / 2, ey + CELL / 2, CELL * 0.28, 0, Math.PI * 2);
+    ctx.fill();
+
+    // 玩家
+    ctx.save();
+    ctx.shadowColor = '#38bdf8'; ctx.shadowBlur = 8;
+    ctx.fillStyle = '#38bdf8';
+    ctx.beginPath();
+    ctx.arc(player.x * CELL + CELL / 2, player.y * CELL + CELL / 2, CELL * 0.3, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+
+    ctx.restore();
+  }
+
+  function tryMove(dirIdx) {
+    if (won || solving) return;
+    if (!canMove(player.x, player.y, dirIdx)) return;
+    player.x += DIRS[dirIdx].dx;
+    player.y += DIRS[dirIdx].dy;
+    steps++;
+    stepV.textContent = steps;
+    trail.add(player.x + ',' + player.y);
+    draw();
+    if (player.x === N - 1 && player.y === N - 1) {
+      won = true;
+      const optimal = bfs().length - 1;
+      ovText.innerHTML = `你用了 <b style="color:#38bdf8">${steps}</b> 步 · 最短路径 <b style="color:#fbbf24">${optimal}</b> 步` +
+        (steps === optimal ? '<br>🏆 完美路线!' : '');
+      setTimeout(() => overlay.classList.remove('hidden'), 350);
+    }
+  }
+
+  function solve() {
+    if (won || solving) return;
+    solving = true;
+    const path = bfs();
+    // 逐步动画展示
+    let i = 0;
+    solvePath = [];
+    const timer = setInterval(() => {
+      solvePath.push(path[i]);
+      draw();
+      i++;
+      if (i >= path.length) {
+        clearInterval(timer);
+        solving = false;
+        solved = true;
+      }
+    }, Math.max(8, 600 / path.length));
+  }
+
+  document.addEventListener('keydown', (e) => {
+    const map = { ArrowUp: 0, ArrowRight: 1, ArrowDown: 2, ArrowLeft: 3 };
+    if (map[e.key] !== undefined) {
+      e.preventDefault();
+      tryMove(map[e.key]);
+    }
+  });
+
+  document.getElementById('newBtn').addEventListener('click', generate);
+  document.getElementById('againBtn').addEventListener('click', generate);
+  document.getElementById('solveBtn').addEventListener('click', solve);
+  sizeSel.addEventListener('change', generate);
+
+  generate();
+})();
+</script>
+</body>
+</html>

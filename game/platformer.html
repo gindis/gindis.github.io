@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>平台跳跃</title>
+<style>
+  :root { --bg: #0f172a; --panel: #1e293b; --text: #e2e8f0; --muted: #94a3b8; --accent: #38bdf8; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 14px; background: radial-gradient(ellipse at top, #1e293b, var(--bg));
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Segoe UI", sans-serif;
+    color: var(--text); padding: 20px;
+  }
+  h1 {
+    font-size: 26px; letter-spacing: 6px;
+    background: linear-gradient(90deg, #4ade80, #fbbf24);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  a.back { color: var(--muted); font-size: 13px; text-decoration: none; }
+  a.back:hover { color: var(--accent); }
+  .hud { display: flex; gap: 12px; width: min(720px, 94vw); }
+  .card { flex: 1; background: var(--panel); border-radius: 12px; padding: 8px 14px; text-align: center; border: 1px solid rgba(255,255,255,0.06); }
+  .card .label { font-size: 12px; color: var(--muted); }
+  .card .value { font-size: 20px; font-weight: 700; font-variant-numeric: tabular-nums; }
+  #coins .value { color: #fbbf24; } #deaths .value { color: #f87171; } #time .value { color: #38bdf8; }
+  .stage { position: relative; width: min(720px, 94vw); }
+  canvas {
+    display: block; width: 100%; border-radius: 16px;
+    border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+  }
+  .overlay {
+    position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 14px; background: rgba(15,23,42,0.82); backdrop-filter: blur(4px); border-radius: 16px;
+    text-align: center; transition: opacity .25s;
+  }
+  .overlay.hidden { opacity: 0; pointer-events: none; }
+  .overlay h2 { font-size: 26px; }
+  .overlay p { color: var(--muted); font-size: 14px; line-height: 1.9; }
+  button {
+    padding: 12px 36px; font-size: 16px; font-weight: 700; color: #14532d;
+    background: linear-gradient(135deg, #4ade80, #fbbf24); border: none; border-radius: 999px;
+    cursor: pointer; transition: transform .15s;
+  }
+  button:hover { transform: translateY(-2px); }
+  .tips { color: var(--muted); font-size: 13px; }
+  kbd { background: var(--panel); border: 1px solid rgba(255,255,255,0.15); border-radius: 5px; padding: 1px 7px; font-size: 12px; font-family: inherit; }
+</style>
+</head>
+<body>
+
+<h1>平台跳跃</h1>
+<a class="back" href="index.html">← 返回游戏合集</a>
+
+<div class="hud">
+  <div class="card" id="coins"><div class="label">金币</div><div class="value">0/0</div></div>
+  <div class="card" id="deaths"><div class="label">死亡</div><div class="value">0</div></div>
+  <div class="card" id="time"><div class="label">时间</div><div class="value">0.0s</div></div>
+</div>
+
+<div class="stage">
+  <canvas id="game" width="720" height="448"></canvas>
+  <div class="overlay" id="overlay">
+    <h2 id="ovTitle">平台跳跃</h2>
+    <p id="ovText">←→ 移动 · ↑ / 空格 跳跃<br>收集金币,躲开尖刺,抵达终点旗帜</p>
+    <button id="startBtn">开始游戏</button>
+  </div>
+</div>
+
+<p class="tips"><kbd>←</kbd><kbd>→</kbd> 移动 · <kbd>↑</kbd>/<kbd>空格</kbd> 跳跃 · <kbd>R</kbd> 重来</p>
+
+<script>
+(() => {
+  const TILE = 32;
+  // # 地面  = 悬浮平台  C 金币  ^ 尖刺  P 出生点  F 终点旗
+  const MAP = [
+    '                                                                                                    ',
+    '                                                                                                    ',
+    '                                                                                                    ',
+    '                                                                                                    ',
+    '                     C                                      CC                         C            ',
+    '                    ===                                     ===                       ===           ',
+    '           C                   C                   CC                    C                          ',
+    '          ===                 ===                 ====                  ===                         ',
+    '     C                                  C                        C                                  ',
+    '  P           ^^                 ^^                    ^^^                    ^^               F    ',
+    '########################   ##################   ####################   #############################',
+    '########################   ##################   ####################   #############################',
+    '########################   ##################   ####################   #############################',
+    '########################   ##################   ####################   #############################',
+  ];
+
+  const W = 720, H = 448;
+  const canvas = document.getElementById('game'), ctx = canvas.getContext('2d');
+  const overlay = document.getElementById('overlay');
+  const ovTitle = document.getElementById('ovTitle'), ovText = document.getElementById('ovText');
+  const startBtn = document.getElementById('startBtn');
+  const coinsV = document.querySelector('#coins .value');
+  const deathsV = document.querySelector('#deaths .value');
+  const timeV = document.querySelector('#time .value');
+
+  const GRAVITY = 0.55, MOVE = 3.6, JUMP = -11.5;
+
+  let player, coins, spikes, solids, flag, spawn, camX, deaths, elapsed, running, won, rafId, totalCoins;
+  let keys = {};
+
+  function parseMap() {
+    coins = []; spikes = []; solids = new Set();
+    MAP.forEach((row, y) => {
+      [...row].forEach((ch, x) => {
+        if (ch === '#' || ch === '=') solids.add(x + ',' + y);
+        else if (ch === 'C') coins.push({ x, y, got: false });
+        else if (ch === '^') spikes.push({ x, y });
+        else if (ch === 'P') spawn = { x, y };
+        else if (ch === 'F') flag = { x, y };
+      });
+    });
+    totalCoins = coins.length;
+  }
+
+  function respawnPlayer() {
+    player = {
+      x: spawn.x * TILE + 4, y: spawn.y * TILE,
+      w: 22, h: 28, vx: 0, vy: 0, grounded: false, face: 1,
+    };
+  }
+
+  function reset() {
+    parseMap();
+    respawnPlayer();
+    camX = 0; deaths = 0; elapsed = 0; won = false;
+    updateHud();
+  }
+
+  function updateHud() {
+    coinsV.textContent = `${coins.filter(c => c.got).length}/${totalCoins}`;
+    deathsV.textContent = deaths;
+    timeV.textContent = elapsed.toFixed(1) + 's';
+  }
+
+  function isSolid(x, y) { return solids.has(x + ',' + y); }
+
+  function collideAxis(axis) {
+    const left = Math.floor(player.x / TILE), right = Math.floor((player.x + player.w) / TILE);
+    const top = Math.floor(player.y / TILE), bottom = Math.floor((player.y + player.h) / TILE);
+    for (let ty = top; ty <= bottom; ty++)
+      for (let tx = left; tx <= right; tx++) {
+        if (!isSolid(tx, ty)) continue;
+        if (axis === 'x') {
+          if (player.vx > 0) player.x = tx * TILE - player.w - 0.01;
+          else if (player.vx < 0) player.x = (tx + 1) * TILE + 0.01;
+          player.vx = 0;
+        } else {
+          if (player.vy > 0) { player.y = ty * TILE - player.h - 0.01; player.grounded = true; }
+          else if (player.vy < 0) player.y = (ty + 1) * TILE + 0.01;
+          player.vy = 0;
+        }
+        return;
+      }
+  }
+
+  function die() {
+    deaths++;
+    updateHud();
+    respawnPlayer();
+  }
+
+  function update(dt) {
+    elapsed += dt;
+    updateHud();
+
+    player.vx = 0;
+    if (keys.ArrowLeft || keys.a) { player.vx = -MOVE; player.face = -1; }
+    if (keys.ArrowRight || keys.d) { player.vx = MOVE; player.face = 1; }
+    if ((keys.ArrowUp || keys[' '] || keys.w) && player.grounded) {
+      player.vy = JUMP;
+      player.grounded = false;
+    }
+
+    player.vy = Math.min(player.vy + GRAVITY, 14);
+
+    player.x += player.vx;
+    collideAxis('x');
+    player.grounded = false;
+    player.y += player.vy;
+    collideAxis('y');
+
+    // 掉出地图
+    if (player.y > MAP.length * TILE + 100) return die();
+
+    // 尖刺
+    const px = player.x + player.w / 2, py = player.y + player.h;
+    for (const s of spikes) {
+      if (px > s.x * TILE + 4 && px < (s.x + 1) * TILE - 4 &&
+          py > s.y * TILE + 12 && player.y < (s.y + 1) * TILE) {
+        return die();
+      }
+    }
+
+    // 金币
+    coins.forEach(c => {
+      if (c.got) return;
+      const cx = c.x * TILE + TILE / 2, cy = c.y * TILE + TILE / 2;
+      if (Math.abs(px - cx) < 22 && Math.abs(player.y + player.h / 2 - cy) < 24) {
+        c.got = true;
+        updateHud();
+      }
+    });
+
+    // 终点
+    if (px > flag.x * TILE && px < (flag.x + 1) * TILE &&
+        player.y + player.h > flag.y * TILE - TILE && player.y < (flag.y + 1) * TILE) {
+      win();
+    }
+
+    // 摄像机
+    const target = player.x - W / 2 + player.w / 2;
+    camX += (target - camX) * 0.12;
+    camX = Math.max(0, Math.min(MAP[0].length * TILE - W, camX));
+  }
+
+  function draw() {
+    // 背景
+    const sky = ctx.createLinearGradient(0, 0, 0, H);
+    sky.addColorStop(0, '#12203f'); sky.addColorStop(1, '#1c3055');
+    ctx.fillStyle = sky;
+    ctx.fillRect(0, 0, W, H);
+
+    // 远山(视差)
+    ctx.fillStyle = '#182a4a';
+    for (let i = 0; i < 8; i++) {
+      const hx = ((i * 300 - camX * 0.3) % (MAP[0].length * TILE)) ;
+      ctx.beginPath();
+      ctx.moveTo(hx - 130, H); ctx.lineTo(hx, 160 + (i % 3) * 40); ctx.lineTo(hx + 130, H);
+      ctx.closePath(); ctx.fill();
+    }
+
+    ctx.save();
+    ctx.translate(-Math.round(camX), 0);
+
+    const startX = Math.floor(camX / TILE), endX = startX + Math.ceil(W / TILE) + 1;
+
+    // 地形
+    for (let y = 0; y < MAP.length; y++)
+      for (let x = startX; x <= endX; x++) {
+        const ch = (MAP[y] || '')[x];
+        const px = x * TILE, py = y * TILE;
+        if (ch === '#') {
+          ctx.fillStyle = '#3f4f6b';
+          ctx.fillRect(px, py, TILE, TILE);
+          if (!isSolid(x, y - 1)) {
+            ctx.fillStyle = '#4ade80';
+            ctx.fillRect(px, py, TILE, 7);
+          }
+        } else if (ch === '=') {
+          ctx.fillStyle = '#8a5a2b';
+          ctx.beginPath(); ctx.roundRect(px, py + 4, TILE, 14, 4); ctx.fill();
+          ctx.fillStyle = '#c07a3a';
+          ctx.fillRect(px + 2, py + 4, TILE - 4, 4);
+        } else if (ch === '^') {
+          ctx.fillStyle = '#cbd5e1';
+          ctx.beginPath();
+          ctx.moveTo(px + 2, py + TILE);
+          ctx.lineTo(px + TILE / 2, py + 8);
+          ctx.lineTo(px + TILE - 2, py + TILE);
+          ctx.closePath(); ctx.fill();
+        }
+      }
+
+    // 金币
+    const t = performance.now() / 300;
+    coins.forEach(c => {
+      if (c.got) return;
+      const cx = c.x * TILE + TILE / 2, cy = c.y * TILE + TILE / 2 + Math.sin(t + c.x) * 3;
+      ctx.save();
+      ctx.shadowColor = '#fbbf24'; ctx.shadowBlur = 10;
+      ctx.fillStyle = '#fbbf24';
+      ctx.beginPath();
+      ctx.ellipse(cx, cy, 8 * Math.abs(Math.cos(t + c.x * 0.7)) + 2, 9, 0, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    });
+
+    // 终点旗
+    const fx = flag.x * TILE + 8, fy = flag.y * TILE;
+    ctx.strokeStyle = '#cbd5e1'; ctx.lineWidth = 3;
+    ctx.beginPath(); ctx.moveTo(fx, fy + TILE); ctx.lineTo(fx, fy - TILE * 1.4); ctx.stroke();
+    ctx.fillStyle = '#f87171';
+    ctx.beginPath();
+    ctx.moveTo(fx, fy - TILE * 1.4);
+    ctx.lineTo(fx + 24, fy - TILE * 1.1);
+    ctx.lineTo(fx, fy - TILE * 0.8);
+    ctx.closePath(); ctx.fill();
+
+    // 玩家
+    ctx.fillStyle = '#38bdf8';
+    ctx.beginPath();
+    ctx.roundRect(player.x, player.y, player.w, player.h, 6);
+    ctx.fill();
+    // 眼睛
+    ctx.fillStyle = '#0c4a6e';
+    const ex = player.x + player.w / 2 + player.face * 5;
+    ctx.beginPath();
+    ctx.arc(ex, player.y + 9, 3, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.restore();
+  }
+
+  let lastT = 0;
+  function loop(ts) {
+    rafId = requestAnimationFrame(loop);
+    const dt = Math.min(0.05, (ts - lastT) / 1000);
+    lastT = ts;
+    if (!running || won) return;
+    update(dt);
+    if (running && !won) draw();
+  }
+
+  function start() {
+    reset();
+    running = true;
+    overlay.classList.add('hidden');
+    lastT = performance.now();
+    cancelAnimationFrame(rafId);
+    rafId = requestAnimationFrame(loop);
+  }
+
+  function win() {
+    won = true;
+    running = false;
+    const got = coins.filter(c => c.got).length;
+    const key = 'platformer-best';
+    const prev = Number(localStorage.getItem(key) || Infinity);
+    if (elapsed < prev) localStorage.setItem(key, elapsed.toFixed(1));
+    ovTitle.textContent = '🏁 到达终点!';
+    ovText.innerHTML =
+      `用时 <b style="color:#38bdf8">${elapsed.toFixed(1)}s</b> · 金币 <b style="color:#fbbf24">${got}/${totalCoins}</b> · 死亡 <b style="color:#f87171">${deaths}</b> 次` +
+      (elapsed < prev ? '<br>🏆 最快纪录!' : `<br>最快纪录 ${Number(localStorage.getItem(key)).toFixed(1)}s`);
+    startBtn.textContent = '再来一次';
+    setTimeout(() => overlay.classList.remove('hidden'), 400);
+  }
+
+  document.addEventListener('keydown', (e) => {
+    if ([' ', 'ArrowUp', 'ArrowDown'].includes(e.key)) e.preventDefault();
+    if ((e.key === 'r' || e.key === 'R') && running) { die(); return; }
+    keys[e.key] = true;
+  });
+  document.addEventListener('keyup', (e) => { keys[e.key] = false; });
+
+  startBtn.addEventListener('click', start);
+})();
+</script>
+</body>
+</html>

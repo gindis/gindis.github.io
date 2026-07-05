@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>贪吃蛇进阶版</title>
+<style>
+  :root { --bg: #0f172a; --panel: #1e293b; --text: #e2e8f0; --muted: #94a3b8; --accent: #38bdf8; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 14px; background: radial-gradient(ellipse at top, #1e293b, var(--bg));
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Segoe UI", sans-serif;
+    color: var(--text); padding: 20px;
+  }
+  h1 {
+    font-size: 26px; letter-spacing: 6px;
+    background: linear-gradient(90deg, #4ade80, #a78bfa);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  a.back { color: var(--muted); font-size: 13px; text-decoration: none; }
+  a.back:hover { color: var(--accent); }
+  .hud { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; align-items: stretch; }
+  .card { background: var(--panel); border-radius: 12px; padding: 8px 18px; text-align: center; border: 1px solid rgba(255,255,255,0.06); }
+  .card .label { font-size: 12px; color: var(--muted); }
+  .card .value { font-size: 18px; font-weight: 700; font-variant-numeric: tabular-nums; }
+  #p1 .value { color: #4ade80; } #p2 .value { color: #38bdf8; }
+  select {
+    background: var(--panel); color: var(--text); border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 12px; padding: 0 16px; font-size: 14px; cursor: pointer; font-family: inherit; font-weight: 700;
+  }
+  select:hover { border-color: var(--accent); }
+  .stage { position: relative; width: min(520px, 92vw); }
+  canvas {
+    display: block; width: 100%; border-radius: 16px;
+    border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+  }
+  .overlay {
+    position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 14px; background: rgba(15,23,42,0.85); backdrop-filter: blur(4px); border-radius: 16px;
+    text-align: center; transition: opacity .25s;
+  }
+  .overlay.hidden { opacity: 0; pointer-events: none; }
+  .overlay h2 { font-size: 26px; }
+  .overlay p { color: var(--muted); font-size: 14px; line-height: 1.9; }
+  button {
+    padding: 12px 36px; font-size: 16px; font-weight: 700; color: #052e16;
+    background: linear-gradient(135deg, #4ade80, #a78bfa); border: none; border-radius: 999px;
+    cursor: pointer; transition: transform .15s;
+  }
+  button:hover { transform: translateY(-2px); }
+  .tips { color: var(--muted); font-size: 13px; text-align: center; line-height: 1.8; }
+  kbd { background: var(--panel); border: 1px solid rgba(255,255,255,0.15); border-radius: 5px; padding: 1px 7px; font-size: 12px; font-family: inherit; }
+</style>
+</head>
+<body>
+
+<h1>贪吃蛇进阶版</h1>
+<a class="back" href="index.html">← 返回游戏合集</a>
+
+<div class="hud">
+  <select id="mode">
+    <option value="classic">经典模式</option>
+    <option value="wrap">穿墙模式</option>
+    <option value="walls">障碍物模式</option>
+    <option value="versus">双人对战</option>
+  </select>
+  <div class="card" id="p1"><div class="label" id="p1label">得分</div><div class="value">0</div></div>
+  <div class="card" id="p2" style="display:none"><div class="label">蓝方(WASD)</div><div class="value">0</div></div>
+</div>
+
+<div class="stage">
+  <canvas id="game" width="520" height="520"></canvas>
+  <div class="overlay" id="overlay">
+    <h2 id="ovTitle">贪吃蛇进阶版</h2>
+    <p id="ovText">选择上方模式后开始<br>穿墙:从边缘穿出对面进入<br>障碍物:场上随机石块<br>双人:绿方方向键 vs 蓝方 WASD</p>
+    <button id="startBtn">开始游戏</button>
+  </div>
+</div>
+
+<p class="tips">
+  绿方 <kbd>↑</kbd><kbd>↓</kbd><kbd>←</kbd><kbd>→</kbd> · 蓝方 <kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> · <kbd>空格</kbd> 暂停
+</p>
+
+<script>
+(() => {
+  const COLS = 26, ROWS = 26, CELL = 20;
+  const canvas = document.getElementById('game'), ctx = canvas.getContext('2d');
+  const overlay = document.getElementById('overlay');
+  const ovTitle = document.getElementById('ovTitle'), ovText = document.getElementById('ovText');
+  const startBtn = document.getElementById('startBtn');
+  const modeSel = document.getElementById('mode');
+  const p1V = document.querySelector('#p1 .value'), p2V = document.querySelector('#p2 .value');
+  const p1Label = document.getElementById('p1label');
+  const p2Card = document.getElementById('p2');
+
+  let snakes, food, walls, running, paused, lastStep, interval, rafId, mode;
+
+  function makeSnake(cells, dir, color, head) {
+    return { body: cells, dir, nextDir: dir, color, head, alive: true, score: 0 };
+  }
+
+  function reset() {
+    mode = modeSel.value;
+    walls = new Set();
+    interval = 150;
+    paused = false;
+
+    if (mode === 'versus') {
+      snakes = [
+        makeSnake([{x:5,y:6},{x:4,y:6},{x:3,y:6}], {x:1,y:0}, '#22c55e', '#4ade80'),
+        makeSnake([{x:20,y:19},{x:21,y:19},{x:22,y:19}], {x:-1,y:0}, '#0ea5e9', '#38bdf8'),
+      ];
+      p2Card.style.display = '';
+      p1Label.textContent = '绿方(方向键)';
+    } else {
+      snakes = [makeSnake([{x:8,y:13},{x:7,y:13},{x:6,y:13}], {x:1,y:0}, '#22c55e', '#4ade80')];
+      p2Card.style.display = 'none';
+      p1Label.textContent = '得分';
+    }
+
+    if (mode === 'walls') {
+      // 随机障碍,避开出生区域和中心
+      while (walls.size < 22) {
+        const x = (Math.random() * COLS) | 0, y = (Math.random() * ROWS) | 0;
+        if (y >= 11 && y <= 15 && x < 14) continue;
+        walls.add(x + ',' + y);
+      }
+    }
+
+    spawnFood();
+    updateHud();
+  }
+
+  function occupied(x, y) {
+    if (walls.has(x + ',' + y)) return true;
+    return snakes.some(s => s.body.some(b => b.x === x && b.y === y));
+  }
+
+  function spawnFood() {
+    do {
+      food = { x: (Math.random() * COLS) | 0, y: (Math.random() * ROWS) | 0 };
+    } while (occupied(food.x, food.y));
+  }
+
+  function updateHud() {
+    p1V.textContent = snakes[0].score;
+    if (snakes[1]) p2V.textContent = snakes[1].score;
+  }
+
+  function step() {
+    // 计算新头
+    const newHeads = snakes.map(s => {
+      if (!s.alive) return null;
+      s.dir = s.nextDir;
+      let hx = s.body[0].x + s.dir.x, hy = s.body[0].y + s.dir.y;
+      if (mode === 'wrap') {
+        hx = (hx + COLS) % COLS;
+        hy = (hy + ROWS) % ROWS;
+      }
+      return { x: hx, y: hy };
+    });
+
+    // 判定死亡
+    snakes.forEach((s, i) => {
+      if (!s.alive) return;
+      const h = newHeads[i];
+      if (mode !== 'wrap' && (h.x < 0 || h.x >= COLS || h.y < 0 || h.y >= ROWS)) { s.alive = false; return; }
+      if (walls.has(h.x + ',' + h.y)) { s.alive = false; return; }
+      // 撞到任何蛇身(包括自己;尾巴即将移走的格子按仍占用处理,简化)
+      for (const t of snakes) {
+        if (!t.alive && t !== s) continue;
+        for (const b of t.body) {
+          if (b.x === h.x && b.y === h.y) { s.alive = false; return; }
+        }
+      }
+      // 双人:头对头相撞
+      const other = newHeads[1 - i];
+      if (snakes.length === 2 && other && h.x === other.x && h.y === other.y) s.alive = false;
+    });
+
+    // 移动存活的蛇
+    let ate = false;
+    snakes.forEach((s, i) => {
+      if (!s.alive) return;
+      const h = newHeads[i];
+      s.body.unshift(h);
+      if (h.x === food.x && h.y === food.y) {
+        s.score += 10;
+        ate = true;
+        if (mode !== 'versus') {
+          const best = Number(localStorage.getItem('snake2-best-' + mode) || 0);
+          if (s.score > best) localStorage.setItem('snake2-best-' + mode, s.score);
+          if (s.score % 50 === 0) interval = Math.max(70, interval - 10);
+        }
+      } else {
+        s.body.pop();
+      }
+    });
+    if (ate) { spawnFood(); updateHud(); }
+
+    // 结束判定
+    if (mode === 'versus') {
+      const dead = snakes.filter(s => !s.alive);
+      if (dead.length) {
+        const alive = snakes.filter(s => s.alive);
+        if (alive.length === 1) {
+          gameOver(alive[0].color === '#22c55e' ? '🟢 绿方获胜!' : '🔵 蓝方获胜!');
+        } else {
+          gameOver('🤝 同归于尽,平局!');
+        }
+      }
+    } else if (!snakes[0].alive) {
+      const best = Number(localStorage.getItem('snake2-best-' + mode) || 0);
+      gameOver(`游戏结束 · 得分 ${snakes[0].score} · 最高 ${best}`);
+    }
+  }
+
+  function draw() {
+    for (let y = 0; y < ROWS; y++)
+      for (let x = 0; x < COLS; x++) {
+        ctx.fillStyle = (x + y) % 2 === 0 ? '#16213c' : '#182544';
+        ctx.fillRect(x * CELL, y * CELL, CELL, CELL);
+      }
+
+    // 穿墙模式:边缘发光提示
+    if (mode === 'wrap') {
+      ctx.strokeStyle = 'rgba(167,139,250,0.5)';
+      ctx.lineWidth = 3;
+      ctx.setLineDash([8, 6]);
+      ctx.strokeRect(1.5, 1.5, canvas.width - 3, canvas.height - 3);
+      ctx.setLineDash([]);
+    }
+
+    // 障碍
+    walls.forEach(key => {
+      const [x, y] = key.split(',').map(Number);
+      ctx.fillStyle = '#64748b';
+      ctx.beginPath(); ctx.roundRect(x * CELL + 2, y * CELL + 2, CELL - 4, CELL - 4, 5); ctx.fill();
+      ctx.fillStyle = 'rgba(255,255,255,0.15)';
+      ctx.beginPath(); ctx.roundRect(x * CELL + 4, y * CELL + 4, CELL - 8, 5, 2); ctx.fill();
+    });
+
+    // 食物
+    const fx = food.x * CELL + CELL / 2, fy = food.y * CELL + CELL / 2;
+    ctx.save();
+    ctx.shadowColor = '#f87171'; ctx.shadowBlur = 12;
+    ctx.fillStyle = '#f87171';
+    ctx.beginPath(); ctx.arc(fx, fy, CELL * 0.35, 0, Math.PI * 2); ctx.fill();
+    ctx.restore();
+
+    // 蛇
+    snakes.forEach(s => {
+      s.body.forEach((seg, i) => {
+        const t = i / s.body.length;
+        ctx.globalAlpha = s.alive ? 1 - t * 0.5 : 0.3;
+        ctx.fillStyle = i === 0 ? s.head : s.color;
+        const pad = i === 0 ? 1 : 2;
+        ctx.beginPath();
+        ctx.roundRect(seg.x * CELL + pad, seg.y * CELL + pad, CELL - pad * 2, CELL - pad * 2, i === 0 ? 6 : 5);
+        ctx.fill();
+      });
+      ctx.globalAlpha = 1;
+    });
+
+    if (paused) {
+      ctx.fillStyle = 'rgba(15,23,42,0.6)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = '#e2e8f0'; ctx.font = 'bold 26px sans-serif'; ctx.textAlign = 'center';
+      ctx.fillText('已暂停 · 按空格继续', canvas.width / 2, canvas.height / 2);
+    }
+  }
+
+  function loop(now) {
+    rafId = requestAnimationFrame(loop);
+    if (paused || !running) return;
+    if (now - lastStep >= interval) {
+      lastStep = now;
+      step();
+      if (running) draw();
+    }
+  }
+
+  function start() {
+    reset();
+    running = true;
+    overlay.classList.add('hidden');
+    lastStep = performance.now();
+    draw();
+    cancelAnimationFrame(rafId);
+    rafId = requestAnimationFrame(loop);
+  }
+
+  function gameOver(msg) {
+    running = false;
+    cancelAnimationFrame(rafId);
+    draw();
+    ovTitle.textContent = mode === 'versus' ? '对战结束' : '游戏结束';
+    ovText.textContent = msg;
+    startBtn.textContent = '再来一局';
+    setTimeout(() => overlay.classList.remove('hidden'), 300);
+  }
+
+  function setDir(s, x, y) {
+    if (x === -s.dir.x && y === -s.dir.y) return;
+    s.nextDir = { x, y };
+  }
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === ' ') {
+      e.preventDefault();
+      if (running) { paused = !paused; draw(); }
+      else start();
+      return;
+    }
+    if (!running) return;
+    const s1 = snakes[0], s2 = snakes[1];
+    switch (e.key) {
+      case 'ArrowUp': e.preventDefault(); setDir(s1, 0, -1); break;
+      case 'ArrowDown': e.preventDefault(); setDir(s1, 0, 1); break;
+      case 'ArrowLeft': e.preventDefault(); setDir(s1, -1, 0); break;
+      case 'ArrowRight': e.preventDefault(); setDir(s1, 1, 0); break;
+    }
+    const target = s2 || s1;
+    switch (e.key.toLowerCase()) {
+      case 'w': setDir(target, 0, -1); break;
+      case 's': setDir(target, 0, 1); break;
+      case 'a': setDir(target, -1, 0); break;
+      case 'd': setDir(target, 1, 0); break;
+    }
+  });
+
+  modeSel.addEventListener('change', () => {
+    running = false;
+    cancelAnimationFrame(rafId);
+    reset();
+    draw();
+    ovTitle.textContent = '贪吃蛇进阶版';
+    ovText.textContent = '模式已切换,点击开始';
+    startBtn.textContent = '开始游戏';
+    overlay.classList.remove('hidden');
+  });
+
+  startBtn.addEventListener('click', start);
+
+  reset();
+  draw();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>2048</title>
+<style>
+  :root { --bg: #0f172a; --panel: #1e293b; --text: #e2e8f0; --muted: #94a3b8; --accent: #38bdf8; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 14px; background: radial-gradient(ellipse at top, #1e293b, var(--bg));
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Segoe UI", sans-serif;
+    color: var(--text); padding: 20px;
+  }
+  h1 {
+    font-size: 30px; letter-spacing: 4px; font-weight: 800;
+    background: linear-gradient(90deg, #fbbf24, #f87171);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  a.back { color: var(--muted); font-size: 13px; text-decoration: none; }
+  a.back:hover { color: var(--accent); }
+  .hud { display: flex; gap: 12px; width: min(420px, 92vw); align-items: stretch; }
+  .card { flex: 1; background: var(--panel); border-radius: 12px; padding: 8px 14px; text-align: center; border: 1px solid rgba(255,255,255,0.06); }
+  .card .label { font-size: 12px; color: var(--muted); }
+  .card .value { font-size: 20px; font-weight: 700; font-variant-numeric: tabular-nums; }
+  #score .value { color: #fbbf24; } #best .value { color: var(--accent); }
+  .hud button {
+    padding: 0 18px; font-size: 14px; font-weight: 700; color: #451a03;
+    background: linear-gradient(135deg, #fbbf24, #fb923c); border: none; border-radius: 12px; cursor: pointer;
+  }
+  .stage { position: relative; width: min(420px, 92vw); }
+  .grid {
+    position: relative; width: 100%; aspect-ratio: 1; background: var(--panel);
+    border-radius: 16px; padding: 10px; border: 1px solid rgba(255,255,255,0.08);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+  }
+  .bgcell { position: absolute; background: rgba(255,255,255,0.05); border-radius: 10px; }
+  .tile {
+    position: absolute; display: flex; align-items: center; justify-content: center;
+    border-radius: 10px; font-weight: 800; transition: left .12s ease, top .12s ease;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  }
+  .tile.pop { animation: pop .15s ease; }
+  .tile.spawn { animation: spawn .18s ease; }
+  @keyframes spawn { from { transform: scale(0.3); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+  @keyframes pop { 0% { transform: scale(1); } 50% { transform: scale(1.18); } 100% { transform: scale(1); } }
+  .overlay {
+    position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 14px; background: rgba(15,23,42,0.85); backdrop-filter: blur(4px); border-radius: 16px;
+    text-align: center; transition: opacity .25s;
+  }
+  .overlay.hidden { opacity: 0; pointer-events: none; }
+  .overlay h2 { font-size: 26px; }
+  .overlay p { color: var(--muted); font-size: 14px; }
+  .overlay button {
+    padding: 12px 36px; font-size: 16px; font-weight: 700; color: #451a03;
+    background: linear-gradient(135deg, #fbbf24, #fb923c); border: none; border-radius: 999px; cursor: pointer;
+  }
+  .tips { color: var(--muted); font-size: 13px; }
+  kbd { background: var(--panel); border: 1px solid rgba(255,255,255,0.15); border-radius: 5px; padding: 1px 7px; font-size: 12px; font-family: inherit; }
+</style>
+</head>
+<body>
+
+<h1>2048</h1>
+<a class="back" href="index.html">← 返回游戏合集</a>
+
+<div class="hud">
+  <div class="card" id="score"><div class="label">得分</div><div class="value">0</div></div>
+  <div class="card" id="best"><div class="label">最高分</div><div class="value">0</div></div>
+  <button id="newBtn">新游戏</button>
+</div>
+
+<div class="stage">
+  <div class="grid" id="grid"></div>
+  <div class="overlay hidden" id="overlay">
+    <h2 id="ovTitle"></h2>
+    <p id="ovText"></p>
+    <button id="againBtn">再来一局</button>
+  </div>
+</div>
+
+<p class="tips"><kbd>↑</kbd><kbd>↓</kbd><kbd>←</kbd><kbd>→</kbd> 滑动合并 · 手机可滑动屏幕</p>
+
+<script>
+(() => {
+  const N = 4;
+  const grid = document.getElementById('grid');
+  const overlay = document.getElementById('overlay');
+  const ovTitle = document.getElementById('ovTitle'), ovText = document.getElementById('ovText');
+  const scoreV = document.querySelector('#score .value'), bestV = document.querySelector('#best .value');
+
+  const TILE_STYLE = {
+    2:    ['#334155', '#e2e8f0'], 4:    ['#475569', '#e2e8f0'],
+    8:    ['#fb923c', '#431407'], 16:   ['#f97316', '#431407'],
+    32:   ['#f87171', '#450a0a'], 64:   ['#ef4444', '#fff'],
+    128:  ['#fbbf24', '#451a03'], 256:  ['#f59e0b', '#451a03'],
+    512:  ['#eab308', '#422006'], 1024: ['#a78bfa', '#2e1065'],
+    2048: ['#38bdf8', '#082f49'],
+  };
+
+  let board, score, best, won, cellSize, gap = 10, pad = 10;
+
+  best = Number(localStorage.getItem('2048-best') || 0);
+  bestV.textContent = best;
+
+  function layout() {
+    const w = grid.clientWidth - pad * 2;
+    cellSize = (w - gap * (N - 1)) / N;
+  }
+
+  function pos(i) { return pad + i * (cellSize + gap); }
+
+  function buildBg() {
+    layout();
+    for (let y = 0; y < N; y++) for (let x = 0; x < N; x++) {
+      const c = document.createElement('div');
+      c.className = 'bgcell';
+      c.style.cssText = `left:${pos(x)}px;top:${pos(y)}px;width:${cellSize}px;height:${cellSize}px`;
+      grid.appendChild(c);
+    }
+  }
+
+  function render(newTiles = [], mergedTiles = []) {
+    grid.querySelectorAll('.tile').forEach(t => t.remove());
+    for (let y = 0; y < N; y++) for (let x = 0; x < N; x++) {
+      const v = board[y][x];
+      if (!v) continue;
+      const t = document.createElement('div');
+      t.className = 'tile';
+      const key = `${x},${y}`;
+      if (newTiles.includes(key)) t.classList.add('spawn');
+      if (mergedTiles.includes(key)) t.classList.add('pop');
+      const [bg, fg] = TILE_STYLE[v] || ['#0ea5e9', '#fff'];
+      const fs = v < 100 ? cellSize * 0.45 : v < 1000 ? cellSize * 0.38 : cellSize * 0.3;
+      t.style.cssText = `left:${pos(x)}px;top:${pos(y)}px;width:${cellSize}px;height:${cellSize}px;background:${bg};color:${fg};font-size:${fs}px`;
+      t.textContent = v;
+      grid.appendChild(t);
+    }
+  }
+
+  function emptyCells() {
+    const out = [];
+    for (let y = 0; y < N; y++) for (let x = 0; x < N; x++) if (!board[y][x]) out.push({ x, y });
+    return out;
+  }
+
+  function addRandom() {
+    const cells = emptyCells();
+    if (!cells.length) return null;
+    const c = cells[(Math.random() * cells.length) | 0];
+    board[c.y][c.x] = Math.random() < 0.9 ? 2 : 4;
+    return `${c.x},${c.y}`;
+  }
+
+  // 将一行向左压缩合并,返回 { row, gained, merged: 合并发生的下标数组 }
+  function slideRow(row) {
+    const vals = row.filter(v => v);
+    const out = []; const merged = [];
+    let gained = 0;
+    for (let i = 0; i < vals.length; i++) {
+      if (i + 1 < vals.length && vals[i] === vals[i + 1]) {
+        out.push(vals[i] * 2);
+        gained += vals[i] * 2;
+        merged.push(out.length - 1);
+        i++;
+      } else out.push(vals[i]);
+    }
+    while (out.length < N) out.push(0);
+    return { row: out, gained, merged };
+  }
+
+  function move(dir) { // 0:左 1:右 2:上 3:下
+    const before = JSON.stringify(board);
+    let gained = 0;
+    const mergedKeys = [];
+
+    const getLine = (i) => {
+      const line = [];
+      for (let j = 0; j < N; j++) {
+        if (dir === 0) line.push(board[i][j]);
+        else if (dir === 1) line.push(board[i][N - 1 - j]);
+        else if (dir === 2) line.push(board[j][i]);
+        else line.push(board[N - 1 - j][i]);
+      }
+      return line;
+    };
+    const setLine = (i, line, merged) => {
+      for (let j = 0; j < N; j++) {
+        let x, y;
+        if (dir === 0) { y = i; x = j; }
+        else if (dir === 1) { y = i; x = N - 1 - j; }
+        else if (dir === 2) { x = i; y = j; }
+        else { x = i; y = N - 1 - j; }
+        board[y][x] = line[j];
+        if (merged.includes(j)) mergedKeys.push(`${x},${y}`);
+      }
+    };
+
+    for (let i = 0; i < N; i++) {
+      const r = slideRow(getLine(i));
+      gained += r.gained;
+      setLine(i, r.row, r.merged);
+    }
+
+    if (JSON.stringify(board) === before) return;
+
+    score += gained;
+    if (score > best) { best = score; localStorage.setItem('2048-best', best); }
+    scoreV.textContent = score; bestV.textContent = best;
+
+    const spawned = addRandom();
+    render(spawned ? [spawned] : [], mergedKeys);
+
+    if (!won && board.flat().includes(2048)) {
+      won = true;
+      showOverlay('你赢了!', `达成 2048!得分 ${score},可以继续挑战更高数字`, '继续游戏', true);
+    } else if (!canMove()) {
+      showOverlay('游戏结束', `本局得分 ${score} · 最高分 ${best}`, '再来一局', false);
+    }
+  }
+
+  function canMove() {
+    if (emptyCells().length) return true;
+    for (let y = 0; y < N; y++) for (let x = 0; x < N; x++) {
+      const v = board[y][x];
+      if (x + 1 < N && board[y][x + 1] === v) return true;
+      if (y + 1 < N && board[y + 1][x] === v) return true;
+    }
+    return false;
+  }
+
+  let overlayContinue = false;
+  function showOverlay(title, text, btn, isContinue) {
+    ovTitle.textContent = title;
+    ovText.textContent = text;
+    document.getElementById('againBtn').textContent = btn;
+    overlayContinue = isContinue;
+    overlay.classList.remove('hidden');
+  }
+
+  function newGame() {
+    board = Array.from({ length: N }, () => Array(N).fill(0));
+    score = 0; won = false;
+    scoreV.textContent = 0;
+    overlay.classList.add('hidden');
+    const a = addRandom(), b = addRandom();
+    render([a, b]);
+  }
+
+  document.addEventListener('keydown', (e) => {
+    if (!overlay.classList.contains('hidden')) return;
+    const map = { ArrowLeft: 0, ArrowRight: 1, ArrowUp: 2, ArrowDown: 3, a: 0, d: 1, w: 2, s: 3 };
+    if (map[e.key] !== undefined) { e.preventDefault(); move(map[e.key]); }
+  });
+
+  let touchStart = null;
+  grid.addEventListener('touchstart', (e) => {
+    touchStart = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+  }, { passive: true });
+  grid.addEventListener('touchend', (e) => {
+    if (!touchStart) return;
+    const dx = e.changedTouches[0].clientX - touchStart.x;
+    const dy = e.changedTouches[0].clientY - touchStart.y;
+    touchStart = null;
+    if (Math.max(Math.abs(dx), Math.abs(dy)) < 24) return;
+    if (Math.abs(dx) > Math.abs(dy)) move(dx > 0 ? 1 : 0);
+    else move(dy > 0 ? 3 : 2);
+  }, { passive: true });
+
+  document.getElementById('newBtn').addEventListener('click', newGame);
+  document.getElementById('againBtn').addEventListener('click', () => {
+    if (overlayContinue) overlay.classList.add('hidden');
+    else newGame();
+  });
+
+  window.addEventListener('resize', () => {
+    grid.querySelectorAll('.bgcell').forEach(c => c.remove());
+    buildBg();
+    render();
+  });
+
+  buildBg();
+  newGame();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>井字棋 · Minimax AI</title>
+<style>
+  :root { --bg: #0f172a; --panel: #1e293b; --text: #e2e8f0; --muted: #94a3b8; --accent: #38bdf8; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 16px; background: radial-gradient(ellipse at top, #1e293b, var(--bg));
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Segoe UI", sans-serif;
+    color: var(--text); padding: 20px;
+  }
+  h1 {
+    font-size: 26px; letter-spacing: 6px;
+    background: linear-gradient(90deg, #38bdf8, #f472b6);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  a.back { color: var(--muted); font-size: 13px; text-decoration: none; }
+  a.back:hover { color: var(--accent); }
+  .hud { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+  .card { background: var(--panel); border-radius: 12px; padding: 8px 18px; text-align: center; border: 1px solid rgba(255,255,255,0.06); }
+  .card .label { font-size: 12px; color: var(--muted); }
+  .card .value { font-size: 18px; font-weight: 700; }
+  #wins .value { color: #4ade80; } #draws .value { color: #fbbf24; } #losses .value { color: #f87171; }
+  select, .hud button {
+    background: var(--panel); color: var(--text); border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 12px; padding: 0 16px; font-size: 14px; cursor: pointer; font-family: inherit; font-weight: 700;
+  }
+  .hud button:hover, select:hover { border-color: var(--accent); }
+  .status { font-size: 15px; color: var(--muted); min-height: 22px; }
+  .board {
+    display: grid; grid-template-columns: repeat(3, 110px); gap: 10px;
+    background: var(--panel); padding: 14px; border-radius: 18px;
+    border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+  }
+  .cell {
+    width: 110px; height: 110px; border-radius: 12px; border: none; cursor: pointer;
+    background: #131c33; font-size: 56px; font-weight: 800; font-family: inherit;
+    color: var(--text); transition: background .15s, transform .1s;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .cell:hover:not(:disabled) { background: #1c2947; }
+  .cell:disabled { cursor: default; }
+  .cell.x { color: #38bdf8; }
+  .cell.o { color: #f472b6; }
+  .cell.winline { background: #14532d; animation: glow 0.6s ease infinite alternate; }
+  @keyframes glow { from { box-shadow: 0 0 4px #4ade80 inset; } to { box-shadow: 0 0 18px #4ade80 inset; } }
+  .cell.placed { animation: drop .18s ease; }
+  @keyframes drop { from { transform: scale(0.4); } to { transform: scale(1); } }
+</style>
+</head>
+<body>
+
+<h1>井字棋</h1>
+<a class="back" href="index.html">← 返回游戏合集</a>
+
+<div class="hud">
+  <select id="first">
+    <option value="human">我先手(X)</option>
+    <option value="ai">电脑先手(X)</option>
+  </select>
+  <div class="card" id="wins"><div class="label">胜</div><div class="value">0</div></div>
+  <div class="card" id="draws"><div class="label">平</div><div class="value">0</div></div>
+  <div class="card" id="losses"><div class="label">负</div><div class="value">0</div></div>
+  <button id="newBtn">新一局</button>
+</div>
+
+<div class="status" id="status">你的回合</div>
+
+<div class="board" id="board"></div>
+
+<script>
+(() => {
+  const boardEl = document.getElementById('board');
+  const statusEl = document.getElementById('status');
+  const firstSel = document.getElementById('first');
+  const winsV = document.querySelector('#wins .value');
+  const drawsV = document.querySelector('#draws .value');
+  const lossesV = document.querySelector('#losses .value');
+
+  const LINES = [
+    [0,1,2],[3,4,5],[6,7,8],
+    [0,3,6],[1,4,7],[2,5,8],
+    [0,4,8],[2,4,6],
+  ];
+
+  let board, human, ai, turn, over, cells;
+  let stats = JSON.parse(localStorage.getItem('ttt-stats') || '{"w":0,"d":0,"l":0}');
+  renderStats();
+
+  function renderStats() {
+    winsV.textContent = stats.w; drawsV.textContent = stats.d; lossesV.textContent = stats.l;
+  }
+
+  function winner(b) {
+    for (const [a, c, d] of LINES) {
+      if (b[a] && b[a] === b[c] && b[a] === b[d]) return { player: b[a], line: [a, c, d] };
+    }
+    if (b.every(v => v)) return { player: 'draw', line: null };
+    return null;
+  }
+
+  // Minimax:赢得越快分越高,输得越慢分越高
+  function minimax(b, player, depth) {
+    const w = winner(b);
+    if (w) {
+      if (w.player === ai) return 10 - depth;
+      if (w.player === human) return depth - 10;
+      return 0;
+    }
+    const scores = [];
+    for (let i = 0; i < 9; i++) {
+      if (b[i]) continue;
+      b[i] = player;
+      scores.push({ i, s: minimax(b, player === 'X' ? 'O' : 'X', depth + 1) });
+      b[i] = null;
+    }
+    if (player === ai) return Math.max(...scores.map(x => x.s));
+    return Math.min(...scores.map(x => x.s));
+  }
+
+  function bestMove() {
+    let best = -Infinity, moves = [];
+    for (let i = 0; i < 9; i++) {
+      if (board[i]) continue;
+      board[i] = ai;
+      const s = minimax(board, human, 0);
+      board[i] = null;
+      if (s > best) { best = s; moves = [i]; }
+      else if (s === best) moves.push(i);
+    }
+    return moves[(Math.random() * moves.length) | 0];
+  }
+
+  function mark(i, player) {
+    board[i] = player;
+    const c = cells[i];
+    c.textContent = player;
+    c.classList.add(player === 'X' ? 'x' : 'o', 'placed');
+    c.disabled = true;
+  }
+
+  function finish(w) {
+    over = true;
+    cells.forEach(c => c.disabled = true);
+    if (w.player === 'draw') {
+      statusEl.textContent = '平局!Minimax 从不失误 🤝';
+      stats.d++;
+    } else if (w.player === human) {
+      statusEl.textContent = '你赢了?!这不可能……';
+      stats.w++;
+      w.line.forEach(i => cells[i].classList.add('winline'));
+    } else {
+      statusEl.textContent = '电脑获胜!再试试?';
+      stats.l++;
+      w.line.forEach(i => cells[i].classList.add('winline'));
+    }
+    localStorage.setItem('ttt-stats', JSON.stringify(stats));
+    renderStats();
+  }
+
+  function aiTurn() {
+    turn = ai;
+    statusEl.textContent = '电脑思考中…';
+    setTimeout(() => {
+      mark(bestMove(), ai);
+      const w = winner(board);
+      if (w) return finish(w);
+      turn = human;
+      statusEl.textContent = '你的回合';
+    }, 350);
+  }
+
+  function onClick(i) {
+    if (over || turn !== human || board[i]) return;
+    mark(i, human);
+    const w = winner(board);
+    if (w) return finish(w);
+    aiTurn();
+  }
+
+  function newGame() {
+    board = Array(9).fill(null);
+    over = false;
+    const humanFirst = firstSel.value === 'human';
+    human = humanFirst ? 'X' : 'O';
+    ai = humanFirst ? 'O' : 'X';
+    boardEl.innerHTML = '';
+    cells = [];
+    for (let i = 0; i < 9; i++) {
+      const b = document.createElement('button');
+      b.className = 'cell';
+      b.addEventListener('click', () => onClick(i));
+      boardEl.appendChild(b);
+      cells.push(b);
+    }
+    if (humanFirst) { turn = human; statusEl.textContent = '你的回合'; }
+    else aiTurn();
+  }
+
+  document.getElementById('newBtn').addEventListener('click', newGame);
+  firstSel.addEventListener('change', newGame);
+
+  newGame();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>俄罗斯方块</title>
+<style>
+  :root {
+    --bg: #0f172a; --panel: #1e293b; --text: #e2e8f0; --muted: #94a3b8; --accent: #38bdf8;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 14px; background: radial-gradient(ellipse at top, #1e293b, var(--bg));
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Segoe UI", sans-serif;
+    color: var(--text); padding: 20px;
+  }
+  h1 {
+    font-size: 26px; letter-spacing: 6px;
+    background: linear-gradient(90deg, #a78bfa, var(--accent));
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  a.back { color: var(--muted); font-size: 13px; text-decoration: none; }
+  a.back:hover { color: var(--accent); }
+  .wrap { display: flex; gap: 14px; align-items: flex-start; }
+  .stage { position: relative; }
+  canvas {
+    display: block; border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.08);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    background: #131c33;
+  }
+  .side { display: flex; flex-direction: column; gap: 10px; width: 130px; }
+  .card {
+    background: var(--panel); border-radius: 12px; padding: 10px 12px; text-align: center;
+    border: 1px solid rgba(255,255,255,0.06);
+  }
+  .card .label { font-size: 12px; color: var(--muted); }
+  .card .value { font-size: 20px; font-weight: 700; font-variant-numeric: tabular-nums; }
+  #scoreV { color: #4ade80; } #bestV { color: var(--accent); } #levelV { color: #fbbf24; } #linesV { color: #f472b6; }
+  .overlay {
+    position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center;
+    justify-content: center; gap: 14px; background: rgba(15,23,42,0.85); backdrop-filter: blur(4px);
+    border-radius: 12px; text-align: center; transition: opacity .25s; padding: 10px;
+  }
+  .overlay.hidden { opacity: 0; pointer-events: none; }
+  .overlay h2 { font-size: 24px; }
+  .overlay p { color: var(--muted); font-size: 13px; line-height: 1.8; }
+  button {
+    padding: 11px 32px; font-size: 15px; font-weight: 700; color: #1e1b4b;
+    background: linear-gradient(135deg, #a78bfa, var(--accent)); border: none; border-radius: 999px;
+    cursor: pointer; transition: transform .15s; box-shadow: 0 6px 20px rgba(56,189,248,0.35);
+  }
+  button:hover { transform: translateY(-2px); }
+  .tips { color: var(--muted); font-size: 12px; text-align: center; line-height: 1.8; }
+  kbd { background: var(--panel); border: 1px solid rgba(255,255,255,0.15); border-radius: 5px; padding: 1px 6px; font-size: 11px; font-family: inherit; }
+</style>
+</head>
+<body>
+
+<h1>俄罗斯方块</h1>
+<a class="back" href="index.html">← 返回游戏合集</a>
+
+<div class="wrap">
+  <div class="stage">
+    <canvas id="game" width="300" height="600"></canvas>
+    <div class="overlay" id="overlay">
+      <h2 id="ovTitle">俄罗斯方块</h2>
+      <p id="ovText">←→ 移动 · ↑ 旋转 · ↓ 软降<br>空格 硬降 · P 暂停</p>
+      <button id="startBtn">开始游戏</button>
+    </div>
+  </div>
+  <div class="side">
+    <div class="card"><div class="label">得分</div><div class="value" id="scoreV">0</div></div>
+    <div class="card"><div class="label">最高分</div><div class="value" id="bestV">0</div></div>
+    <div class="card"><div class="label">等级</div><div class="value" id="levelV">1</div></div>
+    <div class="card"><div class="label">消行</div><div class="value" id="linesV">0</div></div>
+    <div class="card"><div class="label">下一个</div><canvas id="next" width="106" height="80" style="box-shadow:none;border:none;background:transparent;margin:4px auto 0"></canvas></div>
+  </div>
+</div>
+
+<p class="tips"><kbd>←</kbd><kbd>→</kbd> 移动 · <kbd>↑</kbd> 旋转 · <kbd>↓</kbd> 软降 · <kbd>空格</kbd> 硬降 · <kbd>P</kbd> 暂停</p>
+
+<script>
+(() => {
+  const COLS = 10, ROWS = 20, CELL = 30;
+  const canvas = document.getElementById('game'), ctx = canvas.getContext('2d');
+  const nextCv = document.getElementById('next'), nctx = nextCv.getContext('2d');
+  const overlay = document.getElementById('overlay');
+  const ovTitle = document.getElementById('ovTitle'), ovText = document.getElementById('ovText');
+  const startBtn = document.getElementById('startBtn');
+  const scoreV = document.getElementById('scoreV'), bestV = document.getElementById('bestV');
+  const levelV = document.getElementById('levelV'), linesV = document.getElementById('linesV');
+
+  const SHAPES = {
+    I: [[0,0,0,0],[1,1,1,1],[0,0,0,0],[0,0,0,0]],
+    O: [[1,1],[1,1]],
+    T: [[0,1,0],[1,1,1],[0,0,0]],
+    S: [[0,1,1],[1,1,0],[0,0,0]],
+    Z: [[1,1,0],[0,1,1],[0,0,0]],
+    J: [[1,0,0],[1,1,1],[0,0,0]],
+    L: [[0,0,1],[1,1,1],[0,0,0]],
+  };
+  const COLORS = { I:'#38bdf8', O:'#fbbf24', T:'#a78bfa', S:'#4ade80', Z:'#f87171', J:'#60a5fa', L:'#fb923c' };
+
+  let board, cur, next, score, best, level, lines, dropInterval, lastDrop, running, paused, rafId, bag = [];
+
+  best = Number(localStorage.getItem('tetris-best') || 0);
+  bestV.textContent = best;
+
+  function fromBag() {
+    if (bag.length === 0) bag = Object.keys(SHAPES).sort(() => Math.random() - 0.5);
+    return bag.pop();
+  }
+
+  function newPiece() {
+    const type = fromBag();
+    const shape = SHAPES[type].map(r => [...r]);
+    return { type, shape, x: ((COLS - shape[0].length) / 2) | 0, y: 0 };
+  }
+
+  function rotate(shape) {
+    const n = shape.length;
+    const out = Array.from({ length: n }, () => Array(n).fill(0));
+    for (let y = 0; y < n; y++) for (let x = 0; x < n; x++) out[x][n - 1 - y] = shape[y][x];
+    return out;
+  }
+
+  function collides(p, dx = 0, dy = 0, shape = p.shape) {
+    for (let y = 0; y < shape.length; y++)
+      for (let x = 0; x < shape[y].length; x++) {
+        if (!shape[y][x]) continue;
+        const nx = p.x + x + dx, ny = p.y + y + dy;
+        if (nx < 0 || nx >= COLS || ny >= ROWS) return true;
+        if (ny >= 0 && board[ny][nx]) return true;
+      }
+    return false;
+  }
+
+  function merge() {
+    cur.shape.forEach((row, y) => row.forEach((v, x) => {
+      if (v && cur.y + y >= 0) board[cur.y + y][cur.x + x] = cur.type;
+    }));
+  }
+
+  function clearLines() {
+    let cleared = 0;
+    for (let y = ROWS - 1; y >= 0; y--) {
+      if (board[y].every(v => v)) {
+        board.splice(y, 1);
+        board.unshift(Array(COLS).fill(0));
+        cleared++;
+        y++;
+      }
+    }
+    if (cleared) {
+      score += [0, 100, 300, 500, 800][cleared] * level;
+      lines += cleared;
+      level = 1 + (lines / 10 | 0);
+      dropInterval = Math.max(80, 800 - (level - 1) * 70);
+      if (score > best) { best = score; localStorage.setItem('tetris-best', best); }
+      updateHud();
+    }
+  }
+
+  function updateHud() {
+    scoreV.textContent = score; bestV.textContent = best;
+    levelV.textContent = level; linesV.textContent = lines;
+  }
+
+  function spawn() {
+    cur = next; next = newPiece();
+    drawNext();
+    if (collides(cur)) gameOver();
+  }
+
+  function tryRotate() {
+    const r = rotate(cur.shape);
+    for (const dx of [0, -1, 1, -2, 2]) {
+      if (!collides(cur, dx, 0, r)) { cur.shape = r; cur.x += dx; return; }
+    }
+  }
+
+  function hardDrop() {
+    let d = 0;
+    while (!collides(cur, 0, d + 1)) d++;
+    cur.y += d;
+    score += d * 2;
+    lockPiece();
+    updateHud();
+  }
+
+  function lockPiece() {
+    merge(); clearLines(); spawn();
+  }
+
+  function step() {
+    if (!collides(cur, 0, 1)) cur.y++;
+    else lockPiece();
+  }
+
+  function drawCell(c, x, y, size, type, ghost) {
+    const px = x * size, py = y * size;
+    if (ghost) {
+      c.strokeStyle = COLORS[type] + '66';
+      c.lineWidth = 2;
+      c.strokeRect(px + 2, py + 2, size - 4, size - 4);
+      return;
+    }
+    c.fillStyle = COLORS[type];
+    c.beginPath(); c.roundRect(px + 1, py + 1, size - 2, size - 2, 5); c.fill();
+    c.fillStyle = 'rgba(255,255,255,0.25)';
+    c.beginPath(); c.roundRect(px + 3, py + 3, size - 6, (size - 6) / 2.4, 3); c.fill();
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    // 网格
+    ctx.strokeStyle = 'rgba(255,255,255,0.04)';
+    ctx.lineWidth = 1;
+    for (let x = 1; x < COLS; x++) { ctx.beginPath(); ctx.moveTo(x * CELL, 0); ctx.lineTo(x * CELL, canvas.height); ctx.stroke(); }
+    for (let y = 1; y < ROWS; y++) { ctx.beginPath(); ctx.moveTo(0, y * CELL); ctx.lineTo(canvas.width, y * CELL); ctx.stroke(); }
+    // 已固定的方块
+    board.forEach((row, y) => row.forEach((v, x) => { if (v) drawCell(ctx, x, y, CELL, v); }));
+    // 幽灵投影
+    let d = 0;
+    while (!collides(cur, 0, d + 1)) d++;
+    cur.shape.forEach((row, y) => row.forEach((v, x) => {
+      if (v && cur.y + y + d >= 0) drawCell(ctx, cur.x + x, cur.y + y + d, CELL, cur.type, true);
+    }));
+    // 当前方块
+    cur.shape.forEach((row, y) => row.forEach((v, x) => {
+      if (v && cur.y + y >= 0) drawCell(ctx, cur.x + x, cur.y + y, CELL, cur.type);
+    }));
+    if (paused) {
+      ctx.fillStyle = 'rgba(15,23,42,0.65)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = '#e2e8f0'; ctx.font = 'bold 22px sans-serif'; ctx.textAlign = 'center';
+      ctx.fillText('已暂停 · 按 P 继续', canvas.width / 2, canvas.height / 2);
+    }
+  }
+
+  function drawNext() {
+    nctx.clearRect(0, 0, nextCv.width, nextCv.height);
+    const s = 20, shape = next.shape;
+    // 计算实际占用范围居中显示
+    let minX = 9, maxX = -1, minY = 9, maxY = -1;
+    shape.forEach((row, y) => row.forEach((v, x) => {
+      if (v) { minX = Math.min(minX, x); maxX = Math.max(maxX, x); minY = Math.min(minY, y); maxY = Math.max(maxY, y); }
+    }));
+    const w = (maxX - minX + 1) * s, h = (maxY - minY + 1) * s;
+    const ox = (nextCv.width - w) / 2 - minX * s, oy = (nextCv.height - h) / 2 - minY * s;
+    nctx.save(); nctx.translate(ox, oy);
+    shape.forEach((row, y) => row.forEach((v, x) => { if (v) drawCell(nctx, x, y, s, next.type); }));
+    nctx.restore();
+  }
+
+  function loop(now) {
+    rafId = requestAnimationFrame(loop);
+    if (paused || !running) return;
+    if (now - lastDrop >= dropInterval) { lastDrop = now; step(); }
+    draw();
+  }
+
+  function start() {
+    board = Array.from({ length: ROWS }, () => Array(COLS).fill(0));
+    score = 0; level = 1; lines = 0; dropInterval = 800; paused = false; bag = [];
+    next = newPiece();
+    spawn();
+    updateHud();
+    running = true;
+    overlay.classList.add('hidden');
+    lastDrop = performance.now();
+    cancelAnimationFrame(rafId);
+    rafId = requestAnimationFrame(loop);
+  }
+
+  function gameOver() {
+    running = false;
+    cancelAnimationFrame(rafId);
+    ovTitle.textContent = '游戏结束';
+    ovText.innerHTML = `本局得分 <b style="color:#4ade80">${score}</b> · 消行 <b style="color:#f472b6">${lines}</b><br>最高分 <b style="color:#38bdf8">${best}</b>`;
+    startBtn.textContent = '再来一局';
+    overlay.classList.remove('hidden');
+  }
+
+  document.addEventListener('keydown', (e) => {
+    if (!running) return;
+    if (e.key === 'p' || e.key === 'P') { paused = !paused; return; }
+    if (paused) return;
+    switch (e.key) {
+      case 'ArrowLeft': e.preventDefault(); if (!collides(cur, -1, 0)) cur.x--; break;
+      case 'ArrowRight': e.preventDefault(); if (!collides(cur, 1, 0)) cur.x++; break;
+      case 'ArrowDown': e.preventDefault(); if (!collides(cur, 0, 1)) { cur.y++; score++; updateHud(); } break;
+      case 'ArrowUp': e.preventDefault(); tryRotate(); break;
+      case ' ': e.preventDefault(); hardDrop(); break;
+    }
+  });
+
+  startBtn.addEventListener('click', start);
+})();
+</script>
+</body>
+</html>

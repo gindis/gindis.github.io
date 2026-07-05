@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>太空射击</title>
+<style>
+  :root { --bg: #0f172a; --panel: #1e293b; --text: #e2e8f0; --muted: #94a3b8; --accent: #38bdf8; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 14px; background: radial-gradient(ellipse at top, #1e293b, var(--bg));
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Segoe UI", sans-serif;
+    color: var(--text); padding: 20px;
+  }
+  h1 {
+    font-size: 26px; letter-spacing: 6px;
+    background: linear-gradient(90deg, #38bdf8, #f472b6);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  a.back { color: var(--muted); font-size: 13px; text-decoration: none; }
+  a.back:hover { color: var(--accent); }
+  .hud { display: flex; gap: 12px; width: min(480px, 92vw); }
+  .card { flex: 1; background: var(--panel); border-radius: 12px; padding: 8px 14px; text-align: center; border: 1px solid rgba(255,255,255,0.06); }
+  .card .label { font-size: 12px; color: var(--muted); }
+  .card .value { font-size: 20px; font-weight: 700; font-variant-numeric: tabular-nums; }
+  #score .value { color: #4ade80; } #best .value { color: var(--accent); }
+  #wave .value { color: #fbbf24; } #lives .value { color: #f87171; }
+  .stage { position: relative; width: min(480px, 92vw); }
+  canvas {
+    display: block; width: 100%; border-radius: 16px;
+    border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    background: #060b1a;
+  }
+  .overlay {
+    position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 14px; background: rgba(6,11,26,0.82); backdrop-filter: blur(4px); border-radius: 16px;
+    text-align: center; transition: opacity .25s;
+  }
+  .overlay.hidden { opacity: 0; pointer-events: none; }
+  .overlay h2 { font-size: 26px; }
+  .overlay p { color: var(--muted); font-size: 14px; line-height: 1.9; }
+  button {
+    padding: 12px 36px; font-size: 16px; font-weight: 700; color: #082f49;
+    background: linear-gradient(135deg, #38bdf8, #f472b6); border: none; border-radius: 999px;
+    cursor: pointer; transition: transform .15s;
+  }
+  button:hover { transform: translateY(-2px); }
+  .tips { color: var(--muted); font-size: 13px; }
+  kbd { background: var(--panel); border: 1px solid rgba(255,255,255,0.15); border-radius: 5px; padding: 1px 7px; font-size: 12px; font-family: inherit; }
+</style>
+</head>
+<body>
+
+<h1>太空射击</h1>
+<a class="back" href="index.html">← 返回游戏合集</a>
+
+<div class="hud">
+  <div class="card" id="score"><div class="label">得分</div><div class="value">0</div></div>
+  <div class="card" id="best"><div class="label">最高分</div><div class="value">0</div></div>
+  <div class="card" id="wave"><div class="label">波次</div><div class="value">1</div></div>
+  <div class="card" id="lives"><div class="label">生命</div><div class="value">❤❤❤</div></div>
+</div>
+
+<div class="stage">
+  <canvas id="game" width="480" height="600"></canvas>
+  <div class="overlay" id="overlay">
+    <h2 id="ovTitle">太空射击</h2>
+    <p id="ovText">←→ 或鼠标移动飞船,自动开火<br>消灭一波波来袭的敌机,小心敌方子弹</p>
+    <button id="startBtn">开始游戏</button>
+  </div>
+</div>
+
+<p class="tips"><kbd>←</kbd><kbd>→</kbd> / 鼠标移动 · 自动射击 · <kbd>空格</kbd> 暂停</p>
+
+<script>
+(() => {
+  const W = 480, H = 600;
+  const canvas = document.getElementById('game'), ctx = canvas.getContext('2d');
+  const overlay = document.getElementById('overlay');
+  const ovTitle = document.getElementById('ovTitle'), ovText = document.getElementById('ovText');
+  const startBtn = document.getElementById('startBtn');
+  const scoreV = document.querySelector('#score .value'), bestV = document.querySelector('#best .value');
+  const waveV = document.querySelector('#wave .value'), livesV = document.querySelector('#lives .value');
+
+  let ship, bullets, enemies, ebullets, particles, stars, score, best, wave, lives;
+  let running, paused, rafId, fireTimer, invincible;
+  let keys = {};
+
+  best = Number(localStorage.getItem('shooter-best') || 0);
+  bestV.textContent = best;
+
+  function makeStars() {
+    stars = Array.from({ length: 80 }, () => ({
+      x: Math.random() * W, y: Math.random() * H,
+      s: Math.random() * 1.6 + 0.4, v: Math.random() * 0.8 + 0.2,
+    }));
+  }
+
+  function spawnWave() {
+    const rows = Math.min(2 + Math.ceil(wave / 2), 5);
+    const cols = 6;
+    const hp = 1 + Math.floor(wave / 3);
+    for (let r = 0; r < rows; r++)
+      for (let c = 0; c < cols; c++) {
+        enemies.push({
+          baseX: 60 + c * 62, y: -40 - r * 55,
+          x: 60 + c * 62,
+          targetY: 60 + r * 55,
+          hp, maxHp: hp,
+          phase: Math.random() * Math.PI * 2,
+          fireCd: 2 + Math.random() * 4,
+          color: ['#f87171', '#fb923c', '#fbbf24', '#a78bfa', '#f472b6'][r % 5],
+        });
+      }
+  }
+
+  function reset() {
+    ship = { x: W / 2, y: H - 60, w: 34, h: 26 };
+    bullets = []; enemies = []; ebullets = []; particles = [];
+    score = 0; wave = 1; lives = 3; fireTimer = 0; invincible = 0;
+    makeStars();
+    spawnWave();
+    updateHud();
+  }
+
+  function updateHud() {
+    scoreV.textContent = score; bestV.textContent = best;
+    waveV.textContent = wave;
+    livesV.textContent = '❤'.repeat(Math.max(0, lives)) || '💔';
+  }
+
+  function boom(x, y, color, n = 16) {
+    for (let i = 0; i < n; i++) {
+      const a = Math.random() * Math.PI * 2, sp = 1 + Math.random() * 3.5;
+      particles.push({ x, y, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp, life: 1, color });
+    }
+  }
+
+  function hitShip() {
+    if (invincible > 0) return;
+    lives--;
+    invincible = 2;
+    boom(ship.x, ship.y, '#38bdf8', 26);
+    updateHud();
+    if (lives <= 0) gameOver();
+  }
+
+  function update(dt) {
+    if (invincible > 0) invincible -= dt;
+
+    // 飞船
+    if (keys.ArrowLeft || keys.a) ship.x -= 7;
+    if (keys.ArrowRight || keys.d) ship.x += 7;
+    ship.x = Math.max(20, Math.min(W - 20, ship.x));
+
+    // 自动开火
+    fireTimer -= dt;
+    if (fireTimer <= 0) {
+      bullets.push({ x: ship.x, y: ship.y - 18, vy: -9 });
+      fireTimer = 0.18;
+    }
+
+    stars.forEach(s => { s.y += s.v; if (s.y > H) { s.y = 0; s.x = Math.random() * W; } });
+
+    bullets.forEach(b => b.y += b.vy);
+    bullets = bullets.filter(b => b.y > -20);
+
+    // 敌机
+    const speedup = 1 + wave * 0.08;
+    enemies.forEach(e => {
+      if (e.y < e.targetY) e.y += 1.6 * speedup;
+      else {
+        e.phase += dt * 1.6;
+        e.x = e.baseX + Math.sin(e.phase) * 26;
+        e.y += 0.12 * speedup;
+      }
+      e.fireCd -= dt;
+      if (e.fireCd <= 0 && e.y > 0) {
+        e.fireCd = 3 + Math.random() * 5 - Math.min(wave * 0.15, 2);
+        const dx = ship.x - e.x, dy = ship.y - e.y;
+        const len = Math.hypot(dx, dy);
+        const sp = 3.2 + wave * 0.15;
+        ebullets.push({ x: e.x, y: e.y + 12, vx: dx / len * sp, vy: dy / len * sp });
+      }
+      // 敌机到达底部
+      if (e.y > H - 80) hitShip();
+    });
+    enemies = enemies.filter(e => e.y <= H - 80);
+
+    // 子弹打敌机
+    for (let i = bullets.length - 1; i >= 0; i--) {
+      const b = bullets[i];
+      for (let j = enemies.length - 1; j >= 0; j--) {
+        const e = enemies[j];
+        if (Math.abs(b.x - e.x) < 20 && Math.abs(b.y - e.y) < 16) {
+          bullets.splice(i, 1);
+          e.hp--;
+          boom(b.x, b.y, e.color, 5);
+          if (e.hp <= 0) {
+            boom(e.x, e.y, e.color, 20);
+            score += e.maxHp * 10;
+            if (score > best) { best = score; localStorage.setItem('shooter-best', best); }
+            enemies.splice(j, 1);
+            updateHud();
+          }
+          break;
+        }
+      }
+    }
+
+    // 敌方子弹
+    ebullets.forEach(b => { b.x += b.vx; b.y += b.vy; });
+    ebullets = ebullets.filter(b => b.y < H + 20 && b.x > -20 && b.x < W + 20);
+    for (let i = ebullets.length - 1; i >= 0; i--) {
+      const b = ebullets[i];
+      if (Math.abs(b.x - ship.x) < 16 && Math.abs(b.y - ship.y) < 14) {
+        ebullets.splice(i, 1);
+        hitShip();
+      }
+    }
+
+    // 粒子
+    particles.forEach(p => { p.x += p.vx; p.y += p.vy; p.life -= 0.025; });
+    particles = particles.filter(p => p.life > 0);
+
+    // 下一波
+    if (enemies.length === 0 && running) {
+      wave++;
+      updateHud();
+      spawnWave();
+    }
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+
+    ctx.fillStyle = '#e2e8f0';
+    stars.forEach(s => {
+      ctx.globalAlpha = 0.3 + s.s * 0.3;
+      ctx.fillRect(s.x, s.y, s.s, s.s);
+    });
+    ctx.globalAlpha = 1;
+
+    // 我方子弹
+    ctx.fillStyle = '#7dd3fc';
+    bullets.forEach(b => {
+      ctx.beginPath(); ctx.roundRect(b.x - 2, b.y - 8, 4, 12, 2); ctx.fill();
+    });
+
+    // 敌方子弹
+    ctx.fillStyle = '#f87171';
+    ebullets.forEach(b => {
+      ctx.beginPath(); ctx.arc(b.x, b.y, 4, 0, Math.PI * 2); ctx.fill();
+    });
+
+    // 敌机
+    enemies.forEach(e => {
+      ctx.save();
+      ctx.translate(e.x, e.y);
+      ctx.fillStyle = e.color;
+      ctx.beginPath();
+      ctx.moveTo(0, 14); ctx.lineTo(-16, -8); ctx.lineTo(-6, -12);
+      ctx.lineTo(0, -6); ctx.lineTo(6, -12); ctx.lineTo(16, -8);
+      ctx.closePath(); ctx.fill();
+      ctx.fillStyle = 'rgba(255,255,255,0.5)';
+      ctx.beginPath(); ctx.arc(0, 0, 4, 0, Math.PI * 2); ctx.fill();
+      // 血条
+      if (e.maxHp > 1) {
+        ctx.fillStyle = 'rgba(0,0,0,0.5)';
+        ctx.fillRect(-14, -20, 28, 4);
+        ctx.fillStyle = '#4ade80';
+        ctx.fillRect(-14, -20, 28 * (e.hp / e.maxHp), 4);
+      }
+      ctx.restore();
+    });
+
+    // 飞船
+    if (!(invincible > 0 && ((performance.now() / 100) | 0) % 2)) {
+      ctx.save();
+      ctx.translate(ship.x, ship.y);
+      // 尾焰
+      ctx.fillStyle = `rgba(251,146,60,${0.5 + Math.random() * 0.5})`;
+      ctx.beginPath();
+      ctx.moveTo(-6, 14); ctx.lineTo(0, 24 + Math.random() * 8); ctx.lineTo(6, 14);
+      ctx.closePath(); ctx.fill();
+      // 机身
+      const g = ctx.createLinearGradient(0, -16, 0, 14);
+      g.addColorStop(0, '#7dd3fc'); g.addColorStop(1, '#0284c7');
+      ctx.fillStyle = g;
+      ctx.beginPath();
+      ctx.moveTo(0, -18); ctx.lineTo(-17, 12); ctx.lineTo(-6, 8);
+      ctx.lineTo(0, 12); ctx.lineTo(6, 8); ctx.lineTo(17, 12);
+      ctx.closePath(); ctx.fill();
+      ctx.fillStyle = '#e0f2fe';
+      ctx.beginPath(); ctx.arc(0, -4, 4, 0, Math.PI * 2); ctx.fill();
+      ctx.restore();
+    }
+
+    // 粒子
+    particles.forEach(p => {
+      ctx.globalAlpha = p.life;
+      ctx.fillStyle = p.color;
+      ctx.fillRect(p.x - 2, p.y - 2, 4, 4);
+    });
+    ctx.globalAlpha = 1;
+
+    if (paused) {
+      ctx.fillStyle = 'rgba(6,11,26,0.65)';
+      ctx.fillRect(0, 0, W, H);
+      ctx.fillStyle = '#e2e8f0'; ctx.font = 'bold 24px sans-serif'; ctx.textAlign = 'center';
+      ctx.fillText('已暂停 · 按空格继续', W / 2, H / 2);
+    }
+  }
+
+  let lastT = 0;
+  function loop(t) {
+    rafId = requestAnimationFrame(loop);
+    const dt = Math.min(0.05, (t - lastT) / 1000);
+    lastT = t;
+    if (!running) return;
+    if (!paused) update(dt);
+    if (running) draw();
+  }
+
+  function start() {
+    reset();
+    running = true; paused = false;
+    overlay.classList.add('hidden');
+    lastT = performance.now();
+    cancelAnimationFrame(rafId);
+    rafId = requestAnimationFrame(loop);
+  }
+
+  function gameOver() {
+    running = false;
+    ovTitle.textContent = '飞船坠毁!';
+    ovText.innerHTML = `本局得分 <b style="color:#4ade80">${score}</b> · 撑到第 <b style="color:#fbbf24">${wave}</b> 波<br>最高分 <b style="color:#38bdf8">${best}</b>`;
+    startBtn.textContent = '再来一局';
+    setTimeout(() => overlay.classList.remove('hidden'), 500);
+  }
+
+  canvas.addEventListener('mousemove', (e) => {
+    if (!running || paused) return;
+    const rect = canvas.getBoundingClientRect();
+    ship.x = Math.max(20, Math.min(W - 20, (e.clientX - rect.left) * (W / rect.width)));
+  });
+  canvas.addEventListener('touchmove', (e) => {
+    if (!running || paused) return;
+    const rect = canvas.getBoundingClientRect();
+    ship.x = Math.max(20, Math.min(W - 20, (e.touches[0].clientX - rect.left) * (W / rect.width)));
+  }, { passive: true });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === ' ') {
+      e.preventDefault();
+      if (running) paused = !paused;
+      else start();
+      return;
+    }
+    keys[e.key] = true;
+  });
+  document.addEventListener('keyup', (e) => { keys[e.key] = false; });
+
+  startBtn.addEventListener('click', start);
+})();
+</script>
+</body>
+</html>
