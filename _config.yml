@@ -1,8 +1,7 @@
-pygments: true
-auto: true
+highlighter: rouge
 url: http://blog.gindis.me
 lsi: false
-markdown: redcarpet
+markdown: kramdown
 
 colors:
   highlight: '#f60'
